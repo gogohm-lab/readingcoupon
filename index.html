@@ -587,6 +587,28 @@ function render() {
 
   document.getElementById('body').innerHTML = (screenMap[s] || renderHome)();
 }
+// 전역 연결
+window.push = push;
+window.pop = pop;
+window.goRoot = goRoot;
+window.selectType = selectType;
+window.saveRecord = saveRecord;
+window.handleImg = handleImg;
+window.render = render;
+window.setBalance = setBalance;
+window.deleteReading = deleteReading;
+window.deleteChore = deleteChore;
+window.addReadingItem = addReadingItem;
+window.addChoreItem = addChoreItem;
+
+// 상태값도 전역 연결
+window.kids = kids;
+window.reading = reading;
+window.chores = chores;
+window.records = records;
+window.form = form;
+window.newReading = newReading;
+window.newChore = newChore;
 
 loadData();
 </script>
