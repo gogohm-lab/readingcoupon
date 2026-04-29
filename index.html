@@ -138,7 +138,27 @@
 
 <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleImg(event)" />
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDj5Vmp8FZ2Oki2BxsMOaESsFg70PB9ZYA",
+  authDomain: "readingcoupon-cedfb.firebaseapp.com",
+  projectId: "readingcoupon-cedfb",
+  storageBucket: "readingcoupon-cedfb.firebasestorage.app",
+  messagingSenderId: "733137315370",
+  appId: "1:733137315370:web:bc5d934fcceb2d80a34553",
+  measurementId: "G-B76D870KK5"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 // ── State
 let kids = ['첫째', '둘째'];
 let kidIdx = 0;
@@ -171,7 +191,29 @@ const fmt = n => (n||0).toLocaleString('ko-KR') + '원';
 const uid = () => Math.random().toString(36).slice(2,7);
 const screen = () => stack[stack.length - 1];
 const rootScreen = () => stack[0];
+async function saveData() {
+  await setDoc(doc(db, "apps", "readingcoupon"), {
+    kids,
+    reading,
+    chores,
+    records
+  });
+}
 
+async function loadData() {
+  const snap = await getDoc(doc(db, "apps", "readingcoupon"));
+
+  if (snap.exists()) {
+    const data = snap.data();
+
+    kids = data.kids || kids;
+    reading = data.reading || reading;
+    chores = data.chores || chores;
+    records = data.records || records;
+  }
+
+  render();
+}
 function balance(idx) {
   return records[idx].reduce((s,r) => s + (r.type==='spend' ? -r.amount : r.amount), 0);
 }
@@ -205,7 +247,8 @@ function saveRecord() {
   }
   records[kidIdx] = [rec, ...records[kidIdx]];
   form = {}; imgPreview = null;
-  goRoot('home');
+saveData();
+goRoot('home');
 }
 
 function handleImg(e) {
@@ -228,13 +271,15 @@ function addReadingItem() {
   if (!newReading.label || !newReading.points) return;
   reading.push({ id: uid(), label: newReading.label, points: parseInt(newReading.points), icon: newReading.icon });
   newReading = { label:'', points:'', icon:'📗' };
-  render();
+saveData();
+render();
 }
 function addChoreItem() {
   if (!newChore.label || !newChore.points) return;
   chores.push({ id: uid(), label: newChore.label, points: parseInt(newChore.points), icon: newChore.icon });
   newChore = { label:'', points:'', icon:'🛏' };
-  render();
+  saveData();
+render();
 }
 
 function setBalance(i, val) {
@@ -245,7 +290,8 @@ function setBalance(i, val) {
   const rec = { type: diff>0?'chore':'spend', label:'잔액 직접 조정', icon:'✏️',
                 amount: Math.abs(diff), date: new Date().toLocaleDateString('ko-KR') };
   records[i] = [rec, ...records[i]];
-  render();
+saveData();
+render();
 }
 
 // ── Render helpers
@@ -542,7 +588,7 @@ function render() {
   document.getElementById('body').innerHTML = (screenMap[s] || renderHome)();
 }
 
-render();
+loadData();
 </script>
 </body>
 </html>
