@@ -126,9 +126,6 @@
   <div id="top-bar">
     <!-- filled by JS -->
   </div>
-<button onclick="login()">엄마 로그인</button>
-<button onclick="logout()">로그아웃</button>
-<button id="addBtn" style="display:none;">기록 추가</button>
   <div id="body">
     <!-- filled by JS -->
   </div>
@@ -207,7 +204,6 @@ function saveRecord() {
             date: new Date().toLocaleDateString('ko-KR') };
   }
   records[kidIdx] = [rec, ...records[kidIdx]];
-saveToFirestore(rec);
   form = {}; imgPreview = null;
   goRoot('home');
 }
@@ -547,76 +543,6 @@ function render() {
 }
 
 render();
-</script>
-<script type="module">
-import { getFirestore, collection, addDoc } 
-from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-async function saveToFirestore(data) {
-  try {
-    await addDoc(collection(db, "records"), data);
-    console.log("저장 성공!");
-  } catch (e) {
-    console.error("저장 실패:", e);
-  }
-}
-const db = getFirestore();
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } 
-from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-import { getDocs, collection } 
-from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-async function loadRecords() {
-  try {
-    const querySnapshot = await getDocs(collection(db, "records"));
-    const loaded = [];
-
-    querySnapshot.forEach((doc) => {
-      loaded.push(doc.data());
-    });
-
-    // 🔥 일단 첫째에 넣기 (다음 단계에서 분리할 예정)
-    records[0] = loaded;
-
-    render();
-loadRecords();
-    console.log("불러오기 성공!");
-  } catch (e) {
-    console.error("불러오기 실패:", e);
-  }
-}
-
-const firebaseConfig = {
-  apiKey: "여기",
-  authDomain: "여기",
-  projectId: "readingcoupon",
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth();
-
-window.login = async function() {
-  const email = prompt("이메일");
-  const password = prompt("비밀번호");
-
-  await signInWithEmailAndPassword(auth, email, password);
-  alert("로그인 성공!");
-}
-
-window.logout = async function() {
-  await signOut(auth);
-  alert("로그아웃!");
-}
-
-// 로그인 상태 확인
-onAuthStateChanged(auth, (user) => {
-  if (user && user.email === "엄마이메일@gmail.com") {
-    document.getElementById("addBtn").style.display = "block";
-  } else {
-    document.getElementById("addBtn").style.display = "none";
-  }
-});
 </script>
 </body>
 </html>
