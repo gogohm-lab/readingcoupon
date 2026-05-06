@@ -1,115 +1,185 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>독서 쿠폰</title>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f7; display: flex; justify-content: center; }
-  #app { width: 100%; max-width: 420px; min-height: 100dvh; background: #fff; display: flex; flex-direction: column; }
-  #top-bar { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 0.5px solid #e0e0e0; background: #fff; flex-shrink: 0; }
-  #top-bar .title { flex: 1; font-size: 17px; font-weight: 500; }
-  .kid-btn { padding: 6px 16px; border-radius: 20px; border: 0.5px solid #e0e0e0; background: transparent; font-size: 14px; cursor: pointer; color: #888; }
-  .kid-btn.active { border-color: #7F77DD; background: #EEEDFE; color: #533AB7; font-weight: 500; }
-  #back-btn { width: 34px; height: 34px; border: 0.5px solid #e0e0e0; background: transparent; border-radius: 8px; cursor: pointer; font-size: 16px; color: #333; }
-  #home-btn { border: none; background: transparent; font-size: 13px; color: #888; cursor: pointer; padding: 4px 8px; }
-  #body { flex: 1; overflow-y: auto; padding-bottom: 80px; }
-  #nav-bar { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 420px; background: #fff; border-top: 0.5px solid #e0e0e0; display: flex; z-index: 10; }
-  .nav-btn { flex: 1; padding: 12px 0; font-size: 13px; color: #888; border: none; background: transparent; cursor: pointer; }
-  .nav-btn.active { color: #7F77DD; font-weight: 500; }
-  .bal-card { background: linear-gradient(135deg, #7F77DD, #AFA9EC); border-radius: 16px; padding: 24px 20px; margin: 16px 16px 0; color: #fff; }
-  .bal-label { font-size: 13px; opacity: 0.85; }
-  .bal-amount { font-size: 36px; font-weight: 500; margin: 4px 0 0; }
-  .bal-count { font-size: 13px; opacity: 0.7; margin-top: 4px; }
-  .action-row { display: flex; gap: 10px; margin: 14px 16px 0; }
-  .action-btn { flex: 1; padding: 16px 0; border-radius: 14px; border: none; font-size: 13px; font-weight: 500; cursor: pointer; line-height: 1.6; }
-  .action-btn.reading { background: #E1F5EE; }
-  .action-btn.chore   { background: #EEEDFE; }
-  .action-btn.spend   { background: #FAECE7; }
-  .sec-title { font-size: 13px; font-weight: 500; color: #888; margin: 18px 16px 8px; }
-  .rec-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 0.5px solid #f0f0f0; }
-  .rec-icon { font-size: 22px; }
-  .rec-info { flex: 1; }
-  .rec-name { font-size: 14px; font-weight: 500; }
-  .rec-date { font-size: 12px; color: #aaa; }
-  .rec-img  { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; }
-  .rec-amount { font-size: 15px; font-weight: 500; white-space: nowrap; }
-  .rec-amount.plus  { color: #1D9E75; }
-  .rec-amount.minus { color: #E24B4A; }
-  .empty-msg { text-align: center; color: #aaa; padding: 28px 0; font-size: 14px; }
-  .section-card { background: #f5f5f7; border-radius: 14px; padding: 16px; margin: 12px 16px 0; border: 0.5px solid #e0e0e0; }
-  .s-label { font-size: 13px; color: #888; font-weight: 500; margin-bottom: 10px; }
-  .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .type-card { padding: 14px 8px; border-radius: 10px; border: 0.5px solid #e0e0e0; background: #fff; cursor: pointer; text-align: center; }
-  .type-card.selected { border: 1.5px solid #7F77DD; background: #EEEDFE; }
-  .type-card .t-icon { font-size: 26px; }
-  .type-card .t-name { font-size: 13px; margin-top: 6px; color: #333; }
-  .type-card .t-pts  { font-size: 12px; color: #1D9E75; font-weight: 500; margin-top: 3px; }
-  input[type="text"], input[type="number"] { width: 100%; padding: 10px 12px; border-radius: 10px; border: 0.5px solid #e0e0e0; font-size: 15px; background: #fff; color: #333; outline: none; }
-  input:focus { border-color: #7F77DD; }
-  .img-box { width: 90px; height: 90px; border-radius: 12px; border: 0.5px dashed #ccc; background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; text-align: center; flex-direction: column; }
-  .img-box span { font-size: 30px; }
-  .img-box small { font-size: 12px; color: #aaa; margin-top: 4px; }
-  .img-preview { width: 90px; height: 90px; border-radius: 12px; object-fit: cover; }
-  .reselect-btn { padding: 8px 16px; border-radius: 8px; border: 0.5px solid #E24B4A; background: transparent; color: #E24B4A; font-size: 13px; cursor: pointer; }
-  .primary-btn { display: block; width: calc(100% - 32px); margin: 16px 16px 0; padding: 15px; border-radius: 13px; background: #7F77DD; color: #fff; font-size: 15px; font-weight: 500; border: none; cursor: pointer; }
-  .primary-btn:disabled { background: #f0f0f0; color: #aaa; cursor: default; }
-  .tab-row { display: flex; margin: 14px 16px 0; border-bottom: 0.5px solid #e0e0e0; }
-  .tab-btn { flex: 1; padding: 8px 0; font-size: 13px; color: #888; border: none; border-bottom: 2px solid transparent; background: transparent; cursor: pointer; }
-  .tab-btn.active { color: #7F77DD; font-weight: 500; border-bottom: 2px solid #7F77DD; }
-  .chip-row { display: flex; gap: 6px; margin: 10px 16px 0; flex-wrap: wrap; }
-  .chip { padding: 4px 12px; border-radius: 20px; font-size: 12px; border: 0.5px solid #e0e0e0; background: transparent; color: #888; cursor: pointer; }
-  .chip.active { border-color: #7F77DD; background: #EEEDFE; color: #533AB7; }
-  .stat-row { display: flex; gap: 10px; margin: 10px 16px 0; }
-  .stat-card { flex: 1; padding: 12px; border-radius: 12px; background: #f5f5f7; border: 0.5px solid #e0e0e0; text-align: center; }
-  .stat-label { font-size: 12px; color: #888; }
-  .stat-val { font-size: 22px; font-weight: 500; margin-top: 2px; }
-  .stat-val.green { color: #1D9E75; }
-  .settings-group { margin: 14px 16px 0; }
-  .kid-setting-card { margin-bottom: 14px; padding: 14px; border-radius: 12px; border: 0.5px solid #e0e0e0; background: #f5f5f7; }
-  .card-title { font-size: 13px; font-weight: 500; margin-bottom: 8px; }
-  .field-label { font-size: 12px; color: #888; margin-bottom: 4px; margin-top: 10px; }
-  .cur-balance { font-size: 12px; color: #aaa; margin-top: 6px; }
-  .cur-balance b { font-weight: 500; color: #333; }
-  .confirm-hint { font-size: 13px; color: #888; white-space: nowrap; }
-  .item-row { display: flex; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 0.5px solid #f0f0f0; }
-  .s-input { flex: 1; padding: 6px 10px; border-radius: 8px; border: 0.5px solid #e0e0e0; font-size: 14px; background: #f5f5f7; color: #333; width: auto; }
-  .n-input { width: 68px; padding: 6px 8px; border-radius: 8px; border: 0.5px solid #e0e0e0; font-size: 14px; text-align: right; background: #f5f5f7; color: #333; }
-  .del-btn { padding: 4px 10px; border-radius: 6px; border: 0.5px solid #E24B4A; background: transparent; color: #E24B4A; font-size: 12px; cursor: pointer; }
-  .add-section { margin-top: 14px; padding: 14px; border-radius: 12px; border: 0.5px solid #e0e0e0; background: #f5f5f7; }
-  .add-section-title { font-size: 13px; font-weight: 500; margin-bottom: 6px; }
-  .icon-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-  .icon-btn { width: 34px; height: 34px; border-radius: 8px; border: 0.5px solid #e0e0e0; background: transparent; font-size: 18px; cursor: pointer; }
-  .icon-btn.selected { border: 1.5px solid #7F77DD; background: #EEEDFE; }
-  .add-btn { width: 100%; padding: 10px; border-radius: 10px; border: 0.5px dashed #ccc; background: transparent; font-size: 14px; cursor: pointer; color: #7F77DD; font-weight: 500; margin-top: 10px; }
-  .row-unit { font-size: 12px; color: #888; }
-  #loading { position: fixed; inset: 0; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; gap: 12px; }
-  .spinner { width: 36px; height: 36px; border: 3px solid #e0e0e0; border-top-color: #7F77DD; border-radius: 50%; animation: spin .8s linear infinite; }
+  :root {
+    --brand: #6C63FF;
+    --brand-light: #EEF0FF;
+    --brand-dark: #4B44CC;
+    --green: #00C48C;
+    --red: #FF5C5C;
+    --bg: #F7F8FC;
+    --card: #FFFFFF;
+    --border: #EBEBF0;
+    --text: #1A1A2E;
+    --sub: #8A8A9A;
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'Pretendard', -apple-system, sans-serif; background: var(--bg); display: flex; justify-content: center; }
+  #app { width: 100%; max-width: 420px; min-height: 100dvh; background: var(--bg); display: flex; flex-direction: column; }
+
+  /* ── Top Bar */
+  #top-bar { display: flex; align-items: center; gap: 10px; padding: 16px 20px 12px; background: var(--bg); flex-shrink: 0; }
+  .app-title { flex: 1; font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
+  .kid-tabs { display: flex; gap: 6px; }
+  .kid-btn { padding: 6px 14px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--card); font-size: 13px; font-weight: 500; cursor: pointer; color: var(--sub); transition: all .2s; }
+  .kid-btn.active { border-color: var(--brand); background: var(--brand); color: #fff; }
+  .back-btn { width: 36px; height: 36px; border: 1.5px solid var(--border); background: var(--card); border-radius: 12px; cursor: pointer; font-size: 16px; color: var(--text); display: flex; align-items: center; justify-content: center; }
+  .home-link { font-size: 13px; font-weight: 500; color: var(--sub); background: none; border: none; cursor: pointer; padding: 4px 6px; }
+
+  /* ── Body */
+  #body { flex: 1; overflow-y: auto; padding-bottom: 88px; }
+
+  /* ── Nav */
+  #nav-bar { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 420px; background: rgba(255,255,255,0.92); backdrop-filter: blur(16px); border-top: 1px solid var(--border); display: flex; z-index: 10; padding-bottom: env(safe-area-inset-bottom); }
+  .nav-btn { flex: 1; padding: 12px 0 10px; font-size: 11px; font-weight: 500; color: var(--sub); border: none; background: transparent; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .nav-btn .nav-icon { font-size: 20px; }
+  .nav-btn.active { color: var(--brand); }
+
+  /* ── Balance Card */
+  .bal-card { margin: 4px 20px 0; border-radius: 24px; padding: 28px 24px; background: linear-gradient(135deg, #6C63FF 0%, #A78BFA 100%); color: #fff; position: relative; overflow: hidden; }
+  .bal-card::before { content:''; position:absolute; right:-30px; top:-30px; width:140px; height:140px; border-radius:50%; background:rgba(255,255,255,0.08); }
+  .bal-card::after  { content:''; position:absolute; right:30px; bottom:-40px; width:100px; height:100px; border-radius:50%; background:rgba(255,255,255,0.06); }
+  .bal-who { font-size: 13px; font-weight: 500; opacity: 0.85; margin-bottom: 6px; }
+  .bal-amount { font-size: 40px; font-weight: 700; letter-spacing: -1px; }
+  .bal-count { font-size: 12px; opacity: 0.7; margin-top: 6px; }
+
+  /* ── Action Buttons */
+  .action-row { display: flex; gap: 10px; margin: 16px 20px 0; }
+  .action-btn { flex: 1; padding: 16px 0; border-radius: var(--radius); border: none; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; transition: transform .15s; }
+  .action-btn:active { transform: scale(0.96); }
+  .action-btn .a-icon { font-size: 22px; }
+  .action-btn.reading { background: #E8F5E9; color: #2E7D32; }
+  .action-btn.chore   { background: var(--brand-light); color: var(--brand-dark); }
+  .action-btn.spend   { background: #FFF0F0; color: #C62828; }
+
+  /* ── Section Title */
+  .sec-title { font-size: 13px; font-weight: 600; color: var(--sub); margin: 22px 20px 10px; letter-spacing: 0.2px; text-transform: uppercase; }
+
+  /* ── Record Item */
+  .rec-item { padding: 14px 20px; border-bottom: 1px solid var(--border); }
+  .rec-row { display: flex; align-items: center; gap: 12px; }
+  .rec-bubble { width: 40px; height: 40px; border-radius: 12px; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .rec-info { flex: 1; min-width: 0; }
+  .rec-name { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rec-date { font-size: 12px; color: var(--sub); margin-top: 2px; }
+  .rec-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .rec-amount { font-size: 15px; font-weight: 700; }
+  .rec-amount.plus  { color: var(--green); }
+  .rec-amount.minus { color: var(--red); }
+  .memo-toggle { width: 26px; height: 26px; border-radius: 8px; border: 1.5px solid var(--border); background: var(--bg); font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .memo-toggle.open { background: var(--brand-light); border-color: var(--brand); }
+  .memo-box { margin: 10px 0 2px 52px; padding: 10px 14px; background: var(--brand-light); border-radius: 10px; font-size: 13px; color: #444; line-height: 1.7; border-left: 3px solid var(--brand); }
+  .empty-msg { text-align: center; color: var(--sub); padding: 40px 0; font-size: 14px; }
+
+  /* ── Section Card (sub pages) */
+  .section-card { background: var(--card); border-radius: var(--radius); padding: 18px; margin: 12px 20px 0; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .s-label { font-size: 12px; font-weight: 600; color: var(--sub); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.4px; }
+
+  /* ── Type Grid */
+  .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .type-card { padding: 16px 10px; border-radius: var(--radius-sm); border: 2px solid var(--border); background: var(--bg); cursor: pointer; text-align: center; transition: all .18s; }
+  .type-card:active { transform: scale(0.97); }
+  .type-card.selected { border-color: var(--brand); background: var(--brand-light); }
+  .t-icon { font-size: 28px; }
+  .t-name { font-size: 13px; font-weight: 600; margin-top: 6px; color: var(--text); }
+  .t-pts  { font-size: 12px; color: var(--green); font-weight: 600; margin-top: 3px; }
+
+  /* ── Qty */
+  .qty-row { display: flex; align-items: center; gap: 16px; }
+  .qty-btn { width: 38px; height: 38px; border-radius: 50%; font-size: 22px; font-weight: 300; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform .15s; border: 2px solid var(--border); background: var(--bg); color: var(--text); }
+  .qty-btn.plus { border-color: var(--brand); background: var(--brand); color: #fff; }
+  .qty-btn:active { transform: scale(0.9); }
+  .qty-val { font-size: 26px; font-weight: 700; min-width: 32px; text-align: center; color: var(--text); }
+  .qty-total { font-size: 13px; font-weight: 600; color: var(--green); }
+
+  /* ── Input */
+  input[type="text"], input[type="number"] {
+    width: 100%; padding: 12px 14px; border-radius: var(--radius-sm); border: 1.5px solid var(--border);
+    font-size: 15px; font-family: inherit; background: var(--bg); color: var(--text); outline: none; transition: border .2s;
+  }
+  input:focus { border-color: var(--brand); }
+  textarea { width: 100%; padding: 12px 14px; border-radius: var(--radius-sm); border: 1.5px solid var(--border); font-size: 14px; font-family: inherit; background: var(--bg); color: var(--text); outline: none; resize: none; min-height: 96px; line-height: 1.7; transition: border .2s; }
+  textarea:focus { border-color: var(--brand); }
+
+  /* ── Primary Button */
+  .primary-btn { display: block; width: calc(100% - 40px); margin: 20px 20px 0; padding: 16px; border-radius: var(--radius); background: var(--brand); color: #fff; font-size: 16px; font-weight: 700; border: none; cursor: pointer; letter-spacing: -0.2px; transition: opacity .2s, transform .15s; font-family: inherit; }
+  .primary-btn:active { transform: scale(0.98); }
+  .primary-btn:disabled { background: var(--border); color: var(--sub); cursor: default; }
+
+  /* ── Tabs */
+  .tab-row { display: flex; margin: 16px 20px 0; background: var(--card); border-radius: 12px; padding: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .tab-btn { flex: 1; padding: 8px 0; font-size: 13px; font-weight: 600; color: var(--sub); border: none; border-radius: 9px; background: transparent; cursor: pointer; transition: all .2s; font-family: inherit; }
+  .tab-btn.active { background: var(--brand); color: #fff; }
+
+  /* ── Chips */
+  .chip-row { display: flex; gap: 6px; margin: 12px 20px 0; flex-wrap: wrap; }
+  .chip { padding: 5px 13px; border-radius: 20px; font-size: 12px; font-weight: 500; border: 1.5px solid var(--border); background: var(--card); color: var(--sub); cursor: pointer; transition: all .2s; }
+  .chip.active { border-color: var(--brand); background: var(--brand-light); color: var(--brand-dark); }
+
+  /* ── Stat Cards */
+  .stat-row { display: flex; gap: 10px; margin: 12px 20px 0; }
+  .stat-card { flex: 1; padding: 16px; border-radius: var(--radius); background: var(--card); box-shadow: 0 1px 4px rgba(0,0,0,0.05); text-align: center; }
+  .stat-label { font-size: 11px; font-weight: 600; color: var(--sub); text-transform: uppercase; letter-spacing: 0.3px; }
+  .stat-val { font-size: 24px; font-weight: 700; margin-top: 4px; color: var(--text); }
+  .stat-val.green { color: var(--green); }
+
+  /* ── Settings */
+  .settings-group { margin: 14px 20px 0; }
+  .kid-card { margin-bottom: 14px; padding: 18px; border-radius: var(--radius); background: var(--card); box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .kid-card-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 14px; }
+  .field-label { font-size: 11px; font-weight: 600; color: var(--sub); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
+  .field-label + * { margin-top: 0; }
+  .cur-balance { font-size: 12px; color: var(--sub); margin-top: 8px; }
+  .cur-balance b { font-weight: 700; color: var(--text); }
+  .confirm-hint { font-size: 12px; color: var(--sub); white-space: nowrap; }
+  .item-row { display: flex; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .s-input { flex: 1; padding: 7px 10px; border-radius: 8px; border: 1.5px solid var(--border); font-size: 14px; font-family: inherit; background: var(--bg); color: var(--text); width: auto; outline: none; }
+  .s-input:focus { border-color: var(--brand); }
+  .n-input { width: 68px; padding: 7px 8px; border-radius: 8px; border: 1.5px solid var(--border); font-size: 14px; text-align: right; font-family: inherit; background: var(--bg); color: var(--text); outline: none; }
+  .n-input:focus { border-color: var(--brand); }
+  .del-btn { padding: 5px 10px; border-radius: 8px; border: 1.5px solid #FFCDD2; background: #FFF5F5; color: var(--red); font-size: 12px; font-weight: 600; cursor: pointer; }
+  .add-section { margin-top: 14px; padding: 18px; border-radius: var(--radius); background: var(--card); box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .add-section-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+  .icon-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; }
+  .icon-btn { width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--bg); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+  .icon-btn.selected { border-color: var(--brand); background: var(--brand-light); }
+  .add-btn { width: 100%; padding: 12px; border-radius: var(--radius-sm); border: 2px dashed var(--brand-light); background: transparent; font-size: 14px; font-weight: 600; cursor: pointer; color: var(--brand); margin-top: 12px; font-family: inherit; transition: background .2s; }
+  .add-btn:hover { background: var(--brand-light); }
+  .row-unit { font-size: 12px; color: var(--sub); }
+
+  /* ── Loading */
+  #loading { position: fixed; inset: 0; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; gap: 14px; }
+  .spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--brand); border-radius: 50%; animation: spin .8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  #toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 13px; opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 100; white-space: nowrap; }
+
+  /* ── Toast */
+  #toast { position: fixed; bottom: 96px; left: 50%; transform: translateX(-50%); background: #1A1A2E; color: #fff; padding: 11px 22px; border-radius: 24px; font-size: 13px; font-weight: 500; opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 100; white-space: nowrap; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
   #toast.show { opacity: 1; }
 </style>
 </head>
 <body>
-<div id="loading"><div class="spinner"></div><div style="font-size:14px;color:#888">불러오는 중...</div></div>
+<div id="loading"><div class="spinner"></div><div style="font-size:14px;color:#8A8A9A;font-weight:500">불러오는 중...</div></div>
 <div id="toast"></div>
 <div id="app" style="display:none">
   <div id="top-bar"></div>
   <div id="body"></div>
   <div id="nav-bar">
-    <button class="nav-btn" data-s="home"     onclick="A.goRoot('home')">🏠 홈</button>
-    <button class="nav-btn" data-s="history"  onclick="A.goRoot('history')">📋 내역</button>
-    <button class="nav-btn" data-s="settings" onclick="A.goRoot('settings')">⚙️ 설정</button>
+    <button class="nav-btn" data-s="home"     onclick="A.goRoot('home')"><span class="nav-icon">🏠</span>홈</button>
+    <button class="nav-btn" data-s="history"  onclick="A.goRoot('history')"><span class="nav-icon">📋</span>내역</button>
+    <button class="nav-btn" data-s="settings" onclick="A.goRoot('settings')"><span class="nav-icon">⚙️</span>설정</button>
   </div>
 </div>
-<input type="file" id="file-input" accept="image/*" style="display:none" onchange="A.handleImg(event)" />
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 <script>
-// ── Firebase 초기화
 firebase.initializeApp({
   apiKey: "AIzaSyDqvmLwtp3HP0xuoyhpd8VP8WbCnV10T5k",
   authDomain: "reading-coupon.firebaseapp.com",
@@ -119,11 +189,9 @@ firebase.initializeApp({
   appId: "1:586602087544:web:625e7ce0a27dfe07d2998d"
 });
 const db = firebase.firestore();
-const storage = firebase.storage();
 
-// ── 기본값
 const DEFAULTS = {
-  kids:    ['첫째', '둘째'],
+  kids: ['첫째', '둘째'],
   reading: [
     { id:'r1', label:'얇은 책', points:1000, icon:'📗' },
     { id:'r2', label:'굵은 책', points:2000, icon:'📚' },
@@ -138,207 +206,174 @@ const DEFAULTS = {
   records: [[], []],
 };
 
-// ── 앱 전역 객체 (window.A 로 노출 → HTML oninput에서 접근 가능)
 window.A = (() => {
   const ICONS_R = ['📗','📘','📕','📙','📚','📖','📰','🗞','📝','✏️'];
   const ICONS_C = ['🛏','🍽','🧹','👕','🧺','🪣','🧽','🧴','🪴','🗑'];
-  const SUB     = ['reading','chore','spend'];
+  const SUB = ['reading','chore','spend'];
 
-  let st = JSON.parse(JSON.stringify(DEFAULTS)); // 앱 상태
-  let kidIdx = 0, stack = ['home'], form = {}, imgPreview = null, imgFile = null;
-  let settingsTab = 'kids', histFilter = 'all', readingFilter = null;
-  let newR = { label:'', points:'', icon:'📗' };
-  let newC = { label:'', points:'', icon:'🛏' };
-  let saving = false;
+  let st = JSON.parse(JSON.stringify(DEFAULTS));
+  let kidIdx=0, stack=['home'], form={}, settingsTab='kids';
+  let histFilter='all', readingFilter=null, expandedIdx=null;
+  let newR={label:'',points:'',icon:'📗'}, newC={label:'',points:'',icon:'🛏'};
+  let saving=false;
 
-  const fmt  = n  => (n||0).toLocaleString('ko-KR') + '원';
+  const fmt  = n  => (n||0).toLocaleString('ko-KR')+'원';
   const uid  = () => Math.random().toString(36).slice(2,7);
   const cur  = () => stack[stack.length-1];
   const root = () => stack[0];
   const bal  = i  => (st.records[i]||[]).reduce((s,r)=>s+(r.type==='spend'?-r.amount:r.amount),0);
 
-  // toast
   function toast(msg) {
-    const el = document.getElementById('toast');
-    el.textContent = msg; el.classList.add('show');
-    setTimeout(()=>el.classList.remove('show'), 2500);
+    const el=document.getElementById('toast');
+    el.textContent=msg; el.classList.add('show');
+    setTimeout(()=>el.classList.remove('show'),2500);
   }
 
-  // ── Firebase 저장 (기존 데이터 보호: merge 옵션 사용)
   async function save() {
-    if (saving) return; saving = true;
+    if (saving) return; saving=true;
     try {
       await db.collection('app').doc('config').set({
         kids:    JSON.parse(JSON.stringify(st.kids)),
         reading: JSON.parse(JSON.stringify(st.reading)),
         chores:  JSON.parse(JSON.stringify(st.chores)),
-      }, { merge: true });
-      for (let i = 0; i < st.records.length; i++) {
-        const clean = (st.records[i]||[]).map(r => {
-          const o = {};
-          for (const k in r) o[k] = (r[k] === undefined ? null : r[k]);
-          return o;
+      }, {merge:true});
+      for (let i=0; i<st.records.length; i++) {
+        const clean=(st.records[i]||[]).map(r=>{
+          const o={}; for(const k in r) o[k]=(r[k]===undefined?null:r[k]); return o;
         });
-        await db.collection('app').doc('records_'+i).set({ list: clean }, { merge: true });
+        await db.collection('app').doc('records_'+i).set({list:clean},{merge:true});
       }
       toast('저장됐어요 ✓');
-    } catch(e) {
-      console.error(e);
-      toast('저장 실패: ' + e.message);
-    }
-    saving = false;
+    } catch(e) { console.error(e); toast('저장 실패: '+e.message); }
+    saving=false;
   }
 
-  // ── Navigation
-  function push(s)   { stack.push(s); form={}; imgPreview=null; render(); }
+  function push(s)   { stack.push(s); form={}; render(); }
   function pop()     { if(stack.length>1) stack.pop(); render(); }
   function goRoot(s) { stack=[s]; render(); }
 
-  // ── 기록 저장
   async function saveRecord() {
-    const s = cur();
-    if (s==='reading' && !form.typeId) return;
-    if (s==='chore'   && !form.typeId) return;
-    if (s==='spend'   && (!form.amount||!form.memo)) return;
+    const s=cur();
+    if (s==='reading'&&!form.typeId) return;
+    if (s==='chore'&&!form.typeId) return;
+    if (s==='spend'&&(!form.amount||!form.memo)) return;
+    toast('저장 중...');
     let rec;
     if (s==='reading') {
-      const t = st.reading.find(r=>r.id===form.typeId);
-      const qty = form.qty || 1;
-      rec = { type:'reading', label:t.label, icon:t.icon, amount:t.points * qty,
-              qty: qty, img:imgPreview||null, title:form.title||'',
-              date:new Date().toLocaleDateString('ko-KR') };
+      const t=st.reading.find(r=>r.id===form.typeId);
+      const qty=form.qty||1;
+      rec={type:'reading',label:t.label,icon:t.icon,amount:t.points*qty,qty,memo:form.memo||'',title:form.title||'',date:new Date().toLocaleDateString('ko-KR')};
     } else if (s==='chore') {
-      const t = st.chores.find(c=>c.id===form.typeId);
-      rec = { type:'chore', label:t.label, icon:t.icon, amount:t.points, date:new Date().toLocaleDateString('ko-KR') };
+      const t=st.chores.find(c=>c.id===form.typeId);
+      rec={type:'chore',label:t.label,icon:t.icon,amount:t.points,date:new Date().toLocaleDateString('ko-KR')};
     } else {
-      rec = { type:'spend', label:form.memo, icon:'💸', amount:parseInt(form.amount), date:new Date().toLocaleDateString('ko-KR') };
+      rec={type:'spend',label:form.memo,icon:'💸',amount:parseInt(form.amount),date:new Date().toLocaleDateString('ko-KR')};
     }
-    st.records[kidIdx] = [rec, ...(st.records[kidIdx]||[])];
-    form={}; imgPreview=null;
-    await save();
-    goRoot('home');
+    st.records[kidIdx]=[rec,...(st.records[kidIdx]||[])];
+    form={};
+    await save(); goRoot('home');
   }
 
-  function handleImg(e) {
-    const f = e.target.files[0]; if (!f) return;
-    // 파일 객체도 보관 (Storage 업로드용)
-    imgFile = f;
-    const r = new FileReader();
-    r.onload = ev => { imgPreview = ev.target.result; render(); };
-    r.readAsDataURL(f);
-  }
-
-  // 이미지를 Firebase Storage에 업로드하고 URL 반환
-  async function uploadImg() {
-    if (!imgFile) return null;
-    try {
-      const ref = storage.ref('photos/' + Date.now() + '_' + imgFile.name);
-      await ref.put(imgFile);
-      const url = await ref.getDownloadURL();
-      return url;
-    } catch(e) {
-      console.error('사진 업로드 실패:', e);
-      toast('사진 업로드 실패: ' + e.message);
-      return null;
-    }
-  }
-
-  // ── render helpers
-  function recHTML(r) {
-    const s=r.type==='spend',cls=s?'minus':'plus',sign=s?'-':'+';
-    const img=r.img?`<img class="rec-img" src="${r.img}"/>`:'';
+  function recHTML(r, idx) {
+    const s=r.type==='spend', cls=s?'minus':'plus', sign=s?'-':'+';
+    const isExp=expandedIdx===idx, hasMemo=r.memo&&r.memo.trim();
     return `<div class="rec-item">
-      <div class="rec-icon">${r.icon}</div>
-      <div class="rec-info"><div class="rec-name">${r.label}${r.title?' — '+r.title:''}</div><div class="rec-date">${r.date}</div></div>
-      ${img}<div class="rec-amount ${cls}">${sign}${fmt(r.amount)}</div>
+      <div class="rec-row">
+        <div class="rec-bubble">${r.icon}</div>
+        <div class="rec-info">
+          <div class="rec-name">${r.label}${r.qty>1?' ×'+r.qty:''}${r.title?' · '+r.title:''}</div>
+          <div class="rec-date">${r.date}</div>
+        </div>
+        <div class="rec-right">
+          <div class="rec-amount ${cls}">${sign}${fmt(r.amount)}</div>
+          ${hasMemo?`<button class="memo-toggle ${isExp?'open':''}" onclick="A.toggleMemo(${idx})">💬</button>`:''}
+        </div>
+      </div>
+      ${hasMemo&&isExp?`<div class="memo-box">${r.memo}</div>`:''}
     </div>`;
   }
 
-  // ── 화면 렌더
   function renderTopBar() {
     const s=cur(), isSub=SUB.includes(s);
     const titles={reading:'📖 독서 기록',chore:'✨ 집안일',spend:'💸 지출 기록'};
     document.getElementById('top-bar').innerHTML = isSub
-      ? `<button id="back-btn" onclick="A.pop()">←</button>
-         <span style="flex:1;font-size:16px;font-weight:500">${titles[s]}</span>
-         <button id="home-btn" onclick="A.goRoot('home')">홈</button>`
-      : `<span class="title">독서 쿠폰</span>
-         <div style="display:flex;gap:8px">${st.kids.map((k,i)=>
-           `<button class="kid-btn ${kidIdx===i?'active':''}" onclick="A.setKidIdx(${i})">${k}</button>`).join('')}</div>`;
+      ? `<button class="back-btn" onclick="A.pop()">←</button>
+         <span style="flex:1;font-size:16px;font-weight:700;color:var(--text)">${titles[s]}</span>
+         <button class="home-link" onclick="A.goRoot('home')">홈으로</button>`
+      : `<span class="app-title">📚 독서 쿠폰</span>
+         <div class="kid-tabs">${st.kids.map((k,i)=>`<button class="kid-btn ${kidIdx===i?'active':''}" onclick="A.setKidIdx(${i})">${k}</button>`).join('')}</div>`;
   }
 
   function renderNavBar() {
     const isSub=SUB.includes(cur());
-    document.querySelectorAll('.nav-btn').forEach(b=>
-      b.classList.toggle('active', !isSub && b.dataset.s===root()));
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',!isSub&&b.dataset.s===root()));
   }
 
   function renderHome() {
     const recs=st.records[kidIdx]||[];
     return `
       <div class="bal-card">
-        <div class="bal-label">현재 잔액 — ${st.kids[kidIdx]}</div>
+        <div class="bal-who">현재 잔액 · ${st.kids[kidIdx]}</div>
         <div class="bal-amount">${fmt(bal(kidIdx))}</div>
-        <div class="bal-count">${recs.length}건의 기록</div>
+        <div class="bal-count">총 ${recs.length}건의 기록</div>
       </div>
       <div class="action-row">
-        <button class="action-btn reading" onclick="A.push('reading')">📖<br/>독서</button>
-        <button class="action-btn chore"   onclick="A.push('chore')">✨<br/>집안일</button>
-        <button class="action-btn spend"   onclick="A.push('spend')">💸<br/>지출</button>
+        <button class="action-btn reading" onclick="A.push('reading')"><span class="a-icon">📖</span>독서</button>
+        <button class="action-btn chore"   onclick="A.push('chore')"><span class="a-icon">✨</span>집안일</button>
+        <button class="action-btn spend"   onclick="A.push('spend')"><span class="a-icon">💸</span>지출</button>
       </div>
       <div class="sec-title">최근 내역</div>
-      ${recs.length===0?'<div class="empty-msg">아직 기록이 없어요</div>':recs.slice(0,5).map(recHTML).join('')}`;
+      ${recs.length===0?'<div class="empty-msg">아직 기록이 없어요 🌱</div>':recs.slice(0,5).map((r,i)=>recHTML(r,i)).join('')}`;
   }
 
   function renderReadingPage() {
     const cards=st.reading.map(r=>`
       <div class="type-card ${form.typeId===r.id?'selected':''}" onclick="A.selectType('${r.id}')">
-        <div class="t-icon">${r.icon}</div><div class="t-name">${r.label}</div>
+        <div class="t-icon">${r.icon}</div>
+        <div class="t-name">${r.label}</div>
         <div class="t-pts">+${fmt(r.points)}</div>
       </div>`).join('');
-    const imgH=imgPreview
-      ?`<div style="display:flex;align-items:center;gap:14px">
-          <img class="img-preview" src="${imgPreview}"/>
-          <button class="reselect-btn" onclick="A.clearImg()">다시 선택</button></div>`
-      :`<div class="img-box" onclick="document.getElementById('file-input').click()">
-          <span>📷</span><small>사진 선택</small></div>`;
-    const qty = form.qty || 1;
-    const selectedPts = form.typeId ? (st.reading.find(r=>r.id===form.typeId)||{}).points || 0 : 0;
+    const qty=form.qty||1;
+    const pts=form.typeId?(st.reading.find(r=>r.id===form.typeId)||{}).points||0:0;
     return `
-      <div class="section-card"><div class="s-label">책 종류 선택 *</div><div class="type-grid">${cards}</div></div>
+      <div class="section-card"><div class="s-label">종류 선택</div><div class="type-grid">${cards}</div></div>
       <div class="section-card">
         <div class="s-label">개수</div>
-        <div style="display:flex;align-items:center;gap:12px">
-          <button onclick="A.setQty(${qty-1})" style="width:36px;height:36px;border-radius:50%;border:0.5px solid #e0e0e0;background:#f5f5f7;font-size:20px;cursor:pointer;line-height:1">−</button>
-          <span style="font-size:22px;font-weight:500;min-width:28px;text-align:center">${qty}</span>
-          <button onclick="A.setQty(${qty+1})" style="width:36px;height:36px;border-radius:50%;border:0.5px solid #7F77DD;background:#EEEDFE;color:#533AB7;font-size:20px;cursor:pointer;line-height:1">+</button>
-          ${selectedPts ? `<span style="font-size:13px;color:#1D9E75;font-weight:500">= +${fmt(selectedPts*qty)}</span>` : ''}
+        <div class="qty-row">
+          <button class="qty-btn" onclick="A.setQty(${qty-1})">−</button>
+          <span class="qty-val">${qty}</span>
+          <button class="qty-btn plus" onclick="A.setQty(${qty+1})">+</button>
+          ${pts?`<span class="qty-total">= +${fmt(pts*qty)}</span>`:''}
         </div>
       </div>
-      <div class="section-card"><div class="s-label">책 제목 (선택)</div>
-        <input type="text" placeholder="예: 해리포터" value="${form.title||''}" oninput="A.setForm('title',this.value)"/></div>
-      <div class="section-card"><div class="s-label">사진 업로드 (선택)</div>${imgH}</div>
+      <div class="section-card"><div class="s-label">제목 (선택)</div>
+        <input type="text" placeholder="예: 해리포터, 조선일보" value="${form.title||''}" oninput="A.setForm('title',this.value)"/></div>
+      <div class="section-card">
+        <div class="s-label">💬 인상깊었던 내용 (선택)</div>
+        <textarea placeholder="오늘 읽은 것 중 기억에 남는 내용을 적어봐요!" oninput="A.setForm('memo',this.value)">${form.memo||''}</textarea>
+      </div>
       <button class="primary-btn" onclick="A.saveRecord()" ${form.typeId?'':'disabled'}>저장하기</button>`;
   }
 
   function renderChorePage() {
     const cards=st.chores.map(c=>`
       <div class="type-card ${form.typeId===c.id?'selected':''}" onclick="A.selectType('${c.id}')">
-        <div class="t-icon">${c.icon}</div><div class="t-name">${c.label}</div>
+        <div class="t-icon">${c.icon}</div>
+        <div class="t-name">${c.label}</div>
         <div class="t-pts">+${fmt(c.points)}</div>
       </div>`).join('');
     return `
-      <div class="section-card"><div class="s-label">집안일 선택 *</div><div class="type-grid">${cards}</div></div>
+      <div class="section-card"><div class="s-label">집안일 선택</div><div class="type-grid">${cards}</div></div>
       <button class="primary-btn" onclick="A.saveRecord()" ${form.typeId?'':'disabled'}>저장하기</button>`;
   }
 
   function renderSpendPage() {
-    const ok = form.amount && form.memo;
+    const ok=form.amount&&form.memo;
     return `
       <div class="section-card"><div class="s-label">금액</div>
-        <input type="number" placeholder="예: 3000" value="${form.amount||''}" oninput="A.setForm('amount',this.value); A.refreshSaveBtn()"/></div>
+        <input type="number" placeholder="예: 3000" value="${form.amount||''}" oninput="A.setForm('amount',this.value);A.refreshSaveBtn()"/></div>
       <div class="section-card"><div class="s-label">어디에 썼나요?</div>
-        <input type="text" placeholder="예: 편의점, 문구점" value="${form.memo||''}" oninput="A.setForm('memo',this.value); A.refreshSaveBtn()"/></div>
+        <input type="text" placeholder="예: 편의점, 문구점" value="${form.memo||''}" oninput="A.setForm('memo',this.value);A.refreshSaveBtn()"/></div>
       <button class="primary-btn" id="spend-save-btn" onclick="A.saveRecord()" ${ok?'':'disabled'}>저장하기</button>`;
   }
 
@@ -353,10 +388,9 @@ window.A = (() => {
       </div>`;
       const f2=(st.records[kidIdx]||[]).filter(r=>r.type==='reading'&&(!readingFilter||r.label===readingFilter));
       if(f2.length>0){
-        const tot=f2.reduce((s,r)=>s+r.amount,0);
         statsH=`<div class="stat-row">
           <div class="stat-card"><div class="stat-label">총 횟수</div><div class="stat-val">${f2.length}권</div></div>
-          <div class="stat-card"><div class="stat-label">적립 금액</div><div class="stat-val green">${fmt(tot)}</div></div>
+          <div class="stat-card"><div class="stat-label">적립 금액</div><div class="stat-val green">${fmt(f2.reduce((s,r)=>s+r.amount,0))}</div></div>
         </div>`;
       }
     }
@@ -365,35 +399,32 @@ window.A = (() => {
       if(histFilter==='reading') return r.type==='reading'&&(!readingFilter||r.label===readingFilter);
       return r.type===histFilter;
     });
-    const listH=filtered.length===0?'<div class="empty-msg">기록이 없어요</div>':filtered.map(recHTML).join('');
-    return `<div class="tab-row">${tabsH}</div>${chipsH}${statsH}<div style="margin-top:4px">${listH}</div>`;
+    return `<div class="tab-row">${tabsH}</div>${chipsH}${statsH}
+      <div style="margin-top:8px">${filtered.length===0?'<div class="empty-msg">기록이 없어요 🌱</div>':filtered.map((r,i)=>recHTML(r,i)).join('')}</div>`;
   }
 
   function renderSettings() {
     const tabs=[['kids','이름'],['reading','독서'],['chores','집안일']];
     const tabsH=tabs.map(([id,l])=>`<button class="tab-btn ${settingsTab===id?'active':''}" onclick="A.setSettingsTab('${id}')">${l}</button>`).join('');
     let body='';
-
     if (settingsTab==='kids') {
       body=`<div class="settings-group">${st.kids.map((k,i)=>`
-        <div class="kid-setting-card">
-          <div class="card-title">${i+1}번째 아이</div>
+        <div class="kid-card">
+          <div class="kid-card-title">${i+1}번째 아이</div>
           <div class="field-label">이름</div>
           <input type="text" id="kid-name-${i}" value="${k}" oninput="A.updateKidName(${i},this.value)"/>
-          <div class="field-label" style="margin-top:10px">현재 잔액 직접 설정</div>
+          <div class="field-label" style="margin-top:14px">현재 잔액 직접 설정</div>
           <div style="display:flex;gap:8px;align-items:center">
-            <input type="number" placeholder="예: 5000" style="flex:1" id="bal-${i}"
-              onblur="A.setBalance(${i},this.value);this.value=''"/>
+            <input type="number" placeholder="예: 5000" style="flex:1" id="bal-${i}" onblur="A.setBalance(${i},this.value);this.value=''"/>
             <span class="confirm-hint">원 입력 후 확인</span>
           </div>
           <div class="cur-balance">현재 잔액: <b>${fmt(bal(i))}</b></div>
         </div>`).join('')}</div>`;
     }
-
     if (settingsTab==='reading') {
       const rows=st.reading.map((r,i)=>`
         <div class="item-row">
-          <span>${r.icon}</span>
+          <span style="font-size:20px">${r.icon}</span>
           <input class="s-input" type="text" value="${r.label}" oninput="A.updateReadingLabel(${i},this.value)"/>
           <input class="n-input" type="number" value="${r.points}" oninput="A.updateReadingPts(${i},this.value)"/>
           <span class="row-unit">원</span>
@@ -403,21 +434,20 @@ window.A = (() => {
       body=`<div class="settings-group">${rows}
         <div class="add-section">
           <div class="add-section-title">새 독서 종류 추가</div>
-          <div style="font-size:12px;color:#888">아이콘</div>
+          <div class="field-label">아이콘</div>
           <div class="icon-row">${icons}</div>
-          <input type="text" placeholder="이름 (예: 만화책)" value="${newR.label}" oninput="A.setNewR('label',this.value)" style="margin-top:8px"/>
-          <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+          <input type="text" placeholder="이름 (예: 만화책)" value="${newR.label}" oninput="A.setNewR('label',this.value)" style="margin-top:10px"/>
+          <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
             <input class="n-input" type="number" placeholder="금액" value="${newR.points}" oninput="A.setNewR('points',this.value)" style="flex:1;width:auto"/>
             <span class="row-unit">원</span>
           </div>
           <button class="add-btn" onclick="A.addReading()">+ 추가하기</button>
         </div></div>`;
     }
-
     if (settingsTab==='chores') {
       const rows=st.chores.map((c,i)=>`
         <div class="item-row">
-          <span>${c.icon}</span>
+          <span style="font-size:20px">${c.icon}</span>
           <input class="s-input" type="text" value="${c.label}" oninput="A.updateChoreLabel(${i},this.value)"/>
           <input class="n-input" type="number" value="${c.points}" oninput="A.updateChorePts(${i},this.value)"/>
           <span class="row-unit">원</span>
@@ -427,114 +457,88 @@ window.A = (() => {
       body=`<div class="settings-group">${rows}
         <div class="add-section">
           <div class="add-section-title">새 집안일 추가</div>
-          <div style="font-size:12px;color:#888">아이콘</div>
+          <div class="field-label">아이콘</div>
           <div class="icon-row">${icons}</div>
-          <input type="text" placeholder="이름 (예: 쓰레기 버리기)" value="${newC.label}" oninput="A.setNewC('label',this.value)" style="margin-top:8px"/>
-          <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+          <input type="text" placeholder="이름 (예: 쓰레기 버리기)" value="${newC.label}" oninput="A.setNewC('label',this.value)" style="margin-top:10px"/>
+          <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
             <input class="n-input" type="number" placeholder="금액" value="${newC.points}" oninput="A.setNewC('points',this.value)" style="flex:1;width:auto"/>
             <span class="row-unit">원</span>
           </div>
           <button class="add-btn" onclick="A.addChore()">+ 추가하기</button>
         </div></div>`;
     }
-
     return `<div class="tab-row">${tabsH}</div>${body}`;
   }
 
   function render() {
     renderTopBar(); renderNavBar();
-    const map={home:renderHome,reading:renderReadingPage,chore:renderChorePage,
-               spend:renderSpendPage,history:renderHistory,settings:renderSettings};
+    const map={home:renderHome,reading:renderReadingPage,chore:renderChorePage,spend:renderSpendPage,history:renderHistory,settings:renderSettings};
     document.getElementById('body').innerHTML=(map[cur()]||renderHome)();
   }
 
-  // ── 실시간 동기화
   function setupSync() {
-    db.collection('app').doc('config').onSnapshot(snap => {
-      if (snap && snap.exists === true) {
-        const d = snap.data();
-        st.kids    = d.kids    && d.kids.length    ? d.kids    : DEFAULTS.kids;
-        st.reading = d.reading && d.reading.length ? d.reading : DEFAULTS.reading;
-        st.chores  = d.chores  && d.chores.length  ? d.chores  : DEFAULTS.chores;
+    db.collection('app').doc('config').onSnapshot(snap=>{
+      if(snap&&snap.exists===true){
+        const d=snap.data();
+        st.kids    = d.kids&&d.kids.length    ? d.kids    : DEFAULTS.kids;
+        st.reading = d.reading&&d.reading.length ? d.reading : DEFAULTS.reading;
+        st.chores  = d.chores&&d.chores.length  ? d.chores  : DEFAULTS.chores;
         render();
       }
     });
-    for (let i = 0; i < 2; i++) {
-      const idx = i;
-      db.collection('app').doc('records_' + idx).onSnapshot(snap => {
-        if (snap && snap.exists === true) st.records[idx] = snap.data().list || [];
+    for(let i=0;i<2;i++){
+      const idx=i;
+      db.collection('app').doc('records_'+idx).onSnapshot(snap=>{
+        if(snap&&snap.exists===true) st.records[idx]=snap.data().list||[];
         render();
       });
     }
   }
 
-  // ── 초기 로드
   async function init() {
     try {
       console.log('Firebase 불러오기 시작...');
-
-      const cfg = await db.collection('app').doc('config').get();
-      const cfgExists = cfg && cfg.exists === true;
-      console.log('config 존재:', cfgExists);
-      if (cfgExists) {
-        const d = cfg.data();
-        console.log('config 데이터:', d);
-        st.kids    = d.kids    && d.kids.length    ? d.kids    : DEFAULTS.kids;
-        st.reading = d.reading && d.reading.length ? d.reading : DEFAULTS.reading;
-        st.chores  = d.chores  && d.chores.length  ? d.chores  : DEFAULTS.chores;
+      const cfg=await db.collection('app').doc('config').get();
+      const cfgExists=cfg&&cfg.exists===true;
+      if(cfgExists){
+        const d=cfg.data();
+        st.kids    = d.kids&&d.kids.length    ? d.kids    : DEFAULTS.kids;
+        st.reading = d.reading&&d.reading.length ? d.reading : DEFAULTS.reading;
+        st.chores  = d.chores&&d.chores.length  ? d.chores  : DEFAULTS.chores;
       } else {
-        console.log('config 없음 → 기본값으로 새로 저장');
-        await db.collection('app').doc('config').set({
-          kids: st.kids, reading: st.reading, chores: st.chores
-        });
+        await db.collection('app').doc('config').set({kids:st.kids,reading:st.reading,chores:st.chores});
       }
-
-      for (let i = 0; i < 2; i++) {
-        const r = await db.collection('app').doc('records_' + i).get();
-        const rExists = r && r.exists === true;
-        console.log('records_' + i + ' 존재:', rExists);
-        st.records[i] = rExists ? (r.data().list || []) : [];
+      for(let i=0;i<2;i++){
+        const r=await db.collection('app').doc('records_'+i).get();
+        st.records[i]=(r&&r.exists===true)?(r.data().list||[]):[];
       }
-
-      console.log('불러오기 완료. 상태:', JSON.stringify({
-        kids: st.kids,
-        recordCounts: st.records.map(r => r.length)
-      }));
-    } catch(e) {
-      console.error('초기 로드 실패:', e);
-      toast('데이터 불러오기 실패: ' + e.message);
-    }
+      console.log('불러오기 완료');
+    } catch(e){ console.error('초기 로드 실패:',e); toast('데이터 불러오기 실패: '+e.message); }
     setupSync();
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('app').style.display = 'flex';
+    document.getElementById('loading').style.display='none';
+    document.getElementById('app').style.display='flex';
     render();
   }
 
-  // ── public API
   return {
-    push, pop, goRoot, render, saveRecord, handleImg,
-    selectType: id => { form.typeId=id; render(); },
-    clearImg: () => { imgPreview=null; imgFile=null; render(); },
-    setForm:    (k,v) => { form[k]=v; },
-    setQty:     (v) => { form.qty = Math.max(1, v); render(); },
-    refreshSaveBtn: () => {
-      const btn = document.getElementById('spend-save-btn');
-      if (btn) btn.disabled = !(form.amount && form.memo);
-    },
-    setKidIdx:  i   =>{ kidIdx=i; render(); },
+    push, pop, goRoot, render, saveRecord,
+    selectType: id=>{ form.typeId=id; render(); },
+    setForm:    (k,v)=>{ form[k]=v; },
+    setQty:     v=>{ form.qty=Math.max(1,v); render(); },
+    setKidIdx:  i=>{ kidIdx=i; render(); },
     setHistFilter:   f=>{ histFilter=f; readingFilter=null; render(); },
     setReadingFilter:f=>{ readingFilter=f; render(); },
     setSettingsTab:  t=>{ settingsTab=t; render(); },
+    toggleMemo: idx=>{ expandedIdx=expandedIdx===idx?null:idx; render(); },
+    refreshSaveBtn: ()=>{ const b=document.getElementById('spend-save-btn'); if(b) b.disabled=!(form.amount&&form.memo); },
     updateKidName:   (i,v)=>{ st.kids[i]=v; },
-    saveKidName:     async (i)=>{ await save(); render(); },
+    saveKidName:     async ()=>{ await save(); render(); },
     updateReadingLabel:(i,v)=>{ st.reading[i].label=v; },
     updateReadingPts:  (i,v)=>{ st.reading[i].points=parseInt(v)||0; },
-    saveReading:     async ()=>{ await save(); },
     updateChoreLabel:(i,v)=>{ st.chores[i].label=v; },
     updateChorePts:  (i,v)=>{ st.chores[i].points=parseInt(v)||0; },
-    saveChore:       async ()=>{ await save(); },
     deleteReading: async i=>{ st.reading.splice(i,1); await save(); render(); },
-    deleteChore:   async i=>{ st.chores.splice(i,1);  await save(); render(); },
+    deleteChore:   async i=>{ st.chores.splice(i,1); await save(); render(); },
     setNewRIcon: ic=>{ newR.icon=ic; render(); },
     setNewCIcon: ic=>{ newC.icon=ic; render(); },
     setNewR: (k,v)=>{ newR[k]=v; },
@@ -542,33 +546,25 @@ window.A = (() => {
     addReading: async ()=>{
       if(!newR.label||!newR.points) return;
       st.reading.push({id:uid(),label:newR.label,points:parseInt(newR.points),icon:newR.icon});
-      newR={label:'',points:'',icon:'📗'};
-      await save(); render();
+      newR={label:'',points:'',icon:'📗'}; await save(); render();
     },
     addChore: async ()=>{
       if(!newC.label||!newC.points) return;
       st.chores.push({id:uid(),label:newC.label,points:parseInt(newC.points),icon:newC.icon});
-      newC={label:'',points:'',icon:'🛏'};
-      await save(); render();
+      newC={label:'',points:'',icon:'🛏'}; await save(); render();
     },
     setBalance: async (i,v)=>{
-      const target=parseInt(v); if(isNaN(target)) return;
-      const diff=target-bal(i); if(diff===0) return;
-      const rec={type:diff>0?'chore':'spend',label:'잔액 직접 조정',icon:'✏️',
-                 amount:Math.abs(diff),date:new Date().toLocaleDateString('ko-KR')};
-      st.records[i]=[rec,...(st.records[i]||[])];
-      await save(); render();
+      const t=parseInt(v); if(isNaN(t)) return;
+      const diff=t-bal(i); if(diff===0) return;
+      const rec={type:diff>0?'chore':'spend',label:'잔액 직접 조정',icon:'✏️',amount:Math.abs(diff),date:new Date().toLocaleDateString('ko-KR')};
+      st.records[i]=[rec,...(st.records[i]||[])]; await save(); render();
     },
     init,
   };
 })();
 
-// 이름 저장: 입력 완료(blur) 시 저장
 document.addEventListener('blur', async e=>{
-  if(e.target && e.target.id && e.target.id.startsWith('kid-name-')){
-    await A.saveKidName();
-  }
-  if(e.target && e.target.id && e.target.id.startsWith('bal-')) return; // setBalance가 처리
+  if(e.target?.id?.startsWith('kid-name-')) await A.saveKidName();
 }, true);
 
 A.init();
