@@ -107,8 +107,9 @@
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 <script>
-// ── Firebase 초기화 (compat 버전 — window에 직접 노출됨)
+// ── Firebase 초기화
 firebase.initializeApp({
   apiKey: "AIzaSyDqvmLwtp3HP0xuoyhpd8VP8WbCnV10T5k",
   authDomain: "reading-coupon.firebaseapp.com",
@@ -118,6 +119,7 @@ firebase.initializeApp({
   appId: "1:586602087544:web:625e7ce0a27dfe07d2998d"
 });
 const db = firebase.firestore();
+const storage = firebase.storage();
 
 // ── 기본값
 const DEFAULTS = {
@@ -143,7 +145,7 @@ window.A = (() => {
   const SUB     = ['reading','chore','spend'];
 
   let st = JSON.parse(JSON.stringify(DEFAULTS)); // 앱 상태
-  let kidIdx = 0, stack = ['home'], form = {}, imgPreview = null;
+  let kidIdx = 0, stack = ['home'], form = {}, imgPreview = null, imgFile = null;
   let settingsTab = 'kids', histFilter = 'all', readingFilter = null;
   let newR = { label:'', points:'', icon:'📗' };
   let newC = { label:'', points:'', icon:'🛏' };
@@ -218,10 +220,27 @@ window.A = (() => {
   }
 
   function handleImg(e) {
-    const f=e.target.files[0]; if(!f) return;
-    const r=new FileReader();
-    r.onload=ev=>{ imgPreview=ev.target.result; render(); };
+    const f = e.target.files[0]; if (!f) return;
+    // 파일 객체도 보관 (Storage 업로드용)
+    imgFile = f;
+    const r = new FileReader();
+    r.onload = ev => { imgPreview = ev.target.result; render(); };
     r.readAsDataURL(f);
+  }
+
+  // 이미지를 Firebase Storage에 업로드하고 URL 반환
+  async function uploadImg() {
+    if (!imgFile) return null;
+    try {
+      const ref = storage.ref('photos/' + Date.now() + '_' + imgFile.name);
+      await ref.put(imgFile);
+      const url = await ref.getDownloadURL();
+      return url;
+    } catch(e) {
+      console.error('사진 업로드 실패:', e);
+      toast('사진 업로드 실패: ' + e.message);
+      return null;
+    }
   }
 
   // ── render helpers
@@ -495,7 +514,7 @@ window.A = (() => {
   return {
     push, pop, goRoot, render, saveRecord, handleImg,
     selectType: id => { form.typeId=id; render(); },
-    clearImg:   ()  => { imgPreview=null; render(); },
+    clearImg: () => { imgPreview=null; imgFile=null; render(); },
     setForm:    (k,v) => { form[k]=v; },
     setQty:     (v) => { form.qty = Math.max(1, v); render(); },
     refreshSaveBtn: () => {
