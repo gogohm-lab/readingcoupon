@@ -440,23 +440,40 @@ window.A = (() => {
   // ── 초기 로드
   async function init() {
     try {
-      const cfg=await db.collection('app').doc('config').get();
-      if(cfg.exists()){
-        st.kids    = cfg.data().kids    || DEFAULTS.kids;
-        st.reading = cfg.data().reading || DEFAULTS.reading;
-        st.chores  = cfg.data().chores  || DEFAULTS.chores;
+      console.log('Firebase 불러오기 시작...');
+
+      const cfg = await db.collection('app').doc('config').get();
+      console.log('config 존재:', cfg.exists());
+      if (cfg.exists()) {
+        const d = cfg.data();
+        console.log('config 데이터:', d);
+        st.kids    = d.kids    && d.kids.length    ? d.kids    : DEFAULTS.kids;
+        st.reading = d.reading && d.reading.length ? d.reading : DEFAULTS.reading;
+        st.chores  = d.chores  && d.chores.length  ? d.chores  : DEFAULTS.chores;
       } else {
+        console.log('config 없음 → 기본값으로 새로 저장');
         await db.collection('app').doc('config').set({
-          kids:st.kids, reading:st.reading, chores:st.chores });
+          kids: st.kids, reading: st.reading, chores: st.chores
+        });
       }
-      for(let i=0;i<2;i++){
-        const r=await db.collection('app').doc('records_'+i).get();
-        st.records[i]=r.exists()?(r.data().list||[]):[];
+
+      for (let i = 0; i < 2; i++) {
+        const r = await db.collection('app').doc('records_' + i).get();
+        console.log('records_' + i + ' 존재:', r.exists(), r.exists() ? r.data() : null);
+        st.records[i] = r.exists() ? (r.data().list || []) : [];
       }
-    } catch(e){ console.error('초기 로드 실패:',e); }
+
+      console.log('불러오기 완료. 상태:', JSON.stringify({
+        kids: st.kids,
+        recordCounts: st.records.map(r => r.length)
+      }));
+    } catch(e) {
+      console.error('초기 로드 실패:', e);
+      toast('데이터 불러오기 실패: ' + e.message);
+    }
     setupSync();
-    document.getElementById('loading').style.display='none';
-    document.getElementById('app').style.display='flex';
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
     render();
   }
 
