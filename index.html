@@ -6,182 +6,163 @@
 <title>독서 쿠폰</title>
 <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --brand: #A8D8C8;
-    --brand-deep: #6DBFAA;
-    --brand-light: #EDF7F4;
-    --brand-dark: #3D9E87;
-    --purple: #C9B8E8;
-    --purple-deep: #A68FD4;
-    --purple-light: #F2EEFB;
-    --green: #5BBFA8;
-    --red: #F08080;
-    --bg: #F8F9FB;
-    --card: #FFFFFF;
-    --border: #EBEBf0;
-    --text: #2D3A35;
-    --sub: #9AA5A0;
-    --radius: 18px;
-    --radius-sm: 12px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  body { font-family: 'Pretendard', -apple-system, sans-serif; background: var(--bg); display: flex; justify-content: center; }
-  #app { width: 100%; max-width: 420px; min-height: 100dvh; background: var(--bg); display: flex; flex-direction: column; }
+:root{
+  --mint:#7ECFC0;--mint-l:#EAF7F4;--mint-d:#4EB8A6;
+  --purple:#B09ED6;--purple-l:#F2EEFB;--purple-d:#8B76C2;
+  --green:#5BBFA8;--red:#F08080;--yellow-l:#FFF8E6;
+  --bg:#F6F8FA;--card:#fff;--border:#ECEEF2;
+  --text:#2C3A35;--sub:#9AA5A0;
+  --r:18px;--rs:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--bg);display:flex;justify-content:center}
+#app{width:100%;max-width:420px;min-height:100dvh;background:var(--bg);display:flex;flex-direction:column}
 
-  /* ── Top Bar */
-  #top-bar { display: flex; align-items: center; gap: 10px; padding: 16px 20px 12px; background: var(--bg); flex-shrink: 0; }
-  .app-title { flex: 1; font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
-  .kid-tabs { display: flex; gap: 6px; }
-  .kid-btn { padding: 6px 14px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--card); font-size: 13px; font-weight: 500; cursor: pointer; color: var(--sub); transition: all .2s; }
-  .kid-btn.active { border-color: var(--brand-deep); background: var(--brand-deep); color: #fff; }
-  .back-btn { width: 36px; height: 36px; border: 1.5px solid var(--border); background: var(--card); border-radius: 12px; cursor: pointer; font-size: 16px; color: var(--text); display: flex; align-items: center; justify-content: center; }
-  .home-link { font-size: 13px; font-weight: 500; color: var(--sub); background: none; border: none; cursor: pointer; padding: 4px 6px; }
+#top-bar{display:flex;align-items:center;gap:10px;padding:16px 20px 12px;flex-shrink:0}
+.app-title{flex:1;font-size:17px;font-weight:700;color:var(--text);letter-spacing:-.3px}
+.kid-tabs{display:flex;gap:6px}
+.kid-btn{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--card);font-size:13px;font-weight:500;cursor:pointer;color:var(--sub);transition:all .2s}
+.kid-btn.active{border-color:var(--mint-d);background:var(--mint-d);color:#fff}
+.back-btn{width:36px;height:36px;border:1.5px solid var(--border);background:var(--card);border-radius:12px;cursor:pointer;color:var(--text);display:flex;align-items:center;justify-content:center}
+.back-btn svg{width:18px;height:18px}
+.home-link{font-size:13px;font-weight:500;color:var(--sub);background:none;border:none;cursor:pointer}
 
-  /* ── Body */
-  #body { flex: 1; overflow-y: auto; padding-bottom: 88px; }
+#body{flex:1;overflow-y:auto;padding-bottom:88px}
 
-  /* ── Nav */
-  #nav-bar { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 420px; background: rgba(255,255,255,0.92); backdrop-filter: blur(16px); border-top: 1px solid var(--border); display: flex; z-index: 10; padding-bottom: env(safe-area-inset-bottom); }
-  .nav-btn { flex: 1; padding: 12px 0 10px; font-size: 11px; font-weight: 500; color: var(--sub); border: none; background: transparent; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; }
-  .nav-btn .nav-icon { font-size: 20px; }
-  .nav-btn.active { color: var(--brand-dark); }
+#nav-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:rgba(255,255,255,.94);backdrop-filter:blur(16px);border-top:1px solid var(--border);display:flex;z-index:10;padding-bottom:env(safe-area-inset-bottom)}
+.nav-btn{flex:1;padding:10px 0 8px;font-size:11px;font-weight:500;color:var(--sub);border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;transition:color .2s}
+.nav-btn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav-btn.active{color:var(--mint-d)}
 
-  /* ── Balance Cards */
-  .bal-card-mint   { flex:1; border-radius: 22px; padding: 22px 18px; background: linear-gradient(135deg, #A8D8C8, #7ECFC0); color: #fff; position: relative; overflow: hidden; cursor: pointer; }
-  .bal-card-purple { flex:1; border-radius: 22px; padding: 22px 18px; background: linear-gradient(135deg, #C9B8E8, #B09ED6); color: #fff; position: relative; overflow: hidden; cursor: pointer; }
+.bal-wrap{display:flex;gap:10px;margin:4px 20px 0}
+.bal-card{flex:1;border-radius:22px;padding:22px 18px;color:#fff;position:relative;overflow:hidden;cursor:pointer;transition:box-shadow .2s,opacity .2s}
+.bal-card.mint{background:linear-gradient(135deg,#A8D8C8,var(--mint))}
+.bal-card.purple{background:linear-gradient(135deg,#C9B8E8,var(--purple))}
+.bal-card.dim{opacity:.82}
+.bal-card::before{content:'';position:absolute;right:-18px;top:-18px;width:88px;height:88px;border-radius:50%;background:rgba(255,255,255,.15)}
+.bal-who{font-size:12px;font-weight:600;opacity:.88;margin-bottom:6px}
+.bal-amount{font-size:24px;font-weight:700;letter-spacing:-.5px;line-height:1.2}
+.bal-count{font-size:11px;opacity:.72;margin-top:5px}
 
-  /* ── Balance Card */
-  .bal-card { margin: 4px 20px 0; border-radius: 24px; padding: 28px 24px; background: linear-gradient(135deg, #6C63FF 0%, #A78BFA 100%); color: #fff; position: relative; overflow: hidden; }
-  .bal-card::before { content:''; position:absolute; right:-30px; top:-30px; width:140px; height:140px; border-radius:50%; background:rgba(255,255,255,0.08); }
-  .bal-card::after  { content:''; position:absolute; right:30px; bottom:-40px; width:100px; height:100px; border-radius:50%; background:rgba(255,255,255,0.06); }
-  .bal-who { font-size: 13px; font-weight: 500; opacity: 0.85; margin-bottom: 6px; }
-  .bal-amount { font-size: 40px; font-weight: 700; letter-spacing: -1px; }
-  .bal-count { font-size: 12px; opacity: 0.7; margin-top: 6px; }
+.action-row{display:flex;gap:10px;margin:14px 20px 0}
+.action-btn{flex:1;padding:16px 0 14px;border-radius:var(--r);border:none;font-size:12px;font-weight:600;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;transition:transform .15s;color:var(--text)}
+.action-btn:active{transform:scale(.96)}
+.action-btn svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.action-btn.reading{background:#DFF5EF;color:var(--mint-d)}
+.action-btn.chore{background:var(--purple-l);color:var(--purple-d)}
+.action-btn.spend{background:#FDECEA;color:#D9726B}
 
-  /* ── Action Buttons */
-  .action-row { display: flex; gap: 10px; margin: 16px 20px 0; }
-  .action-btn { flex: 1; padding: 16px 0; border-radius: var(--radius); border: none; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; transition: transform .15s; }
-  .action-btn:active { transform: scale(0.96); }
-  .action-btn .a-icon { font-size: 22px; }
-  .action-btn.reading { background: #DFF5EF; color: #3D9E87; }
-  .action-btn.chore   { background: var(--purple-light); color: var(--purple-deep); }
-  .action-btn.spend   { background: #FDECEA; color: #D9726B; }
+.sec-title{font-size:11px;font-weight:700;color:var(--sub);margin:20px 20px 10px;letter-spacing:.6px;text-transform:uppercase}
 
-  /* ── Section Title */
-  .sec-title { font-size: 13px; font-weight: 600; color: var(--sub); margin: 22px 20px 10px; letter-spacing: 0.2px; text-transform: uppercase; }
+.rec-item{padding:13px 20px;border-bottom:1px solid var(--border)}
+.rec-row{display:flex;align-items:center;gap:12px}
+.rec-bubble{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rec-bubble svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.rec-bubble.reading{background:#DFF5EF;color:var(--mint-d)}
+.rec-bubble.chore{background:var(--purple-l);color:var(--purple-d)}
+.rec-bubble.spend{background:#FDECEA;color:#D9726B}
+.rec-bubble.adjust{background:var(--yellow-l);color:#C8A84B}
+.rec-info{flex:1;min-width:0}
+.rec-name{font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rec-date{font-size:12px;color:var(--sub);margin-top:2px}
+.rec-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.rec-amount{font-size:15px;font-weight:700}
+.rec-amount.plus{color:var(--green)}
+.rec-amount.minus{color:var(--red)}
+.memo-btn{width:28px;height:28px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.memo-btn svg{width:14px;height:14px;stroke:var(--sub);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.memo-btn.open{background:var(--mint-l);border-color:var(--mint-d)}
+.memo-btn.open svg{stroke:var(--mint-d)}
+.memo-box{margin:10px 0 2px 54px;padding:10px 14px;background:var(--mint-l);border-radius:10px;font-size:13px;color:#555;line-height:1.7;border-left:3px solid var(--mint-d)}
+.empty-msg{text-align:center;color:var(--sub);padding:40px 0;font-size:14px}
 
-  /* ── Record Item */
-  .rec-item { padding: 14px 20px; border-bottom: 1px solid var(--border); }
-  .rec-row { display: flex; align-items: center; gap: 12px; }
-  .rec-bubble { width: 40px; height: 40px; border-radius: 12px; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-  .rec-info { flex: 1; min-width: 0; }
-  .rec-name { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .rec-date { font-size: 12px; color: var(--sub); margin-top: 2px; }
-  .rec-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-  .rec-amount { font-size: 15px; font-weight: 700; }
-  .rec-amount.plus  { color: var(--green); }
-  .rec-amount.minus { color: var(--red); }
-  .memo-toggle { width: 26px; height: 26px; border-radius: 8px; border: 1.5px solid var(--border); background: var(--bg); font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-  .memo-toggle.open { background: var(--brand-light); border-color: var(--brand-deep); }
-  .memo-box { margin: 10px 0 2px 52px; padding: 10px 14px; background: var(--brand-light); border-radius: 10px; font-size: 13px; color: #444; line-height: 1.7; border-left: 3px solid var(--brand-deep); }
-  .empty-msg { text-align: center; color: var(--sub); padding: 40px 0; font-size: 14px; }
+.section-card{background:var(--card);border-radius:var(--r);padding:18px;margin:12px 20px 0;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.s-label{font-size:11px;font-weight:700;color:var(--sub);margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px}
 
-  /* ── Section Card (sub pages) */
-  .section-card { background: var(--card); border-radius: var(--radius); padding: 18px; margin: 12px 20px 0; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
-  .s-label { font-size: 12px; font-weight: 600; color: var(--sub); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.4px; }
+.type-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.type-card{padding:16px 10px;border-radius:var(--rs);border:2px solid var(--border);background:var(--bg);cursor:pointer;text-align:center;transition:all .18s}
+.type-card:active{transform:scale(.97)}
+.type-card.selected{border-color:var(--mint-d);background:var(--mint-l)}
+.type-card svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;margin:0 auto;display:block}
+.type-card.selected svg{color:var(--mint-d)}
+.t-name{font-size:13px;font-weight:600;margin-top:8px;color:var(--text)}
+.t-pts{font-size:12px;color:var(--green);font-weight:600;margin-top:3px}
 
-  /* ── Type Grid */
-  .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .type-card { padding: 16px 10px; border-radius: var(--radius-sm); border: 2px solid var(--border); background: var(--bg); cursor: pointer; text-align: center; transition: all .18s; }
-  .type-card:active { transform: scale(0.97); }
-  .type-card.selected { border-color: var(--brand); background: var(--brand-light); }
-  .t-icon { font-size: 28px; }
-  .t-name { font-size: 13px; font-weight: 600; margin-top: 6px; color: var(--text); }
-  .t-pts  { font-size: 12px; color: var(--green); font-weight: 600; margin-top: 3px; }
+.qty-row{display:flex;align-items:center;gap:16px}
+.qty-btn{width:38px;height:38px;border-radius:50%;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s;border:2px solid var(--border);background:var(--bg);color:var(--text)}
+.qty-btn.plus{border-color:var(--mint-d);background:var(--mint-d);color:#fff}
+.qty-btn:active{transform:scale(.9)}
+.qty-val{font-size:26px;font-weight:700;min-width:32px;text-align:center;color:var(--text)}
+.qty-total{font-size:13px;font-weight:600;color:var(--green)}
 
-  /* ── Qty */
-  .qty-row { display: flex; align-items: center; gap: 16px; }
-  .qty-btn { width: 38px; height: 38px; border-radius: 50%; font-size: 22px; font-weight: 300; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform .15s; border: 2px solid var(--border); background: var(--bg); color: var(--text); }
-  .qty-btn.plus { border-color: var(--brand-deep); background: var(--brand-deep); color: #fff; }
-  .qty-btn:active { transform: scale(0.9); }
-  .qty-val { font-size: 26px; font-weight: 700; min-width: 32px; text-align: center; color: var(--text); }
-  .qty-total { font-size: 13px; font-weight: 600; color: var(--green); }
+input[type=text],input[type=number]{width:100%;padding:12px 14px;border-radius:var(--rs);border:1.5px solid var(--border);font-size:15px;font-family:inherit;background:var(--bg);color:var(--text);outline:none;transition:border .2s}
+input:focus{border-color:var(--mint-d)}
+textarea{width:100%;padding:12px 14px;border-radius:var(--rs);border:1.5px solid var(--border);font-size:14px;font-family:inherit;background:var(--bg);color:var(--text);outline:none;resize:none;min-height:96px;line-height:1.7;transition:border .2s}
+textarea:focus{border-color:var(--mint-d)}
 
-  /* ── Input */
-  input[type="text"], input[type="number"] {
-    width: 100%; padding: 12px 14px; border-radius: var(--radius-sm); border: 1.5px solid var(--border);
-    font-size: 15px; font-family: inherit; background: var(--bg); color: var(--text); outline: none; transition: border .2s;
-  }
-  input:focus { border-color: var(--brand-deep); }
-  textarea { width: 100%; padding: 12px 14px; border-radius: var(--radius-sm); border: 1.5px solid var(--border); font-size: 14px; font-family: inherit; background: var(--bg); color: var(--text); outline: none; resize: none; min-height: 96px; line-height: 1.7; transition: border .2s; }
-  textarea:focus { border-color: var(--brand-deep); }
+.primary-btn{display:block;width:calc(100% - 40px);margin:20px 20px 0;padding:16px;border-radius:var(--r);background:linear-gradient(135deg,var(--mint-d),#5BB8A8);color:#fff;font-size:16px;font-weight:700;border:none;cursor:pointer;transition:transform .15s;font-family:inherit}
+.primary-btn:active{transform:scale(.98)}
+.primary-btn:disabled{background:var(--border);color:var(--sub);cursor:default}
 
-  /* ── Primary Button */
-  .primary-btn { display: block; width: calc(100% - 40px); margin: 20px 20px 0; padding: 16px; border-radius: var(--radius); background: linear-gradient(135deg, var(--brand-deep), #5BB8A8); color: #fff; font-size: 16px; font-weight: 700; border: none; cursor: pointer; letter-spacing: -0.2px; transition: opacity .2s, transform .15s; font-family: inherit; }
-  .primary-btn:active { transform: scale(0.98); }
-  .primary-btn:disabled { background: var(--border); color: var(--sub); cursor: default; }
+.tab-row{display:flex;margin:14px 20px 0;background:var(--card);border-radius:12px;padding:4px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.tab-btn{flex:1;padding:8px 0;font-size:13px;font-weight:600;color:var(--sub);border:none;border-radius:9px;background:transparent;cursor:pointer;transition:all .2s;font-family:inherit}
+.tab-btn.active{background:linear-gradient(135deg,var(--mint-d),#5BB8A8);color:#fff}
 
-  /* ── Tabs */
-  .tab-row { display: flex; margin: 16px 20px 0; background: var(--card); border-radius: 12px; padding: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
-  .tab-btn { flex: 1; padding: 8px 0; font-size: 13px; font-weight: 600; color: var(--sub); border: none; border-radius: 9px; background: transparent; cursor: pointer; transition: all .2s; font-family: inherit; }
-  .tab-btn.active { background: linear-gradient(135deg, var(--brand-deep), #5BB8A8); color: #fff; }
+.chip-row{display:flex;gap:6px;margin:12px 20px 0;flex-wrap:wrap}
+.chip{padding:5px 13px;border-radius:20px;font-size:12px;font-weight:500;border:1.5px solid var(--border);background:var(--card);color:var(--sub);cursor:pointer;transition:all .2s}
+.chip.active{border-color:var(--mint-d);background:var(--mint-l);color:var(--mint-d)}
 
-  /* ── Chips */
-  .chip-row { display: flex; gap: 6px; margin: 12px 20px 0; flex-wrap: wrap; }
-  .chip { padding: 5px 13px; border-radius: 20px; font-size: 12px; font-weight: 500; border: 1.5px solid var(--border); background: var(--card); color: var(--sub); cursor: pointer; transition: all .2s; }
-  .chip.active { border-color: var(--brand-deep); background: var(--brand-light); color: var(--brand-dark); }
+.stat-row{display:flex;gap:10px;margin:12px 20px 0}
+.stat-card{flex:1;padding:16px;border-radius:var(--r);background:var(--card);box-shadow:0 1px 4px rgba(0,0,0,.05);text-align:center}
+.stat-label{font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.3px}
+.stat-val{font-size:24px;font-weight:700;margin-top:4px;color:var(--text)}
+.stat-val.green{color:var(--green)}
 
-  /* ── Stat Cards */
-  .stat-row { display: flex; gap: 10px; margin: 12px 20px 0; }
-  .stat-card { flex: 1; padding: 16px; border-radius: var(--radius); background: var(--card); box-shadow: 0 1px 4px rgba(0,0,0,0.05); text-align: center; }
-  .stat-label { font-size: 11px; font-weight: 600; color: var(--sub); text-transform: uppercase; letter-spacing: 0.3px; }
-  .stat-val { font-size: 24px; font-weight: 700; margin-top: 4px; color: var(--text); }
-  .stat-val.green { color: var(--green); }
+.settings-group{margin:14px 20px 0}
+.kid-card{margin-bottom:14px;padding:18px;border-radius:var(--r);background:var(--card);box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.kid-card-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px}
+.field-label{font-size:11px;font-weight:700;color:var(--sub);margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px}
+.cur-balance{font-size:12px;color:var(--sub);margin-top:8px}
+.cur-balance b{font-weight:700;color:var(--text)}
+.confirm-hint{font-size:12px;color:var(--sub);white-space:nowrap}
+.item-row{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--border)}
+.s-input{flex:1;padding:7px 10px;border-radius:8px;border:1.5px solid var(--border);font-size:14px;font-family:inherit;background:var(--bg);color:var(--text);width:auto;outline:none}
+.s-input:focus,.n-input:focus{border-color:var(--mint-d)}
+.n-input{width:68px;padding:7px 8px;border-radius:8px;border:1.5px solid var(--border);font-size:14px;text-align:right;font-family:inherit;background:var(--bg);color:var(--text);outline:none}
+.del-btn{padding:5px 10px;border-radius:8px;border:1.5px solid #FFCDD2;background:#FFF5F5;color:var(--red);font-size:12px;font-weight:600;cursor:pointer}
+.add-section{margin-top:14px;padding:18px;border-radius:var(--r);background:var(--card);box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.add-section-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:12px}
+.add-btn{width:100%;padding:12px;border-radius:var(--rs);border:2px dashed var(--mint-l);background:transparent;font-size:14px;font-weight:600;cursor:pointer;color:var(--mint-d);margin-top:12px;font-family:inherit;transition:background .2s}
+.add-btn:hover{background:var(--mint-l)}
+.row-unit{font-size:12px;color:var(--sub)}
 
-  /* ── Settings */
-  .settings-group { margin: 14px 20px 0; }
-  .kid-card { margin-bottom: 14px; padding: 18px; border-radius: var(--radius); background: var(--card); box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
-  .kid-card-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 14px; }
-  .field-label { font-size: 11px; font-weight: 600; color: var(--sub); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
-  .field-label + * { margin-top: 0; }
-  .cur-balance { font-size: 12px; color: var(--sub); margin-top: 8px; }
-  .cur-balance b { font-weight: 700; color: var(--text); }
-  .confirm-hint { font-size: 12px; color: var(--sub); white-space: nowrap; }
-  .item-row { display: flex; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 1px solid var(--border); }
-  .s-input { flex: 1; padding: 7px 10px; border-radius: 8px; border: 1.5px solid var(--border); font-size: 14px; font-family: inherit; background: var(--bg); color: var(--text); width: auto; outline: none; }
-  .s-input:focus { border-color: var(--brand); }
-  .n-input { width: 68px; padding: 7px 8px; border-radius: 8px; border: 1.5px solid var(--border); font-size: 14px; text-align: right; font-family: inherit; background: var(--bg); color: var(--text); outline: none; }
-  .n-input:focus { border-color: var(--brand); }
-  .del-btn { padding: 5px 10px; border-radius: 8px; border: 1.5px solid #FFCDD2; background: #FFF5F5; color: var(--red); font-size: 12px; font-weight: 600; cursor: pointer; }
-  .add-section { margin-top: 14px; padding: 18px; border-radius: var(--radius); background: var(--card); box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
-  .add-section-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
-  .icon-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; }
-  .icon-btn { width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--bg); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; }
-  .icon-btn.selected { border-color: var(--brand-deep); background: var(--brand-light); }
-  .add-btn { width: 100%; padding: 12px; border-radius: var(--radius-sm); border: 2px dashed var(--brand); background: transparent; font-size: 14px; font-weight: 600; cursor: pointer; color: var(--brand-dark); margin-top: 12px; font-family: inherit; transition: background .2s; }
-  .add-btn:hover { background: var(--brand-light); }
-  .row-unit { font-size: 12px; color: var(--sub); }
+.icon-pick-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+.icon-pick-btn{width:36px;height:36px;border-radius:10px;border:1.5px solid var(--border);background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .15s}
+.icon-pick-btn.selected{border-color:var(--mint-d);background:var(--mint-l)}
 
-  /* ── Loading */
-  #loading { position: fixed; inset: 0; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; gap: 14px; }
-  .spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--brand); border-radius: 50%; animation: spin .8s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* ── Toast */
-  #toast { position: fixed; bottom: 96px; left: 50%; transform: translateX(-50%); background: #1A1A2E; color: #fff; padding: 11px 22px; border-radius: 24px; font-size: 13px; font-weight: 500; opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 100; white-space: nowrap; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
-  #toast.show { opacity: 1; }
+#loading{position:fixed;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:14px}
+.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--mint-d);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:#2C3A35;color:#fff;padding:11px 22px;border-radius:24px;font-size:13px;font-weight:500;opacity:0;transition:opacity .3s;pointer-events:none;z-index:100;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.12)}
+#toast.show{opacity:1}
 </style>
 </head>
 <body>
-<div id="loading"><div class="spinner"></div><div style="font-size:14px;color:#8A8A9A;font-weight:500">불러오는 중...</div></div>
+<div id="loading"><div class="spinner"></div><div style="font-size:14px;color:var(--sub);font-weight:500">불러오는 중</div></div>
 <div id="toast"></div>
 <div id="app" style="display:none">
   <div id="top-bar"></div>
   <div id="body"></div>
   <div id="nav-bar">
-    <button class="nav-btn" data-s="home"     onclick="A.goRoot('home')"><span class="nav-icon">🏠</span>홈</button>
-    <button class="nav-btn" data-s="history"  onclick="A.goRoot('history')"><span class="nav-icon">📋</span>내역</button>
-    <button class="nav-btn" data-s="settings" onclick="A.goRoot('settings')"><span class="nav-icon">⚙️</span>설정</button>
+    <button class="nav-btn" data-s="home" onclick="A.goRoot('home')">
+      <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>홈
+    </button>
+    <button class="nav-btn" data-s="history" onclick="A.goRoot('history')">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>내역
+    </button>
+    <button class="nav-btn" data-s="settings" onclick="A.goRoot('settings')">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>설정
+    </button>
   </div>
 </div>
 
@@ -189,40 +170,60 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script>
 firebase.initializeApp({
-  apiKey: "AIzaSyDqvmLwtp3HP0xuoyhpd8VP8WbCnV10T5k",
-  authDomain: "reading-coupon.firebaseapp.com",
-  projectId: "reading-coupon",
-  storageBucket: "reading-coupon.firebasestorage.app",
-  messagingSenderId: "586602087544",
-  appId: "1:586602087544:web:625e7ce0a27dfe07d2998d"
+  apiKey:"AIzaSyDqvmLwtp3HP0xuoyhpd8VP8WbCnV10T5k",
+  authDomain:"reading-coupon.firebaseapp.com",
+  projectId:"reading-coupon",
+  storageBucket:"reading-coupon.firebasestorage.app",
+  messagingSenderId:"586602087544",
+  appId:"1:586602087544:web:625e7ce0a27dfe07d2998d"
 });
 const db = firebase.firestore();
 
+// ── SVG 아이콘 모음
+const IC = {
+  book:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>`,
+  news:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v16a2 2 0 01-2 2zm0 0a2 2 0 01-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/></svg>`,
+  thick:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>`,
+  bed:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16M2 8h20v12M2 14h20M7 8v6"/></svg>`,
+  dish:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10H4c0 6 8 10 8 10z"/><path d="M12 22V12M20 12a8 8 0 10-16 0M12 2v2"/></svg>`,
+  vacuum:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="17" r="3"/><path d="M9 14V7l9-4 1 3-7 3v1"/></svg>`,
+  laundry:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M7 5h2"/></svg>`,
+  spend:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>`,
+  adjust:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`,
+  chat:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>`,
+  back:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>`,
+};
+
+// 설정 아이콘 선택용 (텍스트 레이블 + SVG key)
+const R_TYPES = [
+  {id:'r1',label:'얇은 책',points:1000,icon:'book'},
+  {id:'r2',label:'굵은 책',points:2000,icon:'thick'},
+  {id:'r3',label:'신문',   points:500, icon:'news'},
+];
+const C_TYPES = [
+  {id:'c1',label:'이불 정리',points:300,icon:'bed'},
+  {id:'c2',label:'설거지',  points:500,icon:'dish'},
+  {id:'c3',label:'청소기',  points:400,icon:'vacuum'},
+  {id:'c4',label:'빨래 개기',points:300,icon:'laundry'},
+];
+const ICON_KEYS_R = ['book','thick','news','chat','adjust'];
+const ICON_KEYS_C = ['bed','dish','vacuum','laundry','adjust'];
+const ICON_LABELS = {book:'책',thick:'두꺼운책',news:'신문',chat:'메모',adjust:'기타',bed:'침구',dish:'설거지',vacuum:'청소',laundry:'빨래',spend:'돈'};
+
 const DEFAULTS = {
-  kids: ['첫째', '둘째'],
-  reading: [
-    { id:'r1', label:'얇은 책', points:1000, icon:'📗' },
-    { id:'r2', label:'굵은 책', points:2000, icon:'📚' },
-    { id:'r3', label:'신문',    points:500,  icon:'📰' },
-  ],
-  chores: [
-    { id:'c1', label:'이불 정리', points:300, icon:'🛏' },
-    { id:'c2', label:'설거지',   points:500,  icon:'🍽' },
-    { id:'c3', label:'청소기',   points:400,  icon:'🧹' },
-    { id:'c4', label:'빨래 개기',points:300,  icon:'👕' },
-  ],
-  records: [[], []],
+  kids:['첫째','둘째'],
+  reading: R_TYPES,
+  chores:  C_TYPES,
+  records:[[], []],
 };
 
 window.A = (() => {
-  const ICONS_R = ['📗','📘','📕','📙','📚','📖','📰','🗞','📝','✏️'];
-  const ICONS_C = ['🛏','🍽','🧹','👕','🧺','🪣','🧽','🧴','🪴','🗑'];
   const SUB = ['reading','chore','spend'];
-
   let st = JSON.parse(JSON.stringify(DEFAULTS));
-  let kidIdx=0, stack=['home'], form={}, settingsTab='kids';
-  let histFilter='all', readingFilter=null, expandedIdx=null;
-  let newR={label:'',points:'',icon:'📗'}, newC={label:'',points:'',icon:'🛏'};
+  let kidIdx=0,stack=['home'],form={},settingsTab='kids';
+  let histFilter='all',readingFilter=null,expandedIdx=null;
+  let newR={label:'',points:'',icon:'book'};
+  let newC={label:'',points:'',icon:'bed'};
   let saving=false;
 
   const fmt  = n  => (n||0).toLocaleString('ko-KR')+'원';
@@ -230,127 +231,144 @@ window.A = (() => {
   const cur  = () => stack[stack.length-1];
   const root = () => stack[0];
   const bal  = i  => (st.records[i]||[]).reduce((s,r)=>s+(r.type==='spend'?-r.amount:r.amount),0);
+  const ic   = k  => IC[k] || IC.book;
 
-  function toast(msg) {
+  function toast(msg){
     const el=document.getElementById('toast');
-    el.textContent=msg; el.classList.add('show');
+    el.textContent=msg;el.classList.add('show');
     setTimeout(()=>el.classList.remove('show'),2500);
   }
 
-  async function save() {
-    if (saving) return; saving=true;
-    try {
+  async function save(){
+    if(saving)return;saving=true;
+    try{
       await db.collection('app').doc('config').set({
-        kids:    JSON.parse(JSON.stringify(st.kids)),
-        reading: JSON.parse(JSON.stringify(st.reading)),
-        chores:  JSON.parse(JSON.stringify(st.chores)),
-      }, {merge:true});
-      for (let i=0; i<st.records.length; i++) {
-        const clean=(st.records[i]||[]).map(r=>{
-          const o={}; for(const k in r) o[k]=(r[k]===undefined?null:r[k]); return o;
-        });
+        kids:JSON.parse(JSON.stringify(st.kids)),
+        reading:JSON.parse(JSON.stringify(st.reading)),
+        chores:JSON.parse(JSON.stringify(st.chores)),
+      },{merge:true});
+      for(let i=0;i<st.records.length;i++){
+        const clean=(st.records[i]||[]).map(r=>{const o={};for(const k in r)o[k]=(r[k]===undefined?null:r[k]);return o;});
         await db.collection('app').doc('records_'+i).set({list:clean},{merge:true});
       }
-      toast('저장됐어요 ✓');
-    } catch(e) { console.error(e); toast('저장 실패: '+e.message); }
+      toast('저장됐어요');
+    }catch(e){console.error(e);toast('저장 실패: '+e.message);}
     saving=false;
   }
 
-  function push(s)   { stack.push(s); form={}; render(); }
-  function pop()     { if(stack.length>1) stack.pop(); render(); }
-  function goRoot(s) { stack=[s]; render(); }
+  function push(s){stack.push(s);form={};render();}
+  function pop(){if(stack.length>1)stack.pop();render();}
+  function goRoot(s){stack=[s];render();}
 
-  async function saveRecord() {
+  async function saveRecord(){
     const s=cur();
-    if (s==='reading'&&!form.typeId) return;
-    if (s==='chore'&&!form.typeId) return;
-    if (s==='spend'&&(!form.amount||!form.memo)) return;
+    if(s==='reading'&&!form.typeId)return;
+    if(s==='chore'&&!form.typeId)return;
+    if(s==='spend'&&(!form.amount||!form.memo))return;
     toast('저장 중...');
     let rec;
-    if (s==='reading') {
+    if(s==='reading'){
       const t=st.reading.find(r=>r.id===form.typeId);
       const qty=form.qty||1;
       rec={type:'reading',label:t.label,icon:t.icon,amount:t.points*qty,qty,memo:form.memo||'',title:form.title||'',date:new Date().toLocaleDateString('ko-KR')};
-    } else if (s==='chore') {
+    }else if(s==='chore'){
       const t=st.chores.find(c=>c.id===form.typeId);
       rec={type:'chore',label:t.label,icon:t.icon,amount:t.points,date:new Date().toLocaleDateString('ko-KR')};
-    } else {
-      rec={type:'spend',label:form.memo,icon:'💸',amount:parseInt(form.amount),date:new Date().toLocaleDateString('ko-KR')};
+    }else{
+      rec={type:'spend',label:form.memo,icon:'spend',amount:parseInt(form.amount),date:new Date().toLocaleDateString('ko-KR')};
     }
     st.records[kidIdx]=[rec,...(st.records[kidIdx]||[])];
-    form={};
-    await save(); goRoot('home');
+    form={};await save();goRoot('home');
   }
 
-  function recHTML(r, idx) {
-    const s=r.type==='spend', cls=s?'minus':'plus', sign=s?'-':'+';
-    const isExp=expandedIdx===idx, hasMemo=r.memo&&r.memo.trim();
+  function bubbleClass(r){
+    if(r.type==='reading') return 'reading';
+    if(r.type==='chore')   return 'chore';
+    if(r.label==='잔액 직접 조정') return 'adjust';
+    return 'spend';
+  }
+  function bubbleIcon(r){
+    if(r.label==='잔액 직접 조정') return ic('adjust');
+    return ic(r.icon||'book');
+  }
+
+  function recHTML(r,idx){
+    const isSpend=r.type==='spend',cls=isSpend?'minus':'plus',sign=isSpend?'-':'+';
+    const isExp=expandedIdx===idx,hasMemo=r.memo&&r.memo.trim();
     return `<div class="rec-item">
       <div class="rec-row">
-        <div class="rec-bubble">${r.icon}</div>
+        <div class="rec-bubble ${bubbleClass(r)}">${bubbleIcon(r)}</div>
         <div class="rec-info">
           <div class="rec-name">${r.label}${r.qty>1?' ×'+r.qty:''}${r.title?' · '+r.title:''}</div>
           <div class="rec-date">${r.date}</div>
         </div>
         <div class="rec-right">
           <div class="rec-amount ${cls}">${sign}${fmt(r.amount)}</div>
-          ${hasMemo?`<button class="memo-toggle ${isExp?'open':''}" onclick="A.toggleMemo(${idx})">💬</button>`:''}
+          ${hasMemo?`<button class="memo-btn ${isExp?'open':''}" onclick="A.toggleMemo(${idx})">${IC.chat}</button>`:''}
         </div>
       </div>
       ${hasMemo&&isExp?`<div class="memo-box">${r.memo}</div>`:''}
     </div>`;
   }
 
-  function renderTopBar() {
-    const s=cur(), isSub=SUB.includes(s);
-    const titles={reading:'📖 독서 기록',chore:'✨ 집안일',spend:'💸 지출 기록'};
-    document.getElementById('top-bar').innerHTML = isSub
-      ? `<button class="back-btn" onclick="A.pop()">←</button>
-         <span style="flex:1;font-size:16px;font-weight:700;color:var(--text)">${titles[s]}</span>
-         <button class="home-link" onclick="A.goRoot('home')">홈으로</button>`
-      : `<span class="app-title">📚 독서 쿠폰</span>
-         <div class="kid-tabs">${st.kids.map((k,i)=>`<button class="kid-btn ${kidIdx===i?'active':''}" onclick="A.setKidIdx(${i})">${k}</button>`).join('')}</div>`;
+  function renderTopBar(){
+    const s=cur(),isSub=SUB.includes(s);
+    const titles={reading:'독서 기록',chore:'집안일',spend:'지출 기록'};
+    document.getElementById('top-bar').innerHTML=isSub
+      ?`<button class="back-btn" onclick="A.pop()">${IC.back}</button>
+        <span style="flex:1;font-size:16px;font-weight:700;color:var(--text)">${titles[s]}</span>
+        <button class="home-link" onclick="A.goRoot('home')">홈으로</button>`
+      :`<span class="app-title">독서 쿠폰</span>
+        <div class="kid-tabs">${st.kids.map((k,i)=>`<button class="kid-btn ${kidIdx===i?'active':''}" onclick="A.setKidIdx(${i})">${k}</button>`).join('')}</div>`;
   }
 
-  function renderNavBar() {
+  function renderNavBar(){
     const isSub=SUB.includes(cur());
     document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',!isSub&&b.dataset.s===root()));
   }
 
-  function renderHome() {
+  function renderHome(){
     const recs=st.records[kidIdx]||[];
     return `
-      <div style="display:flex;gap:10px;margin:4px 20px 0">
+      <div class="bal-wrap">
         ${st.kids.map((k,i)=>`
-        <div class="${i===0?'bal-card-mint':'bal-card-purple'}" style="${kidIdx===i?'box-shadow:0 6px 24px rgba(0,0,0,0.12)':'opacity:0.88'}" onclick="A.setKidIdx(${i})">
-          <div style="position:absolute;right:-16px;top:-16px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,0.15)"></div>
-          <div style="font-size:12px;font-weight:600;opacity:0.9;margin-bottom:6px">${k}</div>
-          <div style="font-size:${fmt(bal(i)).length>7?'22px':'26px'};font-weight:700;letter-spacing:-0.5px;line-height:1.2">${fmt(bal(i))}</div>
-          <div style="font-size:11px;opacity:0.75;margin-top:5px">${(st.records[i]||[]).length}건의 기록</div>
-        </div>`).join('')}
+          <div class="bal-card ${i===0?'mint':'purple'} ${kidIdx===i?'':'dim'}" onclick="A.setKidIdx(${i})">
+            <div class="bal-who">${k}</div>
+            <div class="bal-amount">${fmt(bal(i))}</div>
+            <div class="bal-count">${(st.records[i]||[]).length}건의 기록</div>
+          </div>`).join('')}
       </div>
       <div class="action-row">
-        <button class="action-btn reading" onclick="A.push('reading')"><span class="a-icon">📖</span>독서</button>
-        <button class="action-btn chore"   onclick="A.push('chore')"><span class="a-icon">✨</span>집안일</button>
-        <button class="action-btn spend"   onclick="A.push('spend')"><span class="a-icon">💸</span>지출</button>
+        <button class="action-btn reading" onclick="A.push('reading')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>독서
+        </button>
+        <button class="action-btn chore" onclick="A.push('chore')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>집안일
+        </button>
+        <button class="action-btn spend" onclick="A.push('spend')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>지출
+        </button>
       </div>
       <div class="sec-title">최근 내역</div>
-      ${recs.length===0?'<div class="empty-msg">아직 기록이 없어요 🌱</div>':recs.slice(0,5).map((r,i)=>recHTML(r,i)).join('')}`;
+      ${recs.length===0?'<div class="empty-msg">아직 기록이 없어요</div>':recs.slice(0,5).map((r,i)=>recHTML(r,i)).join('')}`;
   }
 
-  function renderReadingPage() {
-    const cards=st.reading.map(r=>`
-      <div class="type-card ${form.typeId===r.id?'selected':''}" onclick="A.selectType('${r.id}')">
-        <div class="t-icon">${r.icon}</div>
-        <div class="t-name">${r.label}</div>
-        <div class="t-pts">+${fmt(r.points)}</div>
-      </div>`).join('');
+  function typeCardSVG(t,selected){
+    return `<div class="type-card ${selected?'selected':''}" onclick="A.selectType('${t.id}')">
+      ${ic(t.icon)}
+      <div class="t-name">${t.label}</div>
+      <div class="t-pts">+${fmt(t.points)}</div>
+    </div>`;
+  }
+
+  function renderReadingPage(){
     const qty=form.qty||1;
     const pts=form.typeId?(st.reading.find(r=>r.id===form.typeId)||{}).points||0:0;
     return `
-      <div class="section-card"><div class="s-label">종류 선택</div><div class="type-grid">${cards}</div></div>
-      <div class="section-card">
-        <div class="s-label">개수</div>
+      <div class="section-card"><div class="s-label">종류 선택</div>
+        <div class="type-grid">${st.reading.map(r=>typeCardSVG(r,form.typeId===r.id)).join('')}</div>
+      </div>
+      <div class="section-card"><div class="s-label">개수</div>
         <div class="qty-row">
           <button class="qty-btn" onclick="A.setQty(${qty-1})">−</button>
           <span class="qty-val">${qty}</span>
@@ -359,44 +377,42 @@ window.A = (() => {
         </div>
       </div>
       <div class="section-card"><div class="s-label">제목 (선택)</div>
-        <input type="text" placeholder="예: 해리포터, 조선일보" value="${form.title||''}" oninput="A.setForm('title',this.value)"/></div>
-      <div class="section-card">
-        <div class="s-label">💬 인상깊었던 내용 (선택)</div>
-        <textarea placeholder="오늘 읽은 것 중 기억에 남는 내용을 적어봐요!" oninput="A.setForm('memo',this.value)">${form.memo||''}</textarea>
+        <input type="text" placeholder="예: 해리포터, 조선일보" value="${form.title||''}" oninput="A.setForm('title',this.value)"/>
+      </div>
+      <div class="section-card"><div class="s-label">인상깊었던 내용 (선택)</div>
+        <textarea placeholder="기억에 남는 내용을 적어봐요" oninput="A.setForm('memo',this.value)">${form.memo||''}</textarea>
       </div>
       <button class="primary-btn" onclick="A.saveRecord()" ${form.typeId?'':'disabled'}>저장하기</button>`;
   }
 
-  function renderChorePage() {
-    const cards=st.chores.map(c=>`
-      <div class="type-card ${form.typeId===c.id?'selected':''}" onclick="A.selectType('${c.id}')">
-        <div class="t-icon">${c.icon}</div>
-        <div class="t-name">${c.label}</div>
-        <div class="t-pts">+${fmt(c.points)}</div>
-      </div>`).join('');
+  function renderChorePage(){
     return `
-      <div class="section-card"><div class="s-label">집안일 선택</div><div class="type-grid">${cards}</div></div>
+      <div class="section-card"><div class="s-label">집안일 선택</div>
+        <div class="type-grid">${st.chores.map(c=>typeCardSVG(c,form.typeId===c.id)).join('')}</div>
+      </div>
       <button class="primary-btn" onclick="A.saveRecord()" ${form.typeId?'':'disabled'}>저장하기</button>`;
   }
 
-  function renderSpendPage() {
+  function renderSpendPage(){
     const ok=form.amount&&form.memo;
     return `
       <div class="section-card"><div class="s-label">금액</div>
-        <input type="number" placeholder="예: 3000" value="${form.amount||''}" oninput="A.setForm('amount',this.value);A.refreshSaveBtn()"/></div>
-      <div class="section-card"><div class="s-label">어디에 썼나요?</div>
-        <input type="text" placeholder="예: 편의점, 문구점" value="${form.memo||''}" oninput="A.setForm('memo',this.value);A.refreshSaveBtn()"/></div>
+        <input type="number" placeholder="예: 3000" value="${form.amount||''}" oninput="A.setForm('amount',this.value);A.refreshSaveBtn()"/>
+      </div>
+      <div class="section-card"><div class="s-label">어디에 썼나요</div>
+        <input type="text" placeholder="예: 편의점, 문구점" value="${form.memo||''}" oninput="A.setForm('memo',this.value);A.refreshSaveBtn()"/>
+      </div>
       <button class="primary-btn" id="spend-save-btn" onclick="A.saveRecord()" ${ok?'':'disabled'}>저장하기</button>`;
   }
 
-  function renderHistory() {
+  function renderHistory(){
     const tabs=[['all','전체'],['reading','독서'],['chore','집안일'],['spend','지출']];
     const tabsH=tabs.map(([id,l])=>`<button class="tab-btn ${histFilter===id?'active':''}" onclick="A.setHistFilter('${id}')">${l}</button>`).join('');
-    let chipsH='', statsH='';
-    if (histFilter==='reading') {
+    let chipsH='',statsH='';
+    if(histFilter==='reading'){
       chipsH=`<div class="chip-row">
         <button class="chip ${!readingFilter?'active':''}" onclick="A.setReadingFilter(null)">전체</button>
-        ${st.reading.map(r=>`<button class="chip ${readingFilter===r.label?'active':''}" onclick="A.setReadingFilter('${r.label}')">${r.icon} ${r.label}</button>`).join('')}
+        ${st.reading.map(r=>`<button class="chip ${readingFilter===r.label?'active':''}" onclick="A.setReadingFilter('${r.label}')">${r.label}</button>`).join('')}
       </div>`;
       const f2=(st.records[kidIdx]||[]).filter(r=>r.type==='reading'&&(!readingFilter||r.label===readingFilter));
       if(f2.length>0){
@@ -407,19 +423,23 @@ window.A = (() => {
       }
     }
     const filtered=(st.records[kidIdx]||[]).filter(r=>{
-      if(histFilter==='all') return true;
-      if(histFilter==='reading') return r.type==='reading'&&(!readingFilter||r.label===readingFilter);
+      if(histFilter==='all')return true;
+      if(histFilter==='reading')return r.type==='reading'&&(!readingFilter||r.label===readingFilter);
       return r.type===histFilter;
     });
     return `<div class="tab-row">${tabsH}</div>${chipsH}${statsH}
-      <div style="margin-top:8px">${filtered.length===0?'<div class="empty-msg">기록이 없어요 🌱</div>':filtered.map((r,i)=>recHTML(r,i)).join('')}</div>`;
+      <div style="margin-top:8px">${filtered.length===0?'<div class="empty-msg">기록이 없어요</div>':filtered.map((r,i)=>recHTML(r,i)).join('')}</div>`;
   }
 
-  function renderSettings() {
+  function iconPickRow(keys,selectedKey,onclickFn){
+    return keys.map(k=>`<button class="icon-pick-btn ${selectedKey===k?'selected':''}" onclick="${onclickFn}('${k}')" title="${ICON_LABELS[k]||k}">${ic(k)}</button>`).join('');
+  }
+
+  function renderSettings(){
     const tabs=[['kids','이름'],['reading','독서'],['chores','집안일']];
     const tabsH=tabs.map(([id,l])=>`<button class="tab-btn ${settingsTab===id?'active':''}" onclick="A.setSettingsTab('${id}')">${l}</button>`).join('');
     let body='';
-    if (settingsTab==='kids') {
+    if(settingsTab==='kids'){
       body=`<div class="settings-group">${st.kids.map((k,i)=>`
         <div class="kid-card">
           <div class="kid-card-title">${i+1}번째 아이</div>
@@ -433,21 +453,22 @@ window.A = (() => {
           <div class="cur-balance">현재 잔액: <b>${fmt(bal(i))}</b></div>
         </div>`).join('')}</div>`;
     }
-    if (settingsTab==='reading') {
+    if(settingsTab==='reading'){
       const rows=st.reading.map((r,i)=>`
         <div class="item-row">
-          <span style="font-size:20px">${r.icon}</span>
+          <div style="width:32px;height:32px;border-radius:9px;background:var(--mint-l);display:flex;align-items:center;justify-content:center;color:var(--mint-d);flex-shrink:0">
+            <svg style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24">${(IC[r.icon]||IC.book).replace(/<svg[^>]*>/,'').replace('</svg>','')}</svg>
+          </div>
           <input class="s-input" type="text" value="${r.label}" oninput="A.updateReadingLabel(${i},this.value)"/>
           <input class="n-input" type="number" value="${r.points}" oninput="A.updateReadingPts(${i},this.value)"/>
           <span class="row-unit">원</span>
           <button class="del-btn" onclick="A.deleteReading(${i})">삭제</button>
         </div>`).join('');
-      const icons=ICONS_R.map(ic=>`<button class="icon-btn ${newR.icon===ic?'selected':''}" onclick="A.setNewRIcon('${ic}')">${ic}</button>`).join('');
       body=`<div class="settings-group">${rows}
         <div class="add-section">
-          <div class="add-section-title">새 독서 종류 추가</div>
+          <div class="add-section-title">독서 종류 추가</div>
           <div class="field-label">아이콘</div>
-          <div class="icon-row">${icons}</div>
+          <div class="icon-pick-row">${iconPickRow(ICON_KEYS_R,newR.icon,'A.setNewRIcon')}</div>
           <input type="text" placeholder="이름 (예: 만화책)" value="${newR.label}" oninput="A.setNewR('label',this.value)" style="margin-top:10px"/>
           <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
             <input class="n-input" type="number" placeholder="금액" value="${newR.points}" oninput="A.setNewR('points',this.value)" style="flex:1;width:auto"/>
@@ -456,21 +477,22 @@ window.A = (() => {
           <button class="add-btn" onclick="A.addReading()">+ 추가하기</button>
         </div></div>`;
     }
-    if (settingsTab==='chores') {
+    if(settingsTab==='chores'){
       const rows=st.chores.map((c,i)=>`
         <div class="item-row">
-          <span style="font-size:20px">${c.icon}</span>
+          <div style="width:32px;height:32px;border-radius:9px;background:var(--purple-l);display:flex;align-items:center;justify-content:center;color:var(--purple-d);flex-shrink:0">
+            <svg style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24">${(IC[c.icon]||IC.bed).replace(/<svg[^>]*>/,'').replace('</svg>','')}</svg>
+          </div>
           <input class="s-input" type="text" value="${c.label}" oninput="A.updateChoreLabel(${i},this.value)"/>
           <input class="n-input" type="number" value="${c.points}" oninput="A.updateChorePts(${i},this.value)"/>
           <span class="row-unit">원</span>
           <button class="del-btn" onclick="A.deleteChore(${i})">삭제</button>
         </div>`).join('');
-      const icons=ICONS_C.map(ic=>`<button class="icon-btn ${newC.icon===ic?'selected':''}" onclick="A.setNewCIcon('${ic}')">${ic}</button>`).join('');
       body=`<div class="settings-group">${rows}
         <div class="add-section">
-          <div class="add-section-title">새 집안일 추가</div>
+          <div class="add-section-title">집안일 추가</div>
           <div class="field-label">아이콘</div>
-          <div class="icon-row">${icons}</div>
+          <div class="icon-pick-row">${iconPickRow(ICON_KEYS_C,newC.icon,'A.setNewCIcon')}</div>
           <input type="text" placeholder="이름 (예: 쓰레기 버리기)" value="${newC.label}" oninput="A.setNewC('label',this.value)" style="margin-top:10px"/>
           <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
             <input class="n-input" type="number" placeholder="금액" value="${newC.points}" oninput="A.setNewC('points',this.value)" style="flex:1;width:auto"/>
@@ -482,50 +504,47 @@ window.A = (() => {
     return `<div class="tab-row">${tabsH}</div>${body}`;
   }
 
-  function render() {
-    renderTopBar(); renderNavBar();
+  function render(){
+    renderTopBar();renderNavBar();
     const map={home:renderHome,reading:renderReadingPage,chore:renderChorePage,spend:renderSpendPage,history:renderHistory,settings:renderSettings};
     document.getElementById('body').innerHTML=(map[cur()]||renderHome)();
   }
 
-  function setupSync() {
+  function setupSync(){
     db.collection('app').doc('config').onSnapshot(snap=>{
       if(snap&&snap.exists===true){
         const d=snap.data();
-        st.kids    = d.kids&&d.kids.length    ? d.kids    : DEFAULTS.kids;
-        st.reading = d.reading&&d.reading.length ? d.reading : DEFAULTS.reading;
-        st.chores  = d.chores&&d.chores.length  ? d.chores  : DEFAULTS.chores;
+        st.kids    = d.kids&&d.kids.length    ?d.kids    :DEFAULTS.kids;
+        st.reading = d.reading&&d.reading.length?d.reading:DEFAULTS.reading;
+        st.chores  = d.chores&&d.chores.length  ?d.chores :DEFAULTS.chores;
         render();
       }
     });
     for(let i=0;i<2;i++){
       const idx=i;
       db.collection('app').doc('records_'+idx).onSnapshot(snap=>{
-        if(snap&&snap.exists===true) st.records[idx]=snap.data().list||[];
+        if(snap&&snap.exists===true)st.records[idx]=snap.data().list||[];
         render();
       });
     }
   }
 
-  async function init() {
-    try {
-      console.log('Firebase 불러오기 시작...');
+  async function init(){
+    try{
       const cfg=await db.collection('app').doc('config').get();
-      const cfgExists=cfg&&cfg.exists===true;
-      if(cfgExists){
+      if(cfg&&cfg.exists===true){
         const d=cfg.data();
-        st.kids    = d.kids&&d.kids.length    ? d.kids    : DEFAULTS.kids;
-        st.reading = d.reading&&d.reading.length ? d.reading : DEFAULTS.reading;
-        st.chores  = d.chores&&d.chores.length  ? d.chores  : DEFAULTS.chores;
-      } else {
+        st.kids    = d.kids&&d.kids.length    ?d.kids    :DEFAULTS.kids;
+        st.reading = d.reading&&d.reading.length?d.reading:DEFAULTS.reading;
+        st.chores  = d.chores&&d.chores.length  ?d.chores :DEFAULTS.chores;
+      }else{
         await db.collection('app').doc('config').set({kids:st.kids,reading:st.reading,chores:st.chores});
       }
       for(let i=0;i<2;i++){
         const r=await db.collection('app').doc('records_'+i).get();
         st.records[i]=(r&&r.exists===true)?(r.data().list||[]):[];
       }
-      console.log('불러오기 완료');
-    } catch(e){ console.error('초기 로드 실패:',e); toast('데이터 불러오기 실패: '+e.message); }
+    }catch(e){console.error(e);toast('데이터 불러오기 실패');}
     setupSync();
     document.getElementById('loading').style.display='none';
     document.getElementById('app').style.display='flex';
@@ -533,51 +552,51 @@ window.A = (() => {
   }
 
   return {
-    push, pop, goRoot, render, saveRecord,
-    selectType: id=>{ form.typeId=id; render(); },
-    setForm:    (k,v)=>{ form[k]=v; },
-    setQty:     v=>{ form.qty=Math.max(1,v); render(); },
-    setKidIdx:  i=>{ kidIdx=i; render(); },
-    setHistFilter:   f=>{ histFilter=f; readingFilter=null; render(); },
-    setReadingFilter:f=>{ readingFilter=f; render(); },
-    setSettingsTab:  t=>{ settingsTab=t; render(); },
-    toggleMemo: idx=>{ expandedIdx=expandedIdx===idx?null:idx; render(); },
-    refreshSaveBtn: ()=>{ const b=document.getElementById('spend-save-btn'); if(b) b.disabled=!(form.amount&&form.memo); },
-    updateKidName:   (i,v)=>{ st.kids[i]=v; },
-    saveKidName:     async ()=>{ await save(); render(); },
-    updateReadingLabel:(i,v)=>{ st.reading[i].label=v; },
-    updateReadingPts:  (i,v)=>{ st.reading[i].points=parseInt(v)||0; },
-    updateChoreLabel:(i,v)=>{ st.chores[i].label=v; },
-    updateChorePts:  (i,v)=>{ st.chores[i].points=parseInt(v)||0; },
-    deleteReading: async i=>{ st.reading.splice(i,1); await save(); render(); },
-    deleteChore:   async i=>{ st.chores.splice(i,1); await save(); render(); },
-    setNewRIcon: ic=>{ newR.icon=ic; render(); },
-    setNewCIcon: ic=>{ newC.icon=ic; render(); },
-    setNewR: (k,v)=>{ newR[k]=v; },
-    setNewC: (k,v)=>{ newC[k]=v; },
-    addReading: async ()=>{
-      if(!newR.label||!newR.points) return;
+    push,pop,goRoot,render,saveRecord,
+    selectType: id=>{form.typeId=id;render();},
+    setForm:    (k,v)=>{form[k]=v;},
+    setQty:     v=>{form.qty=Math.max(1,v);render();},
+    setKidIdx:  i=>{kidIdx=i;render();},
+    setHistFilter:   f=>{histFilter=f;readingFilter=null;render();},
+    setReadingFilter:f=>{readingFilter=f;render();},
+    setSettingsTab:  t=>{settingsTab=t;render();},
+    toggleMemo: idx=>{expandedIdx=expandedIdx===idx?null:idx;render();},
+    refreshSaveBtn:()=>{const b=document.getElementById('spend-save-btn');if(b)b.disabled=!(form.amount&&form.memo);},
+    updateKidName:   (i,v)=>{st.kids[i]=v;},
+    saveKidName:     async()=>{await save();render();},
+    updateReadingLabel:(i,v)=>{st.reading[i].label=v;},
+    updateReadingPts:  (i,v)=>{st.reading[i].points=parseInt(v)||0;},
+    updateChoreLabel:(i,v)=>{st.chores[i].label=v;},
+    updateChorePts:  (i,v)=>{st.chores[i].points=parseInt(v)||0;},
+    deleteReading: async i=>{st.reading.splice(i,1);await save();render();},
+    deleteChore:   async i=>{st.chores.splice(i,1);await save();render();},
+    setNewRIcon: ic=>{newR.icon=ic;render();},
+    setNewCIcon: ic=>{newC.icon=ic;render();},
+    setNewR:(k,v)=>{newR[k]=v;},
+    setNewC:(k,v)=>{newC[k]=v;},
+    addReading: async()=>{
+      if(!newR.label||!newR.points)return;
       st.reading.push({id:uid(),label:newR.label,points:parseInt(newR.points),icon:newR.icon});
-      newR={label:'',points:'',icon:'📗'}; await save(); render();
+      newR={label:'',points:'',icon:'book'};await save();render();
     },
-    addChore: async ()=>{
-      if(!newC.label||!newC.points) return;
+    addChore: async()=>{
+      if(!newC.label||!newC.points)return;
       st.chores.push({id:uid(),label:newC.label,points:parseInt(newC.points),icon:newC.icon});
-      newC={label:'',points:'',icon:'🛏'}; await save(); render();
+      newC={label:'',points:'',icon:'bed'};await save();render();
     },
-    setBalance: async (i,v)=>{
-      const t=parseInt(v); if(isNaN(t)) return;
-      const diff=t-bal(i); if(diff===0) return;
-      const rec={type:diff>0?'chore':'spend',label:'잔액 직접 조정',icon:'✏️',amount:Math.abs(diff),date:new Date().toLocaleDateString('ko-KR')};
-      st.records[i]=[rec,...(st.records[i]||[])]; await save(); render();
+    setBalance: async(i,v)=>{
+      const t=parseInt(v);if(isNaN(t))return;
+      const diff=t-bal(i);if(diff===0)return;
+      const rec={type:diff>0?'chore':'spend',label:'잔액 직접 조정',icon:'adjust',amount:Math.abs(diff),date:new Date().toLocaleDateString('ko-KR')};
+      st.records[i]=[rec,...(st.records[i]||[])];await save();render();
     },
     init,
   };
 })();
 
-document.addEventListener('blur', async e=>{
-  if(e.target?.id?.startsWith('kid-name-')) await A.saveKidName();
-}, true);
+document.addEventListener('blur',async e=>{
+  if(e.target?.id?.startsWith('kid-name-'))await A.saveKidName();
+},true);
 
 A.init();
 </script>
