@@ -197,15 +197,27 @@ function balance(idx) {
   return (state.records[idx]||[]).reduce((s,r) => s + (r.type==='spend' ? -r.amount : r.amount), 0);
 }
 
+// undefined 제거 — Firestore는 undefined 값을 거부함
+function sanitize(obj) {
+  return JSON.parse(JSON.stringify(obj, (k, v) => v === undefined ? null : v));
+}
+
 // ── Firebase 저장
 async function saveToFirebase() {
   if (isSaving) return;
   isSaving = true;
   try {
-    await setDoc(DATA_DOC, state);
+    const clean = sanitize({
+      kids:    state.kids,
+      reading: state.reading,
+      chores:  state.chores,
+      records: state.records,
+    });
+    await setDoc(DATA_DOC, clean);
     showToast('저장됐어요 ✓');
   } catch(e) {
-    showToast('저장 실패 — 인터넷 연결 확인');
+    console.error('Firebase 저장 오류:', e);
+    showToast('저장 실패: ' + e.message);
   }
   isSaving = false;
 }
