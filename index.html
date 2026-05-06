@@ -201,8 +201,10 @@ window.A = (() => {
     let rec;
     if (s==='reading') {
       const t = st.reading.find(r=>r.id===form.typeId);
-      rec = { type:'reading', label:t.label, icon:t.icon, amount:t.points,
-              img:imgPreview||null, title:form.title||'', date:new Date().toLocaleDateString('ko-KR') };
+      const qty = form.qty || 1;
+      rec = { type:'reading', label:t.label, icon:t.icon, amount:t.points * qty,
+              qty: qty, img:imgPreview||null, title:form.title||'',
+              date:new Date().toLocaleDateString('ko-KR') };
     } else if (s==='chore') {
       const t = st.chores.find(c=>c.id===form.typeId);
       rec = { type:'chore', label:t.label, icon:t.icon, amount:t.points, date:new Date().toLocaleDateString('ko-KR') };
@@ -494,7 +496,12 @@ window.A = (() => {
     push, pop, goRoot, render, saveRecord, handleImg,
     selectType: id => { form.typeId=id; render(); },
     clearImg:   ()  => { imgPreview=null; render(); },
-    setForm:    (k,v)=>{ form[k]=v; },
+    setForm:    (k,v) => { form[k]=v; },
+    setQty:     (v) => { form.qty = Math.max(1, v); render(); },
+    refreshSaveBtn: () => {
+      const btn = document.getElementById('spend-save-btn');
+      if (btn) btn.disabled = !(form.amount && form.memo);
+    },
     setKidIdx:  i   =>{ kidIdx=i; render(); },
     setHistFilter:   f=>{ histFilter=f; readingFilter=null; render(); },
     setReadingFilter:f=>{ readingFilter=f; render(); },
