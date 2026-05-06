@@ -419,19 +419,19 @@ window.A = (() => {
 
   // ── 실시간 동기화
   function setupSync() {
-    db.collection('app').doc('config').onSnapshot(snap=>{
-      if(snap.exists()){
-        const d=snap.data();
-        st.kids    = d.kids    || DEFAULTS.kids;
-        st.reading = d.reading || DEFAULTS.reading;
-        st.chores  = d.chores  || DEFAULTS.chores;
+    db.collection('app').doc('config').onSnapshot(snap => {
+      if (snap && snap.exists === true) {
+        const d = snap.data();
+        st.kids    = d.kids    && d.kids.length    ? d.kids    : DEFAULTS.kids;
+        st.reading = d.reading && d.reading.length ? d.reading : DEFAULTS.reading;
+        st.chores  = d.chores  && d.chores.length  ? d.chores  : DEFAULTS.chores;
         render();
       }
     });
-    for(let i=0;i<2;i++){
-      const idx=i;
-      db.collection('app').doc('records_'+idx).onSnapshot(snap=>{
-        if(snap.exists()) st.records[idx]=snap.data().list||[];
+    for (let i = 0; i < 2; i++) {
+      const idx = i;
+      db.collection('app').doc('records_' + idx).onSnapshot(snap => {
+        if (snap && snap.exists === true) st.records[idx] = snap.data().list || [];
         render();
       });
     }
@@ -443,8 +443,9 @@ window.A = (() => {
       console.log('Firebase 불러오기 시작...');
 
       const cfg = await db.collection('app').doc('config').get();
-      console.log('config 존재:', cfg.exists());
-      if (cfg.exists()) {
+      const cfgExists = cfg && cfg.exists === true;
+      console.log('config 존재:', cfgExists);
+      if (cfgExists) {
         const d = cfg.data();
         console.log('config 데이터:', d);
         st.kids    = d.kids    && d.kids.length    ? d.kids    : DEFAULTS.kids;
@@ -459,8 +460,9 @@ window.A = (() => {
 
       for (let i = 0; i < 2; i++) {
         const r = await db.collection('app').doc('records_' + i).get();
-        console.log('records_' + i + ' 존재:', r.exists(), r.exists() ? r.data() : null);
-        st.records[i] = r.exists() ? (r.data().list || []) : [];
+        const rExists = r && r.exists === true;
+        console.log('records_' + i + ' 존재:', rExists);
+        st.records[i] = rExists ? (r.data().list || []) : [];
       }
 
       console.log('불러오기 완료. 상태:', JSON.stringify({
