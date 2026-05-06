@@ -481,8 +481,7 @@ function renderSettings() {
         <div class="card-title">${i+1}번째 아이</div>
         <div class="field-label">이름</div>
         <input type="text" value="${k}"
-          oninput="state.kids[${i}]=this.value"
-          onblur="saveSettings()" />
+          oninput="state.kids[${i}]=this.value;saveSettings()" />
         <div class="field-label" style="margin-top:10px">현재 잔액 직접 설정</div>
         <div style="display:flex;gap:8px;align-items:center">
           <input type="number" placeholder="예: 5000" style="flex:1"
