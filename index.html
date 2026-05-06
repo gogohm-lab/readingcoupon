@@ -9,61 +9,52 @@
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f7; display: flex; justify-content: center; }
   #app { width: 100%; max-width: 420px; min-height: 100dvh; background: #fff; display: flex; flex-direction: column; position: relative; }
 
-  /* top bar */
   #top-bar { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 0.5px solid #e0e0e0; background: #fff; flex-shrink: 0; }
   #top-bar .title { flex: 1; font-size: 17px; font-weight: 500; }
   #kid-tabs { display: flex; gap: 8px; }
-  .kid-btn { padding: 6px 16px; border-radius: 20px; border: 0.5px solid #e0e0e0; background: transparent; font-size: 14px; cursor: pointer; color: #888; font-weight: 400; }
+  .kid-btn { padding: 6px 16px; border-radius: 20px; border: 0.5px solid #e0e0e0; background: transparent; font-size: 14px; cursor: pointer; color: #888; }
   .kid-btn.active { border-color: #7F77DD; background: #EEEDFE; color: #533AB7; font-weight: 500; }
-  #back-btn, #home-btn { border: 0.5px solid #e0e0e0; background: transparent; border-radius: 8px; cursor: pointer; font-size: 16px; color: #333; }
-  #back-btn { width: 34px; height: 34px; }
-  #home-btn { border: none; font-size: 13px; color: #888; padding: 4px 8px; }
+  #back-btn { width: 34px; height: 34px; border: 0.5px solid #e0e0e0; background: transparent; border-radius: 8px; cursor: pointer; font-size: 16px; color: #333; }
+  #home-btn { border: none; background: transparent; font-size: 13px; color: #888; cursor: pointer; padding: 4px 8px; }
 
-  /* scroll body */
   #body { flex: 1; overflow-y: auto; padding-bottom: 80px; }
 
-  /* bottom nav */
   #nav-bar { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 420px; background: #fff; border-top: 0.5px solid #e0e0e0; display: flex; z-index: 10; }
-  .nav-btn { flex: 1; padding: 12px 0; font-size: 13px; font-weight: 400; color: #888; border: none; background: transparent; cursor: pointer; }
+  .nav-btn { flex: 1; padding: 12px 0; font-size: 13px; color: #888; border: none; background: transparent; cursor: pointer; }
   .nav-btn.active { color: #7F77DD; font-weight: 500; }
 
-  /* balance card */
   .bal-card { background: linear-gradient(135deg, #7F77DD, #AFA9EC); border-radius: 16px; padding: 24px 20px; margin: 16px 16px 0; color: #fff; }
   .bal-label { font-size: 13px; opacity: 0.85; }
   .bal-amount { font-size: 36px; font-weight: 500; margin: 4px 0 0; }
   .bal-count { font-size: 13px; opacity: 0.7; margin-top: 4px; }
 
-  /* action row */
   .action-row { display: flex; gap: 10px; margin: 14px 16px 0; }
   .action-btn { flex: 1; padding: 16px 0; border-radius: 14px; border: none; font-size: 13px; font-weight: 500; cursor: pointer; line-height: 1.6; }
   .action-btn.reading { background: #E1F5EE; }
-  .action-btn.chore { background: #EEEDFE; }
-  .action-btn.spend { background: #FAECE7; }
+  .action-btn.chore   { background: #EEEDFE; }
+  .action-btn.spend   { background: #FAECE7; }
 
-  /* section title */
   .sec-title { font-size: 13px; font-weight: 500; color: #888; margin: 18px 16px 8px; }
 
-  /* record item */
   .rec-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 0.5px solid #f0f0f0; }
   .rec-icon { font-size: 22px; }
   .rec-info { flex: 1; }
   .rec-name { font-size: 14px; font-weight: 500; }
   .rec-date { font-size: 12px; color: #aaa; }
-  .rec-img { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; }
+  .rec-img  { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; }
   .rec-amount { font-size: 15px; font-weight: 500; white-space: nowrap; }
-  .rec-amount.plus { color: #1D9E75; }
+  .rec-amount.plus  { color: #1D9E75; }
   .rec-amount.minus { color: #E24B4A; }
   .empty-msg { text-align: center; color: #aaa; padding: 28px 0; font-size: 14px; }
 
-  /* section card (sub pages) */
   .section-card { background: #f5f5f7; border-radius: 14px; padding: 16px; margin: 12px 16px 0; border: 0.5px solid #e0e0e0; }
   .s-label { font-size: 13px; color: #888; font-weight: 500; margin-bottom: 10px; }
   .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .type-card { padding: 14px 8px; border-radius: 10px; border: 0.5px solid #e0e0e0; background: #fff; cursor: pointer; text-align: center; transition: all .15s; }
+  .type-card { padding: 14px 8px; border-radius: 10px; border: 0.5px solid #e0e0e0; background: #fff; cursor: pointer; text-align: center; }
   .type-card.selected { border: 1.5px solid #7F77DD; background: #EEEDFE; }
   .type-card .t-icon { font-size: 26px; }
   .type-card .t-name { font-size: 13px; margin-top: 6px; color: #333; }
-  .type-card .t-pts { font-size: 12px; color: #1D9E75; font-weight: 500; margin-top: 3px; }
+  .type-card .t-pts  { font-size: 12px; color: #1D9E75; font-weight: 500; margin-top: 3px; }
 
   input[type="text"], input[type="number"] {
     width: 100%; padding: 10px 12px; border-radius: 10px; border: 0.5px solid #e0e0e0;
@@ -71,7 +62,7 @@
   }
   input:focus { border-color: #7F77DD; }
 
-  .img-box { width: 90px; height: 90px; border-radius: 12px; border: 0.5px dashed #ccc; background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; text-align: center; }
+  .img-box { width: 90px; height: 90px; border-radius: 12px; border: 0.5px dashed #ccc; background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; text-align: center; }
   .img-box span { font-size: 30px; display: block; }
   .img-box small { font-size: 12px; color: #aaa; display: block; margin-top: 4px; }
   .img-preview { width: 90px; height: 90px; border-radius: 12px; object-fit: cover; }
@@ -80,29 +71,24 @@
   .primary-btn { display: block; width: calc(100% - 32px); margin: 16px 16px 0; padding: 15px; border-radius: 13px; background: #7F77DD; color: #fff; font-size: 15px; font-weight: 500; border: none; cursor: pointer; }
   .primary-btn:disabled { background: #f0f0f0; color: #aaa; cursor: default; }
 
-  /* tabs */
   .tab-row { display: flex; margin: 14px 16px 0; border-bottom: 0.5px solid #e0e0e0; gap: 4px; }
-  .tab-btn { flex: 1; padding: 8px 0; font-size: 13px; font-weight: 400; color: #888; border: none; border-bottom: 2px solid transparent; background: transparent; cursor: pointer; }
+  .tab-btn { flex: 1; padding: 8px 0; font-size: 13px; color: #888; border: none; border-bottom: 2px solid transparent; background: transparent; cursor: pointer; }
   .tab-btn.active { color: #7F77DD; font-weight: 500; border-bottom: 2px solid #7F77DD; }
 
-  /* filter chips */
   .chip-row { display: flex; gap: 6px; margin: 10px 16px 0; flex-wrap: wrap; }
   .chip { padding: 4px 12px; border-radius: 20px; font-size: 12px; border: 0.5px solid #e0e0e0; background: transparent; color: #888; cursor: pointer; }
   .chip.active { border-color: #7F77DD; background: #EEEDFE; color: #533AB7; }
 
-  /* stat cards */
   .stat-row { display: flex; gap: 10px; margin: 10px 16px 0; }
   .stat-card { flex: 1; padding: 12px; border-radius: 12px; background: #f5f5f7; border: 0.5px solid #e0e0e0; text-align: center; }
   .stat-label { font-size: 12px; color: #888; }
   .stat-val { font-size: 22px; font-weight: 500; margin-top: 2px; }
   .stat-val.green { color: #1D9E75; }
 
-  /* settings */
   .settings-group { margin: 14px 16px 0; }
   .kid-setting-card { margin-bottom: 14px; padding: 14px; border-radius: 12px; border: 0.5px solid #e0e0e0; background: #f5f5f7; }
   .kid-setting-card .card-title { font-size: 13px; font-weight: 500; margin-bottom: 8px; }
   .field-label { font-size: 12px; color: #888; margin-bottom: 4px; margin-top: 10px; }
-  .field-label:first-of-type { margin-top: 0; }
   .cur-balance { font-size: 12px; color: #aaa; margin-top: 6px; }
   .cur-balance span { font-weight: 500; color: #333; }
   .confirm-hint { font-size: 13px; color: #888; white-space: nowrap; }
@@ -119,41 +105,76 @@
   .icon-btn.selected { border: 1.5px solid #7F77DD; background: #EEEDFE; }
   .add-btn { width: 100%; padding: 10px; border-radius: 10px; border: 0.5px dashed #ccc; background: transparent; font-size: 14px; cursor: pointer; color: #7F77DD; font-weight: 500; margin-top: 10px; }
   .row-unit { font-size: 12px; color: #888; }
+
+  /* 로딩 */
+  #loading { position: fixed; inset: 0; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; gap: 12px; }
+  .spinner { width: 36px; height: 36px; border: 3px solid #e0e0e0; border-top-color: #7F77DD; border-radius: 50%; animation: spin .8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* 저장 토스트 */
+  #toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 13px; opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 100; white-space: nowrap; }
+  #toast.show { opacity: 1; }
 </style>
 </head>
 <body>
-<div id="app">
-  <div id="top-bar">
-    <!-- filled by JS -->
-  </div>
-  <div id="body">
-    <!-- filled by JS -->
-  </div>
+
+<div id="loading">
+  <div class="spinner"></div>
+  <div style="font-size:14px;color:#888">데이터 불러오는 중...</div>
+</div>
+
+<div id="toast"></div>
+
+<div id="app" style="display:none">
+  <div id="top-bar"></div>
+  <div id="body"></div>
   <div id="nav-bar">
-    <button class="nav-btn" data-screen="home" onclick="goRoot('home')">🏠 홈</button>
-    <button class="nav-btn" data-screen="history" onclick="goRoot('history')">📋 내역</button>
+    <button class="nav-btn" data-screen="home"     onclick="goRoot('home')">🏠 홈</button>
+    <button class="nav-btn" data-screen="history"  onclick="goRoot('history')">📋 내역</button>
     <button class="nav-btn" data-screen="settings" onclick="goRoot('settings')">⚙️ 설정</button>
   </div>
 </div>
 
 <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleImg(event)" />
 
-<script>
-// ── State
-let kids = ['첫째', '둘째'];
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDqvmLwtp3HP0xuoyhpd8VP8WbCnV10T5k",
+  authDomain: "reading-coupon.firebaseapp.com",
+  projectId: "reading-coupon",
+  storageBucket: "reading-coupon.firebasestorage.app",
+  messagingSenderId: "586602087544",
+  appId: "1:586602087544:web:625e7ce0a27dfe07d2998d"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
+const DATA_DOC = doc(db, "app", "state");
+
+// ── 기본값
+const DEFAULT_STATE = {
+  kids: ['첫째', '둘째'],
+  reading: [
+    { id:'r1', label:'얇은 책', points:1000, icon:'📗' },
+    { id:'r2', label:'굵은 책', points:2000, icon:'📚' },
+    { id:'r3', label:'신문',    points:500,  icon:'📰' },
+  ],
+  chores: [
+    { id:'c1', label:'이불 정리', points:300, icon:'🛏' },
+    { id:'c2', label:'설거지',   points:500, icon:'🍽' },
+    { id:'c3', label:'청소기',   points:400, icon:'🧹' },
+    { id:'c4', label:'빨래 개기',points:300, icon:'👕' },
+  ],
+  records: [[], []],
+};
+
+// ── 앱 상태
+let state = JSON.parse(JSON.stringify(DEFAULT_STATE));
 let kidIdx = 0;
-let reading = [
-  { id:'r1', label:'얇은 책', points:1000, icon:'📗' },
-  { id:'r2', label:'굵은 책', points:2000, icon:'📚' },
-  { id:'r3', label:'신문',    points:500,  icon:'📰' },
-];
-let chores = [
-  { id:'c1', label:'이불 정리', points:300, icon:'🛏' },
-  { id:'c2', label:'설거지',   points:500, icon:'🍽' },
-  { id:'c3', label:'청소기',   points:400, icon:'🧹' },
-  { id:'c4', label:'빨래 개기',points:300, icon:'👕' },
-];
-let records = [[], []];
 let stack = ['home'];
 let form = {};
 let imgPreview = null;
@@ -162,29 +183,65 @@ let histFilter = 'all';
 let readingFilter = null;
 let newReading = { label:'', points:'', icon:'📗' };
 let newChore   = { label:'', points:'', icon:'🛏' };
+let isSaving = false;
 
 const ICONS_READING = ['📗','📘','📕','📙','📚','📖','📰','🗞','📝','✏️'];
 const ICONS_CHORES  = ['🛏','🍽','🧹','👕','🧺','🪣','🧽','🧴','🪴','🗑'];
-const SUB_SCREENS = ['reading','chore','spend'];
+const SUB_SCREENS   = ['reading','chore','spend'];
 
-const fmt = n => (n||0).toLocaleString('ko-KR') + '원';
-const uid = () => Math.random().toString(36).slice(2,7);
+const fmt    = n  => (n||0).toLocaleString('ko-KR') + '원';
+const uid    = () => Math.random().toString(36).slice(2,7);
 const screen = () => stack[stack.length - 1];
-const rootScreen = () => stack[0];
 
 function balance(idx) {
-  return records[idx].reduce((s,r) => s + (r.type==='spend' ? -r.amount : r.amount), 0);
+  return (state.records[idx]||[]).reduce((s,r) => s + (r.type==='spend' ? -r.amount : r.amount), 0);
 }
 
+// ── Firebase 저장
+async function saveToFirebase() {
+  if (isSaving) return;
+  isSaving = true;
+  try {
+    await setDoc(DATA_DOC, state);
+    showToast('저장됐어요 ✓');
+  } catch(e) {
+    showToast('저장 실패 — 인터넷 연결 확인');
+  }
+  isSaving = false;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ── 실시간 동기화 (다른 기기에서 수정 시 자동 반영)
+onSnapshot(DATA_DOC, (snap) => {
+  if (snap.exists()) {
+    const remote = snap.data();
+    // 현재 sub 화면(입력 중)일 때는 설정/기록만 업데이트, form은 유지
+    state.kids    = remote.kids    || DEFAULT_STATE.kids;
+    state.reading = remote.reading || DEFAULT_STATE.reading;
+    state.chores  = remote.chores  || DEFAULT_STATE.chores;
+    state.records = remote.records || DEFAULT_STATE.records;
+    render();
+  }
+});
+
 // ── Navigation
-function push(s) { stack.push(s); form = {}; imgPreview = null; render(); }
-function pop()   { if (stack.length > 1) stack.pop(); render(); }
-function goRoot(s) { stack = [s]; render(); }
+function push(s)      { stack.push(s); form = {}; imgPreview = null; render(); }
+function pop()        { if (stack.length > 1) stack.pop(); render(); }
+function goRoot(s)    { stack = [s]; render(); }
+window.push    = push;
+window.pop     = pop;
+window.goRoot  = goRoot;
 
-// ── Record
-function selectType(id) { form.typeId = id; render(); }
+// ── 기록 저장
+window.selectType = id => { form.typeId = id; render(); };
 
-function saveRecord() {
+window.saveRecord = async () => {
   const s = screen();
   if (s === 'reading' && !form.typeId) return;
   if (s === 'chore'   && !form.typeId) return;
@@ -192,126 +249,120 @@ function saveRecord() {
 
   let rec;
   if (s === 'reading') {
-    const t = reading.find(r => r.id === form.typeId);
+    const t = state.reading.find(r => r.id === form.typeId);
     rec = { type:'reading', label:t.label, icon:t.icon, amount:t.points,
-            img: imgPreview, title: form.title||'', date: new Date().toLocaleDateString('ko-KR') };
+            img: imgPreview||null, title: form.title||'',
+            date: new Date().toLocaleDateString('ko-KR') };
   } else if (s === 'chore') {
-    const t = chores.find(c => c.id === form.typeId);
+    const t = state.chores.find(c => c.id === form.typeId);
     rec = { type:'chore', label:t.label, icon:t.icon, amount:t.points,
             date: new Date().toLocaleDateString('ko-KR') };
   } else {
     rec = { type:'spend', label:form.memo, icon:'💸', amount:parseInt(form.amount),
             date: new Date().toLocaleDateString('ko-KR') };
   }
-  records[kidIdx] = [rec, ...records[kidIdx]];
-  form = {}; imgPreview = null;
-  goRoot('home');
-}
 
-function handleImg(e) {
+  state.records[kidIdx] = [rec, ...(state.records[kidIdx]||[])];
+  form = {}; imgPreview = null;
+  await saveToFirebase();
+  goRoot('home');
+};
+
+window.handleImg = e => {
   const f = e.target.files[0]; if (!f) return;
   const reader = new FileReader();
   reader.onload = ev => { imgPreview = ev.target.result; render(); };
   reader.readAsDataURL(f);
-}
+};
 
-// ── Settings helpers
-function updateKidName(i, val) { kids[i] = val; }
-function updateReadingPts(i, val) { reading[i].points = parseInt(val)||0; }
-function updateReadingLabel(i, val) { reading[i].label = val; }
-function deleteReading(i) { reading.splice(i,1); render(); }
-function updateChorePts(i, val) { chores[i].points = parseInt(val)||0; }
-function updateChoreLabel(i, val) { chores[i].label = val; }
-function deleteChore(i) { chores.splice(i,1); render(); }
+// ── 설정 변경 후 저장
+window.updateKidName = (i,v) => { state.kids[i]=v; };
+window.saveSettings  = ()    => saveToFirebase();
 
-function addReadingItem() {
+window.deleteReading = async i => { state.reading.splice(i,1); await saveToFirebase(); render(); };
+window.deleteChore   = async i => { state.chores.splice(i,1);  await saveToFirebase(); render(); };
+
+window.addReadingItem = async () => {
   if (!newReading.label || !newReading.points) return;
-  reading.push({ id: uid(), label: newReading.label, points: parseInt(newReading.points), icon: newReading.icon });
+  state.reading.push({ id:uid(), label:newReading.label, points:parseInt(newReading.points), icon:newReading.icon });
   newReading = { label:'', points:'', icon:'📗' };
-  render();
-}
-function addChoreItem() {
+  await saveToFirebase(); render();
+};
+window.addChoreItem = async () => {
   if (!newChore.label || !newChore.points) return;
-  chores.push({ id: uid(), label: newChore.label, points: parseInt(newChore.points), icon: newChore.icon });
+  state.chores.push({ id:uid(), label:newChore.label, points:parseInt(newChore.points), icon:newChore.icon });
   newChore = { label:'', points:'', icon:'🛏' };
-  render();
-}
+  await saveToFirebase(); render();
+};
 
-function setBalance(i, val) {
+window.setBalance = async (i, val) => {
   const target = parseInt(val);
   if (isNaN(target)) return;
   const diff = target - balance(i);
   if (diff === 0) return;
-  const rec = { type: diff>0?'chore':'spend', label:'잔액 직접 조정', icon:'✏️',
-                amount: Math.abs(diff), date: new Date().toLocaleDateString('ko-KR') };
-  records[i] = [rec, ...records[i]];
-  render();
-}
+  const rec = { type:diff>0?'chore':'spend', label:'잔액 직접 조정', icon:'✏️',
+                amount:Math.abs(diff), date:new Date().toLocaleDateString('ko-KR') };
+  state.records[i] = [rec, ...(state.records[i]||[])];
+  await saveToFirebase(); render();
+};
 
-// ── Render helpers
-function recAmountHTML(r) {
-  const sign = r.type==='spend' ? '-' : '+';
-  const cls  = r.type==='spend' ? 'minus' : 'plus';
-  return `<div class="rec-amount ${cls}">${sign}${fmt(r.amount)}</div>`;
-}
-function recImgHTML(r) {
-  return r.img ? `<img class="rec-img" src="${r.img}" />` : '';
-}
+window.setNewReadingIcon = ic => { newReading.icon = ic; render(); };
+window.setNewChoreIcon   = ic => { newChore.icon   = ic; render(); };
+window.setSettingsTab    = t  => { settingsTab = t; render(); };
+window.setHistFilter     = f  => { histFilter = f; readingFilter = null; render(); };
+window.setReadingFilter  = f  => { readingFilter = f; render(); };
+window.setKidIdx         = i  => { kidIdx = i; render(); };
+
+// ── HTML 조각들
 function recItemHTML(r) {
+  const sign = r.type==='spend'?'-':'+';
+  const cls  = r.type==='spend'?'minus':'plus';
+  const imgH = r.img ? `<img class="rec-img" src="${r.img}" />` : '';
   return `<div class="rec-item">
     <div class="rec-icon">${r.icon}</div>
     <div class="rec-info">
-      <div class="rec-name">${r.label}${r.title ? ' — '+r.title : ''}</div>
+      <div class="rec-name">${r.label}${r.title?' — '+r.title:''}</div>
       <div class="rec-date">${r.date}</div>
     </div>
-    ${recImgHTML(r)}
-    ${recAmountHTML(r)}
+    ${imgH}
+    <div class="rec-amount ${cls}">${sign}${fmt(r.amount)}</div>
   </div>`;
 }
 
-// ── Top Bar
+// ── 화면별 렌더
 function renderTopBar() {
   const s = screen();
   const isSub = SUB_SCREENS.includes(s);
-  const subTitles = { reading:'📖 독서 기록', chore:'✨ 집안일', spend:'💸 지출 기록' };
-
+  const titles = { reading:'📖 독서 기록', chore:'✨ 집안일', spend:'💸 지출 기록' };
   let html = '';
   if (isSub) {
-    html = `
-      <button id="back-btn" onclick="pop()">←</button>
-      <span style="flex:1;font-size:16px;font-weight:500">${subTitles[s]}</span>
-      <button id="home-btn" onclick="goRoot('home')">홈</button>`;
+    html = `<button id="back-btn" onclick="pop()">←</button>
+            <span style="flex:1;font-size:16px;font-weight:500">${titles[s]}</span>
+            <button id="home-btn" onclick="goRoot('home')">홈</button>`;
   } else {
-    const kidTabsHTML = kids.map((k,i) =>
-      `<button class="kid-btn ${kidIdx===i?'active':''}" onclick="kidIdx=${i};render()">${k}</button>`
+    const kidTabsHTML = state.kids.map((k,i) =>
+      `<button class="kid-btn ${kidIdx===i?'active':''}" onclick="setKidIdx(${i})">${k}</button>`
     ).join('');
-    html = `
-      <span class="title">독서 쿠폰</span>
-      <div id="kid-tabs">${kidTabsHTML}</div>`;
+    html = `<span class="title">독서 쿠폰</span><div id="kid-tabs">${kidTabsHTML}</div>`;
   }
   document.getElementById('top-bar').innerHTML = html;
 }
 
-// ── Nav Bar
 function renderNavBar() {
-  const s = screen();
-  const isSub = SUB_SCREENS.includes(s);
+  const isSub = SUB_SCREENS.includes(screen());
   document.querySelectorAll('.nav-btn').forEach(btn => {
-    const active = !isSub && btn.dataset.screen === rootScreen();
-    btn.classList.toggle('active', active);
+    btn.classList.toggle('active', !isSub && btn.dataset.screen === stack[0]);
   });
 }
 
-// ── Screens
 function renderHome() {
-  const recs = records[kidIdx];
-  const recentHTML = recs.length === 0
+  const recs = state.records[kidIdx]||[];
+  const recentHTML = recs.length===0
     ? `<div class="empty-msg">아직 기록이 없어요</div>`
     : recs.slice(0,5).map(recItemHTML).join('');
-
   return `
     <div class="bal-card">
-      <div class="bal-label">현재 잔액 — ${kids[kidIdx]}</div>
+      <div class="bal-label">현재 잔액 — ${state.kids[kidIdx]}</div>
       <div class="bal-amount">${fmt(balance(kidIdx))}</div>
       <div class="bal-count">${recs.length}건의 기록</div>
     </div>
@@ -325,13 +376,12 @@ function renderHome() {
 }
 
 function renderReadingPage() {
-  const typeCardsHTML = reading.map(r => `
-    <div class="type-card ${form.typeId===r.id?'selected':''}" onclick="selectType('${r.id}')">
+  const typeCardsHTML = state.reading.map(r =>
+    `<div class="type-card ${form.typeId===r.id?'selected':''}" onclick="selectType('${r.id}')">
       <div class="t-icon">${r.icon}</div>
       <div class="t-name">${r.label}</div>
       <div class="t-pts">+${fmt(r.points)}</div>
     </div>`).join('');
-
   const imgHTML = imgPreview
     ? `<div style="display:flex;align-items:center;gap:14px">
         <img class="img-preview" src="${imgPreview}" />
@@ -340,8 +390,6 @@ function renderReadingPage() {
     : `<div class="img-box" onclick="document.getElementById('file-input').click()">
         <span>📷</span><small>사진 선택</small>
        </div>`;
-
-  const ok = !!form.typeId;
   return `
     <div class="section-card">
       <div class="s-label">책 종류 선택 *</div>
@@ -349,31 +397,28 @@ function renderReadingPage() {
     </div>
     <div class="section-card">
       <div class="s-label">책 제목 (선택)</div>
-      <input type="text" placeholder="예: 해리포터" value="${form.title||''}"
-        oninput="form.title=this.value" />
+      <input type="text" placeholder="예: 해리포터" value="${form.title||''}" oninput="form.title=this.value" />
     </div>
     <div class="section-card">
       <div class="s-label">사진 업로드 (선택)</div>
       ${imgHTML}
     </div>
-    <button class="primary-btn" onclick="saveRecord()" ${ok?'':'disabled'}>저장하기</button>`;
+    <button class="primary-btn" onclick="saveRecord()" ${form.typeId?'':'disabled'}>저장하기</button>`;
 }
 
 function renderChorePage() {
-  const typeCardsHTML = chores.map(c => `
-    <div class="type-card ${form.typeId===c.id?'selected':''}" onclick="selectType('${c.id}')">
+  const typeCardsHTML = state.chores.map(c =>
+    `<div class="type-card ${form.typeId===c.id?'selected':''}" onclick="selectType('${c.id}')">
       <div class="t-icon">${c.icon}</div>
       <div class="t-name">${c.label}</div>
       <div class="t-pts">+${fmt(c.points)}</div>
     </div>`).join('');
-
-  const ok = !!form.typeId;
   return `
     <div class="section-card">
       <div class="s-label">집안일 선택 *</div>
       <div class="type-grid">${typeCardsHTML}</div>
     </div>
-    <button class="primary-btn" onclick="saveRecord()" ${ok?'':'disabled'}>저장하기</button>`;
+    <button class="primary-btn" onclick="saveRecord()" ${form.typeId?'':'disabled'}>저장하기</button>`;
 }
 
 function renderSpendPage() {
@@ -381,34 +426,29 @@ function renderSpendPage() {
   return `
     <div class="section-card">
       <div class="s-label">금액</div>
-      <input type="number" placeholder="예: 3000" value="${form.amount||''}"
-        oninput="form.amount=this.value" />
+      <input type="number" placeholder="예: 3000" value="${form.amount||''}" oninput="form.amount=this.value" />
     </div>
     <div class="section-card">
       <div class="s-label">어디에 썼나요?</div>
-      <input type="text" placeholder="예: 편의점, 문구점" value="${form.memo||''}"
-        oninput="form.memo=this.value" />
+      <input type="text" placeholder="예: 편의점, 문구점" value="${form.memo||''}" oninput="form.memo=this.value" />
     </div>
     <button class="primary-btn" onclick="saveRecord()" ${ok?'':'disabled'}>저장하기</button>`;
 }
 
 function renderHistory() {
-  const tabs = [['all','전체'],['reading','독서'],['chore','집안일'],['spend','지출']];
-  const tabsHTML = tabs.map(([id,label]) =>
-    `<button class="tab-btn ${histFilter===id?'active':''}" onclick="histFilter='${id}';readingFilter=null;render()">${label}</button>`
+  const tabsHTML = [['all','전체'],['reading','독서'],['chore','집안일'],['spend','지출']].map(([id,label]) =>
+    `<button class="tab-btn ${histFilter===id?'active':''}" onclick="setHistFilter('${id}')">${label}</button>`
   ).join('');
 
-  let chipsHTML = '';
-  let statsHTML = '';
+  let chipsHTML = '', statsHTML = '';
   if (histFilter === 'reading') {
     chipsHTML = `<div class="chip-row">
-      <button class="chip ${!readingFilter?'active':''}" onclick="readingFilter=null;render()">전체</button>
-      ${reading.map(r => `<button class="chip ${readingFilter===r.label?'active':''}" onclick="readingFilter='${r.label}';render()">${r.icon} ${r.label}</button>`).join('')}
+      <button class="chip ${!readingFilter?'active':''}" onclick="setReadingFilter(null)">전체</button>
+      ${state.reading.map(r=>`<button class="chip ${readingFilter===r.label?'active':''}" onclick="setReadingFilter('${r.label}')">${r.icon} ${r.label}</button>`).join('')}
     </div>`;
-
-    const f2 = records[kidIdx].filter(r => r.type==='reading' && (!readingFilter || r.label===readingFilter));
-    if (f2.length > 0) {
-      const total = f2.reduce((s,r) => s+r.amount, 0);
+    const f2 = (state.records[kidIdx]||[]).filter(r=>r.type==='reading'&&(!readingFilter||r.label===readingFilter));
+    if (f2.length>0) {
+      const total = f2.reduce((s,r)=>s+r.amount,0);
       statsHTML = `<div class="stat-row">
         <div class="stat-card"><div class="stat-label">총 횟수</div><div class="stat-val">${f2.length}권</div></div>
         <div class="stat-card"><div class="stat-label">적립 금액</div><div class="stat-val green">${fmt(total)}</div></div>
@@ -416,40 +456,36 @@ function renderHistory() {
     }
   }
 
-  const filtered = records[kidIdx].filter(r => {
-    if (histFilter === 'all') return true;
-    if (histFilter === 'reading') return r.type==='reading' && (!readingFilter || r.label===readingFilter);
-    return r.type === histFilter;
+  const filtered = (state.records[kidIdx]||[]).filter(r => {
+    if (histFilter==='all') return true;
+    if (histFilter==='reading') return r.type==='reading'&&(!readingFilter||r.label===readingFilter);
+    return r.type===histFilter;
   });
-
-  const listHTML = filtered.length === 0
+  const listHTML = filtered.length===0
     ? `<div class="empty-msg">기록이 없어요</div>`
     : filtered.map(recItemHTML).join('');
 
-  return `
-    <div class="tab-row">${tabsHTML}</div>
-    ${chipsHTML}
-    ${statsHTML}
-    <div style="margin-top:4px">${listHTML}</div>`;
+  return `<div class="tab-row">${tabsHTML}</div>${chipsHTML}${statsHTML}<div style="margin-top:4px">${listHTML}</div>`;
 }
 
 function renderSettings() {
-  const tabs = [['kids','이름'],['reading','독서'],['chores','집안일']];
-  const tabsHTML = tabs.map(([id,label]) =>
-    `<button class="tab-btn ${settingsTab===id?'active':''}" onclick="settingsTab='${id}';render()">${label}</button>`
+  const tabsHTML = [['kids','이름'],['reading','독서'],['chores','집안일']].map(([id,label]) =>
+    `<button class="tab-btn ${settingsTab===id?'active':''}" onclick="setSettingsTab('${id}')">${label}</button>`
   ).join('');
 
   let bodyHTML = '';
 
   if (settingsTab === 'kids') {
-    bodyHTML = `<div class="settings-group">` + kids.map((k,i) => `
+    bodyHTML = `<div class="settings-group">` + state.kids.map((k,i) => `
       <div class="kid-setting-card">
         <div class="card-title">${i+1}번째 아이</div>
         <div class="field-label">이름</div>
-        <input type="text" value="${k}" oninput="kids[${i}]=this.value;document.querySelectorAll('.kid-btn')[${i}].textContent=this.value" />
+        <input type="text" value="${k}"
+          oninput="state.kids[${i}]=this.value"
+          onblur="saveSettings()" />
         <div class="field-label" style="margin-top:10px">현재 잔액 직접 설정</div>
         <div style="display:flex;gap:8px;align-items:center">
-          <input type="number" placeholder="예: 5000" id="bal-input-${i}" style="flex:1"
+          <input type="number" placeholder="예: 5000" style="flex:1"
             onblur="setBalance(${i},this.value);this.value=''" />
           <span class="confirm-hint">원 입력 후 확인</span>
         </div>
@@ -458,19 +494,19 @@ function renderSettings() {
   }
 
   if (settingsTab === 'reading') {
-    const rowsHTML = reading.map((r,i) => `
+    const rowsHTML = state.reading.map((r,i) => `
       <div class="item-row">
         <span class="item-icon">${r.icon}</span>
-        <input class="s-input" type="text" value="${r.label}" oninput="reading[${i}].label=this.value" />
-        <input class="n-input" type="number" value="${r.points}" oninput="reading[${i}].points=parseInt(this.value)||0" />
+        <input class="s-input" type="text" value="${r.label}"
+          oninput="state.reading[${i}].label=this.value" onblur="saveSettings()" />
+        <input class="n-input" type="number" value="${r.points}"
+          oninput="state.reading[${i}].points=parseInt(this.value)||0" onblur="saveSettings()" />
         <span class="row-unit">원</span>
         <button class="del-btn" onclick="deleteReading(${i})">삭제</button>
       </div>`).join('');
-
     const iconsHTML = ICONS_READING.map(ic =>
-      `<button class="icon-btn ${newReading.icon===ic?'selected':''}" onclick="newReading.icon='${ic}';render()">${ic}</button>`
+      `<button class="icon-btn ${newReading.icon===ic?'selected':''}" onclick="setNewReadingIcon('${ic}')">${ic}</button>`
     ).join('');
-
     bodyHTML = `<div class="settings-group">
       ${rowsHTML}
       <div class="add-section">
@@ -490,19 +526,19 @@ function renderSettings() {
   }
 
   if (settingsTab === 'chores') {
-    const rowsHTML = chores.map((c,i) => `
+    const rowsHTML = state.chores.map((c,i) => `
       <div class="item-row">
         <span class="item-icon">${c.icon}</span>
-        <input class="s-input" type="text" value="${c.label}" oninput="chores[${i}].label=this.value" />
-        <input class="n-input" type="number" value="${c.points}" oninput="chores[${i}].points=parseInt(this.value)||0" />
+        <input class="s-input" type="text" value="${c.label}"
+          oninput="state.chores[${i}].label=this.value" onblur="saveSettings()" />
+        <input class="n-input" type="number" value="${c.points}"
+          oninput="state.chores[${i}].points=parseInt(this.value)||0" onblur="saveSettings()" />
         <span class="row-unit">원</span>
         <button class="del-btn" onclick="deleteChore(${i})">삭제</button>
       </div>`).join('');
-
     const iconsHTML = ICONS_CHORES.map(ic =>
-      `<button class="icon-btn ${newChore.icon===ic?'selected':''}" onclick="newChore.icon='${ic}';render()">${ic}</button>`
+      `<button class="icon-btn ${newChore.icon===ic?'selected':''}" onclick="setNewChoreIcon('${ic}')">${ic}</button>`
     ).join('');
-
     bodyHTML = `<div class="settings-group">
       ${rowsHTML}
       <div class="add-section">
@@ -524,25 +560,38 @@ function renderSettings() {
   return `<div class="tab-row">${tabsHTML}</div>${bodyHTML}`;
 }
 
-// ── Main render
-function render() {
+// ── 메인 렌더
+window.render = function() {
   const s = screen();
   renderTopBar();
   renderNavBar();
+  const map = { home:renderHome, reading:renderReadingPage, chore:renderChorePage, spend:renderSpendPage, history:renderHistory, settings:renderSettings };
+  document.getElementById('body').innerHTML = (map[s]||renderHome)();
+};
 
-  const screenMap = {
-    home:     renderHome,
-    reading:  renderReadingPage,
-    chore:    renderChorePage,
-    spend:    renderSpendPage,
-    history:  renderHistory,
-    settings: renderSettings,
-  };
-
-  document.getElementById('body').innerHTML = (screenMap[s] || renderHome)();
+// ── 초기 로드
+async function init() {
+  try {
+    const snap = await getDoc(DATA_DOC);
+    if (snap.exists()) {
+      const d = snap.data();
+      state.kids    = d.kids    || DEFAULT_STATE.kids;
+      state.reading = d.reading || DEFAULT_STATE.reading;
+      state.chores  = d.chores  || DEFAULT_STATE.chores;
+      state.records = d.records || DEFAULT_STATE.records;
+    } else {
+      // 첫 실행: 기본값 저장
+      await setDoc(DATA_DOC, state);
+    }
+  } catch(e) {
+    console.warn('Firebase 불러오기 실패, 로컬 기본값 사용');
+  }
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  render();
 }
 
-render();
+init();
 </script>
 </body>
 </html>
