@@ -249,6 +249,12 @@ window.A = (() => {
   const root = () => stack[0];
   const bal  = i => (st.records[i]||[]).reduce((s,r)=>s+(r.type==='spend'?-r.amount:r.amount),0);
 
+  function iconSelRow(keys, selectedKey, onclickFn){
+    return `<div class="icon-sel-row">${keys.map(k=>`
+      <button class="icon-sel-btn ${selectedKey===k?'sel':''}" onclick="${onclickFn}('${k}')">${ic(k)}</button>
+    `).join('')}</div>`;
+  }
+
   // 날짜+시간 문자열
   function nowStr() {
     const d = new Date();
