@@ -154,11 +154,7 @@ textarea:focus{border-color:var(--sky-d)}
 .add-btn:hover{background:var(--sky-l)}
 .row-unit{font-size:12px;color:var(--sub)}
 
-/* 아이콘 선택 그리드 */
-.icon-sel-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-.icon-sel-btn{width:40px;height:40px;border-radius:11px;border:1.5px solid var(--border);background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
-.icon-sel-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.icon-sel-btn.sel{border-color:var(--sky-d);background:var(--sky-l);color:var(--sky-d)}inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:14px}
+#loading{position:fixed;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:14px}
 .spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--sky-d);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 #toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:#2C3A35;color:#fff;padding:11px 22px;border-radius:24px;font-size:13px;font-weight:500;opacity:0;transition:opacity .3s;pointer-events:none;z-index:100;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.12)}
@@ -213,13 +209,7 @@ const IC = {
 };
 const ic = k => IC[k] || IC.book;
 
-const CHORE_ICONS = ['bed','dish','vacuum','laundry','adjust','book','spend','transfer','chat','news'];
-
-  function iconSelRow(keys, selectedKey, onclickFn){
-    return `<div class="icon-sel-row">${keys.map(k=>`
-      <button class="icon-sel-btn ${selectedKey===k?'sel':''}" onclick="${onclickFn}('${k}')">${ic(k)}</button>
-    `).join('')}</div>`;
-  }
+const DEFAULTS = {
   kids:['첫째','둘째'],
   reading:[
     {id:'r1',label:'얇은 책',points:1000,icon:'book'},
@@ -248,12 +238,6 @@ window.A = (() => {
   const cur  = () => stack[stack.length-1];
   const root = () => stack[0];
   const bal  = i => (st.records[i]||[]).reduce((s,r)=>s+(r.type==='spend'?-r.amount:r.amount),0);
-
-  function iconSelRow(keys, selectedKey, onclickFn){
-    return `<div class="icon-sel-row">${keys.map(k=>`
-      <button class="icon-sel-btn ${selectedKey===k?'sel':''}" onclick="${onclickFn}('${k}')">${ic(k)}</button>
-    `).join('')}</div>`;
-  }
 
   // 날짜+시간 문자열
   function nowStr() {
@@ -342,11 +326,7 @@ window.A = (() => {
     for(let i=0;i<2;i++){
       (st.records[i]||[]).forEach((r,idx)=>all.push({...r,_ki:i,_idx:idx}));
     }
-    // ts 없으면 맨 뒤로
-    all.sort((a,b)=>{
-      const ta = a.ts||0, tb = b.ts||0;
-      return tb - ta;
-    });
+    all.sort((a,b)=>(b.ts||0)-(a.ts||0));
     return n ? all.slice(0,n) : all;
   }
 
@@ -453,27 +433,10 @@ window.A = (() => {
   }
 
   function renderChorePage(){
-    // 각 집안일 카드에 아이콘 표시 + 선택 후 아이콘 변경 가능
-    const cards = st.chores.map(c=>`
-      <div class="type-card ${form.typeId===c.id?'selected':''}" onclick="A.selectChore('${c.id}')">
-        <div style="color:${form.typeId===c.id?'var(--sky-d)':'var(--gray-d)'}">${ic(c.icon||'bed')}</div>
-        <div class="t-name">${c.label}</div>
-        <div class="t-pts">+${fmt(c.points)}</div>
-      </div>`).join('');
-
-    // 선택된 집안일이 있으면 아이콘 변경 UI 표시
-    const selected = form.typeId ? st.chores.find(c=>c.id===form.typeId) : null;
-    const iconChangeUI = selected ? `
-      <div class="section-card">
-        <div class="s-label">아이콘 변경 (선택)</div>
-        ${iconSelRow(CHORE_ICONS, selected.icon||'bed', 'A.changeChoreIcon')}
-      </div>` : '';
-
     return `
       <div class="section-card"><div class="s-label">집안일 선택</div>
-        <div class="type-grid">${cards}</div>
+        <div class="type-grid">${st.chores.map(c=>typeCardSVG(c,form.typeId===c.id)).join('')}</div>
       </div>
-      ${iconChangeUI}
       <button class="primary-btn" onclick="A.saveRecord()" ${form.typeId?'':'disabled'}>저장하기</button>`;
   }
 
@@ -656,11 +619,6 @@ window.A = (() => {
   return {
     push,pop,goRoot,render,saveRecord,
     selectType: id=>{form.typeId=id;render();},
-    selectChore: id=>{form.typeId=id;render();},
-    changeChoreIcon: key=>{
-      const c=st.chores.find(c=>c.id===form.typeId);
-      if(c){c.icon=key;render();}
-    },
     setForm:    (k,v)=>{form[k]=v;render();},
     setQty:     v=>{form.qty=Math.max(1,v);render();},
     setKidIdx:  i=>{kidIdx=i;expandedIdx=null;render();},
