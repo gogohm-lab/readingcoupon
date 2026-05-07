@@ -7,10 +7,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 :root{
+  --pink:#F2A7B8;--pink-l:#FEF0F3;--pink-d:#D97A8F;
+  --yellow:#F5CF7A;--yellow-l:#FDF8EC;--yellow-d:#C9A23A;
   --mint:#7ECFC0;--mint-l:#EAF7F4;--mint-d:#4EB8A6;
+  --gray:#B0B8C1;--gray-l:#F2F4F6;--gray-d:#6E7A84;
   --purple:#B09ED6;--purple-l:#F2EEFB;--purple-d:#8B76C2;
-  --green:#5BBFA8;--red:#F08080;--yellow-l:#FFF8E6;
-  --bg:#F6F8FA;--card:#fff;--border:#ECEEF2;
+  --green:#5BBFA8;--red:#F08080;
+  --bg:#F8F9FB;--card:#fff;--border:#ECEEF2;
   --text:#2C3A35;--sub:#9AA5A0;
   --r:18px;--rs:12px;
 }
@@ -22,9 +25,9 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--bg);disp
 .app-title{flex:1;font-size:17px;font-weight:700;color:var(--text);letter-spacing:-.3px}
 .kid-tabs{display:flex;gap:6px}
 .kid-btn{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--card);font-size:13px;font-weight:500;cursor:pointer;color:var(--sub);transition:all .2s}
-.kid-btn.active{border-color:var(--mint-d);background:var(--mint-d);color:#fff}
+.kid-btn.active{border-color:var(--pink-d);background:var(--pink-d);color:#fff}
 .back-btn{width:36px;height:36px;border:1.5px solid var(--border);background:var(--card);border-radius:12px;cursor:pointer;color:var(--text);display:flex;align-items:center;justify-content:center}
-.back-btn svg{width:18px;height:18px}
+.back-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .home-link{font-size:13px;font-weight:500;color:var(--sub);background:none;border:none;cursor:pointer}
 
 #body{flex:1;overflow-y:auto;padding-bottom:88px}
@@ -32,36 +35,40 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--bg);disp
 #nav-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:rgba(255,255,255,.94);backdrop-filter:blur(16px);border-top:1px solid var(--border);display:flex;z-index:10;padding-bottom:env(safe-area-inset-bottom)}
 .nav-btn{flex:1;padding:10px 0 8px;font-size:11px;font-weight:500;color:var(--sub);border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;transition:color .2s}
 .nav-btn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.nav-btn.active{color:var(--mint-d)}
+.nav-btn.active{color:var(--pink-d)}
 
+/* 잔액 카드 */
 .bal-wrap{display:flex;gap:10px;margin:4px 20px 0}
 .bal-card{flex:1;border-radius:22px;padding:22px 18px;color:#fff;position:relative;overflow:hidden;cursor:pointer;transition:box-shadow .2s,opacity .2s}
-.bal-card.mint{background:linear-gradient(135deg,#A8D8C8,var(--mint))}
-.bal-card.purple{background:linear-gradient(135deg,#C9B8E8,var(--purple))}
-.bal-card.dim{opacity:.82}
-.bal-card::before{content:'';position:absolute;right:-18px;top:-18px;width:88px;height:88px;border-radius:50%;background:rgba(255,255,255,.15)}
+.bal-card.kid0{background:linear-gradient(135deg,#F7C4CF,var(--pink))}
+.bal-card.kid1{background:linear-gradient(135deg,#FAE0A0,var(--yellow))}
+.bal-card.dim{opacity:.8}
+.bal-card.active-card{box-shadow:0 6px 20px rgba(0,0,0,.12)}
+.bal-card::before{content:'';position:absolute;right:-18px;top:-18px;width:88px;height:88px;border-radius:50%;background:rgba(255,255,255,.18)}
 .bal-who{font-size:12px;font-weight:600;opacity:.88;margin-bottom:6px}
 .bal-amount{font-size:24px;font-weight:700;letter-spacing:-.5px;line-height:1.2}
 .bal-count{font-size:11px;opacity:.72;margin-top:5px}
 
+/* 액션 버튼 */
 .action-row{display:flex;gap:10px;margin:14px 20px 0}
-.action-btn{flex:1;padding:16px 0 14px;border-radius:var(--r);border:none;font-size:12px;font-weight:600;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;transition:transform .15s;color:var(--text)}
+.action-btn{flex:1;padding:16px 0 14px;border-radius:var(--r);border:none;font-size:12px;font-weight:600;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;transition:transform .15s}
 .action-btn:active{transform:scale(.96)}
 .action-btn svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.action-btn.reading{background:#DFF5EF;color:var(--mint-d)}
-.action-btn.chore{background:var(--purple-l);color:var(--purple-d)}
-.action-btn.spend{background:#FDECEA;color:#D9726B}
+.action-btn.reading{background:var(--mint-l);color:var(--mint-d)}
+.action-btn.chore{background:var(--gray-l);color:var(--gray-d)}
+.action-btn.spend{background:var(--purple-l);color:var(--purple-d)}
 
 .sec-title{font-size:11px;font-weight:700;color:var(--sub);margin:20px 20px 10px;letter-spacing:.6px;text-transform:uppercase}
 
+/* 기록 아이템 */
 .rec-item{padding:13px 20px;border-bottom:1px solid var(--border)}
 .rec-row{display:flex;align-items:center;gap:12px}
 .rec-bubble{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .rec-bubble svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.rec-bubble.reading{background:#DFF5EF;color:var(--mint-d)}
-.rec-bubble.chore{background:var(--purple-l);color:var(--purple-d)}
-.rec-bubble.spend{background:#FDECEA;color:#D9726B}
-.rec-bubble.adjust{background:var(--yellow-l);color:#C8A84B}
+.rec-bubble.reading{background:var(--mint-l);color:var(--mint-d)}
+.rec-bubble.chore{background:var(--gray-l);color:var(--gray-d)}
+.rec-bubble.spend{background:var(--purple-l);color:var(--purple-d)}
+.rec-bubble.adjust{background:var(--yellow-l);color:var(--yellow-d)}
 .rec-info{flex:1;min-width:0}
 .rec-name{font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rec-date{font-size:12px;color:var(--sub);margin-top:2px}
@@ -76,9 +83,11 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--bg);disp
 .memo-box{margin:10px 0 2px 54px;padding:10px 14px;background:var(--mint-l);border-radius:10px;font-size:13px;color:#555;line-height:1.7;border-left:3px solid var(--mint-d)}
 .empty-msg{text-align:center;color:var(--sub);padding:40px 0;font-size:14px}
 
+/* section card */
 .section-card{background:var(--card);border-radius:var(--r);padding:18px;margin:12px 20px 0;box-shadow:0 1px 4px rgba(0,0,0,.05)}
 .s-label{font-size:11px;font-weight:700;color:var(--sub);margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px}
 
+/* type grid */
 .type-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .type-card{padding:16px 10px;border-radius:var(--rs);border:2px solid var(--border);background:var(--bg);cursor:pointer;text-align:center;transition:all .18s}
 .type-card:active{transform:scale(.97)}
@@ -88,6 +97,7 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--bg);disp
 .t-name{font-size:13px;font-weight:600;margin-top:8px;color:var(--text)}
 .t-pts{font-size:12px;color:var(--green);font-weight:600;margin-top:3px}
 
+/* qty */
 .qty-row{display:flex;align-items:center;gap:16px}
 .qty-btn{width:38px;height:38px;border-radius:50%;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s;border:2px solid var(--border);background:var(--bg);color:var(--text)}
 .qty-btn.plus{border-color:var(--mint-d);background:var(--mint-d);color:#fff}
@@ -100,24 +110,28 @@ input:focus{border-color:var(--mint-d)}
 textarea{width:100%;padding:12px 14px;border-radius:var(--rs);border:1.5px solid var(--border);font-size:14px;font-family:inherit;background:var(--bg);color:var(--text);outline:none;resize:none;min-height:96px;line-height:1.7;transition:border .2s}
 textarea:focus{border-color:var(--mint-d)}
 
-.primary-btn{display:block;width:calc(100% - 40px);margin:20px 20px 0;padding:16px;border-radius:var(--r);background:linear-gradient(135deg,var(--mint-d),#5BB8A8);color:#fff;font-size:16px;font-weight:700;border:none;cursor:pointer;transition:transform .15s;font-family:inherit}
+.primary-btn{display:block;width:calc(100% - 40px);margin:20px 20px 0;padding:16px;border-radius:var(--r);background:linear-gradient(135deg,var(--pink-d),#E8889A);color:#fff;font-size:16px;font-weight:700;border:none;cursor:pointer;transition:transform .15s;font-family:inherit}
 .primary-btn:active{transform:scale(.98)}
 .primary-btn:disabled{background:var(--border);color:var(--sub);cursor:default}
 
+/* tabs */
 .tab-row{display:flex;margin:14px 20px 0;background:var(--card);border-radius:12px;padding:4px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
 .tab-btn{flex:1;padding:8px 0;font-size:13px;font-weight:600;color:var(--sub);border:none;border-radius:9px;background:transparent;cursor:pointer;transition:all .2s;font-family:inherit}
-.tab-btn.active{background:linear-gradient(135deg,var(--mint-d),#5BB8A8);color:#fff}
+.tab-btn.active{background:linear-gradient(135deg,var(--pink-d),#E8889A);color:#fff}
 
+/* chips */
 .chip-row{display:flex;gap:6px;margin:12px 20px 0;flex-wrap:wrap}
 .chip{padding:5px 13px;border-radius:20px;font-size:12px;font-weight:500;border:1.5px solid var(--border);background:var(--card);color:var(--sub);cursor:pointer;transition:all .2s}
-.chip.active{border-color:var(--mint-d);background:var(--mint-l);color:var(--mint-d)}
+.chip.active{border-color:var(--pink-d);background:var(--pink-l);color:var(--pink-d)}
 
+/* stat */
 .stat-row{display:flex;gap:10px;margin:12px 20px 0}
 .stat-card{flex:1;padding:16px;border-radius:var(--r);background:var(--card);box-shadow:0 1px 4px rgba(0,0,0,.05);text-align:center}
 .stat-label{font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.3px}
 .stat-val{font-size:24px;font-weight:700;margin-top:4px;color:var(--text)}
 .stat-val.green{color:var(--green)}
 
+/* settings */
 .settings-group{margin:14px 20px 0}
 .kid-card{margin-bottom:14px;padding:18px;border-radius:var(--r);background:var(--card);box-shadow:0 1px 4px rgba(0,0,0,.05)}
 .kid-card-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px}
@@ -125,23 +139,25 @@ textarea:focus{border-color:var(--mint-d)}
 .cur-balance{font-size:12px;color:var(--sub);margin-top:8px}
 .cur-balance b{font-weight:700;color:var(--text)}
 .confirm-hint{font-size:12px;color:var(--sub);white-space:nowrap}
-.item-row{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--border)}
+
+/* 설정 item row */
+.item-row{display:flex;align-items:center;gap:8px;padding:11px 0;border-bottom:1px solid var(--border)}
+.item-label{font-size:14px;font-weight:500;color:var(--text);flex:1}
 .s-input{flex:1;padding:7px 10px;border-radius:8px;border:1.5px solid var(--border);font-size:14px;font-family:inherit;background:var(--bg);color:var(--text);width:auto;outline:none}
-.s-input:focus,.n-input:focus{border-color:var(--mint-d)}
-.n-input{width:68px;padding:7px 8px;border-radius:8px;border:1.5px solid var(--border);font-size:14px;text-align:right;font-family:inherit;background:var(--bg);color:var(--text);outline:none}
-.del-btn{padding:5px 10px;border-radius:8px;border:1.5px solid #FFCDD2;background:#FFF5F5;color:var(--red);font-size:12px;font-weight:600;cursor:pointer}
+.s-input:focus{border-color:var(--pink-d)}
+.n-input{width:72px;padding:7px 8px;border-radius:8px;border:1.5px solid var(--border);font-size:14px;text-align:right;font-family:inherit;background:var(--bg);color:var(--text);outline:none}
+.n-input:focus{border-color:var(--pink-d)}
+.del-btn{padding:6px 10px;border-radius:8px;border:1.5px solid #FFCDD2;background:#FFF5F5;color:var(--red);font-size:12px;font-weight:600;cursor:pointer}
+.save-row-btn{padding:6px 12px;border-radius:8px;background:var(--mint-d);color:#fff;font-size:12px;font-weight:600;border:none;cursor:pointer;font-family:inherit;white-space:nowrap}
+
 .add-section{margin-top:14px;padding:18px;border-radius:var(--r);background:var(--card);box-shadow:0 1px 4px rgba(0,0,0,.05)}
 .add-section-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:12px}
-.add-btn{width:100%;padding:12px;border-radius:var(--rs);border:2px dashed var(--mint-l);background:transparent;font-size:14px;font-weight:600;cursor:pointer;color:var(--mint-d);margin-top:12px;font-family:inherit;transition:background .2s}
-.add-btn:hover{background:var(--mint-l)}
+.add-btn{width:100%;padding:12px;border-radius:var(--rs);border:2px dashed var(--pink-l);background:transparent;font-size:14px;font-weight:600;cursor:pointer;color:var(--pink-d);margin-top:12px;font-family:inherit;transition:background .2s}
+.add-btn:hover{background:var(--pink-l)}
 .row-unit{font-size:12px;color:var(--sub)}
 
-.icon-pick-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
-.icon-pick-btn{width:36px;height:36px;border-radius:10px;border:1.5px solid var(--border);background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .15s}
-.icon-pick-btn.selected{border-color:var(--mint-d);background:var(--mint-l)}
-
 #loading{position:fixed;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:14px}
-.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--mint-d);border-radius:50%;animation:spin .8s linear infinite}
+.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--pink-d);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 #toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:#2C3A35;color:#fff;padding:11px 22px;border-radius:24px;font-size:13px;font-weight:500;opacity:0;transition:opacity .3s;pointer-events:none;z-index:100;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.12)}
 #toast.show{opacity:1}
@@ -179,7 +195,6 @@ firebase.initializeApp({
 });
 const db = firebase.firestore();
 
-// ── SVG 아이콘 모음
 const IC = {
   book:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>`,
   news:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v16a2 2 0 01-2 2zm0 0a2 2 0 01-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/></svg>`,
@@ -192,55 +207,49 @@ const IC = {
   adjust:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`,
   chat:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>`,
   back:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>`,
+  home2:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>`,
+  chore2:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
 };
-
-// 설정 아이콘 선택용 (텍스트 레이블 + SVG key)
-const R_TYPES = [
-  {id:'r1',label:'얇은 책',points:1000,icon:'book'},
-  {id:'r2',label:'굵은 책',points:2000,icon:'thick'},
-  {id:'r3',label:'신문',   points:500, icon:'news'},
-];
-const C_TYPES = [
-  {id:'c1',label:'이불 정리',points:300,icon:'bed'},
-  {id:'c2',label:'설거지',  points:500,icon:'dish'},
-  {id:'c3',label:'청소기',  points:400,icon:'vacuum'},
-  {id:'c4',label:'빨래 개기',points:300,icon:'laundry'},
-];
-const ICON_KEYS_R = ['book','thick','news','chat','adjust'];
-const ICON_KEYS_C = ['bed','dish','vacuum','laundry','adjust'];
-const ICON_LABELS = {book:'책',thick:'두꺼운책',news:'신문',chat:'메모',adjust:'기타',bed:'침구',dish:'설거지',vacuum:'청소',laundry:'빨래',spend:'돈'};
+const ic = k => IC[k] || IC.book;
 
 const DEFAULTS = {
   kids:['첫째','둘째'],
-  reading: R_TYPES,
-  chores:  C_TYPES,
-  records:[[], []],
+  reading:[
+    {id:'r1',label:'얇은 책',points:1000,icon:'book'},
+    {id:'r2',label:'굵은 책',points:2000,icon:'thick'},
+    {id:'r3',label:'신문',   points:500, icon:'news'},
+  ],
+  chores:[
+    {id:'c1',label:'이불 정리',points:300,icon:'bed'},
+    {id:'c2',label:'설거지',  points:500,icon:'dish'},
+    {id:'c3',label:'청소기',  points:400,icon:'vacuum'},
+    {id:'c4',label:'빨래 개기',points:300,icon:'laundry'},
+  ],
+  records:[[],[]],
 };
 
 window.A = (() => {
   const SUB = ['reading','chore','spend'];
   let st = JSON.parse(JSON.stringify(DEFAULTS));
-  let kidIdx=0,stack=['home'],form={},settingsTab='kids';
-  let histFilter='all',readingFilter=null,expandedIdx=null;
-  let newR={label:'',points:'',icon:'book'};
-  let newC={label:'',points:'',icon:'bed'};
+  let kidIdx=0, stack=['home'], form={}, settingsTab='kids';
+  let histFilter='all', readingFilter=null, expandedIdx=null;
+  let newR={label:'',points:''}, newC={label:'',points:''};
   let saving=false;
 
-  const fmt  = n  => (n||0).toLocaleString('ko-KR')+'원';
-  const uid  = () => Math.random().toString(36).slice(2,7);
-  const cur  = () => stack[stack.length-1];
-  const root = () => stack[0];
-  const bal  = i  => (st.records[i]||[]).reduce((s,r)=>s+(r.type==='spend'?-r.amount:r.amount),0);
-  const ic   = k  => IC[k] || IC.book;
+  const fmt = n => (n||0).toLocaleString('ko-KR')+'원';
+  const uid = () => Math.random().toString(36).slice(2,7);
+  const cur = () => stack[stack.length-1];
+  const root= () => stack[0];
+  const bal = i => (st.records[i]||[]).reduce((s,r)=>s+(r.type==='spend'?-r.amount:r.amount),0);
 
   function toast(msg){
     const el=document.getElementById('toast');
-    el.textContent=msg;el.classList.add('show');
+    el.textContent=msg; el.classList.add('show');
     setTimeout(()=>el.classList.remove('show'),2500);
   }
 
   async function save(){
-    if(saving)return;saving=true;
+    if(saving)return; saving=true;
     try{
       await db.collection('app').doc('config').set({
         kids:JSON.parse(JSON.stringify(st.kids)),
@@ -278,26 +287,22 @@ window.A = (() => {
       rec={type:'spend',label:form.memo,icon:'spend',amount:parseInt(form.amount),date:new Date().toLocaleDateString('ko-KR')};
     }
     st.records[kidIdx]=[rec,...(st.records[kidIdx]||[])];
-    form={};await save();goRoot('home');
+    form={}; await save(); goRoot('home');
   }
 
   function bubbleClass(r){
+    if(r.label==='잔액 직접 조정') return 'adjust';
     if(r.type==='reading') return 'reading';
     if(r.type==='chore')   return 'chore';
-    if(r.label==='잔액 직접 조정') return 'adjust';
     return 'spend';
-  }
-  function bubbleIcon(r){
-    if(r.label==='잔액 직접 조정') return ic('adjust');
-    return ic(r.icon||'book');
   }
 
   function recHTML(r,idx){
-    const isSpend=r.type==='spend',cls=isSpend?'minus':'plus',sign=isSpend?'-':'+';
-    const isExp=expandedIdx===idx,hasMemo=r.memo&&r.memo.trim();
+    const isSpend=r.type==='spend', cls=isSpend?'minus':'plus', sign=isSpend?'-':'+';
+    const isExp=expandedIdx===idx, hasMemo=r.memo&&r.memo.trim();
     return `<div class="rec-item">
       <div class="rec-row">
-        <div class="rec-bubble ${bubbleClass(r)}">${bubbleIcon(r)}</div>
+        <div class="rec-bubble ${bubbleClass(r)}">${ic(r.icon||'book')}</div>
         <div class="rec-info">
           <div class="rec-name">${r.label}${r.qty>1?' ×'+r.qty:''}${r.title?' · '+r.title:''}</div>
           <div class="rec-date">${r.date}</div>
@@ -312,9 +317,9 @@ window.A = (() => {
   }
 
   function renderTopBar(){
-    const s=cur(),isSub=SUB.includes(s);
+    const s=cur(), isSub=SUB.includes(s);
     const titles={reading:'독서 기록',chore:'집안일',spend:'지출 기록'};
-    document.getElementById('top-bar').innerHTML=isSub
+    document.getElementById('top-bar').innerHTML = isSub
       ?`<button class="back-btn" onclick="A.pop()">${IC.back}</button>
         <span style="flex:1;font-size:16px;font-weight:700;color:var(--text)">${titles[s]}</span>
         <button class="home-link" onclick="A.goRoot('home')">홈으로</button>`
@@ -332,7 +337,7 @@ window.A = (() => {
     return `
       <div class="bal-wrap">
         ${st.kids.map((k,i)=>`
-          <div class="bal-card ${i===0?'mint':'purple'} ${kidIdx===i?'':'dim'}" onclick="A.setKidIdx(${i})">
+          <div class="bal-card kid${i} ${kidIdx===i?'active-card':'dim'}" onclick="A.setKidIdx(${i})">
             <div class="bal-who">${k}</div>
             <div class="bal-amount">${fmt(bal(i))}</div>
             <div class="bal-count">${(st.records[i]||[]).length}건의 기록</div>
@@ -408,7 +413,7 @@ window.A = (() => {
   function renderHistory(){
     const tabs=[['all','전체'],['reading','독서'],['chore','집안일'],['spend','지출']];
     const tabsH=tabs.map(([id,l])=>`<button class="tab-btn ${histFilter===id?'active':''}" onclick="A.setHistFilter('${id}')">${l}</button>`).join('');
-    let chipsH='',statsH='';
+    let chipsH='', statsH='';
     if(histFilter==='reading'){
       chipsH=`<div class="chip-row">
         <button class="chip ${!readingFilter?'active':''}" onclick="A.setReadingFilter(null)">전체</button>
@@ -431,14 +436,11 @@ window.A = (() => {
       <div style="margin-top:8px">${filtered.length===0?'<div class="empty-msg">기록이 없어요</div>':filtered.map((r,i)=>recHTML(r,i)).join('')}</div>`;
   }
 
-  function iconPickRow(keys,selectedKey,onclickFn){
-    return keys.map(k=>`<button class="icon-pick-btn ${selectedKey===k?'selected':''}" onclick="${onclickFn}('${k}')" title="${ICON_LABELS[k]||k}">${ic(k)}</button>`).join('');
-  }
-
   function renderSettings(){
     const tabs=[['kids','이름'],['reading','독서'],['chores','집안일']];
     const tabsH=tabs.map(([id,l])=>`<button class="tab-btn ${settingsTab===id?'active':''}" onclick="A.setSettingsTab('${id}')">${l}</button>`).join('');
     let body='';
+
     if(settingsTab==='kids'){
       body=`<div class="settings-group">${st.kids.map((k,i)=>`
         <div class="kid-card">
@@ -451,25 +453,28 @@ window.A = (() => {
             <span class="confirm-hint">원 입력 후 확인</span>
           </div>
           <div class="cur-balance">현재 잔액: <b>${fmt(bal(i))}</b></div>
-        </div>`).join('')}</div>`;
+        </div>`).join('')}
+        <button class="primary-btn" style="margin-left:0;width:100%" onclick="A.saveSettings()">이름 저장</button>
+      </div>`;
     }
+
     if(settingsTab==='reading'){
       const rows=st.reading.map((r,i)=>`
         <div class="item-row">
-          <div style="width:32px;height:32px;border-radius:9px;background:var(--mint-l);display:flex;align-items:center;justify-content:center;color:var(--mint-d);flex-shrink:0">
-            <svg style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24">${(IC[r.icon]||IC.book).replace(/<svg[^>]*>/,'').replace('</svg>','')}</svg>
-          </div>
-          <input class="s-input" type="text" value="${r.label}" oninput="A.updateReadingLabel(${i},this.value)"/>
+          <span class="item-label">${r.label}</span>
           <input class="n-input" type="number" value="${r.points}" oninput="A.updateReadingPts(${i},this.value)"/>
           <span class="row-unit">원</span>
           <button class="del-btn" onclick="A.deleteReading(${i})">삭제</button>
         </div>`).join('');
-      body=`<div class="settings-group">${rows}
+      body=`<div class="settings-group">
+        <div style="background:var(--card);border-radius:var(--r);padding:4px 18px 12px;box-shadow:0 1px 4px rgba(0,0,0,.05)">
+          ${rows}
+        </div>
+        <button class="primary-btn" style="margin:12px 0 0;width:100%" onclick="A.saveSettings()">저장하기</button>
         <div class="add-section">
           <div class="add-section-title">독서 종류 추가</div>
-          <div class="field-label">아이콘</div>
-          <div class="icon-pick-row">${iconPickRow(ICON_KEYS_R,newR.icon,'A.setNewRIcon')}</div>
-          <input type="text" placeholder="이름 (예: 만화책)" value="${newR.label}" oninput="A.setNewR('label',this.value)" style="margin-top:10px"/>
+          <div class="field-label">이름</div>
+          <input type="text" placeholder="예: 만화책" value="${newR.label}" oninput="A.setNewR('label',this.value)"/>
           <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
             <input class="n-input" type="number" placeholder="금액" value="${newR.points}" oninput="A.setNewR('points',this.value)" style="flex:1;width:auto"/>
             <span class="row-unit">원</span>
@@ -477,23 +482,24 @@ window.A = (() => {
           <button class="add-btn" onclick="A.addReading()">+ 추가하기</button>
         </div></div>`;
     }
+
     if(settingsTab==='chores'){
       const rows=st.chores.map((c,i)=>`
         <div class="item-row">
-          <div style="width:32px;height:32px;border-radius:9px;background:var(--purple-l);display:flex;align-items:center;justify-content:center;color:var(--purple-d);flex-shrink:0">
-            <svg style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24">${(IC[c.icon]||IC.bed).replace(/<svg[^>]*>/,'').replace('</svg>','')}</svg>
-          </div>
-          <input class="s-input" type="text" value="${c.label}" oninput="A.updateChoreLabel(${i},this.value)"/>
+          <span class="item-label">${c.label}</span>
           <input class="n-input" type="number" value="${c.points}" oninput="A.updateChorePts(${i},this.value)"/>
           <span class="row-unit">원</span>
           <button class="del-btn" onclick="A.deleteChore(${i})">삭제</button>
         </div>`).join('');
-      body=`<div class="settings-group">${rows}
+      body=`<div class="settings-group">
+        <div style="background:var(--card);border-radius:var(--r);padding:4px 18px 12px;box-shadow:0 1px 4px rgba(0,0,0,.05)">
+          ${rows}
+        </div>
+        <button class="primary-btn" style="margin:12px 0 0;width:100%" onclick="A.saveSettings()">저장하기</button>
         <div class="add-section">
           <div class="add-section-title">집안일 추가</div>
-          <div class="field-label">아이콘</div>
-          <div class="icon-pick-row">${iconPickRow(ICON_KEYS_C,newC.icon,'A.setNewCIcon')}</div>
-          <input type="text" placeholder="이름 (예: 쓰레기 버리기)" value="${newC.label}" oninput="A.setNewC('label',this.value)" style="margin-top:10px"/>
+          <div class="field-label">이름</div>
+          <input type="text" placeholder="예: 쓰레기 버리기" value="${newC.label}" oninput="A.setNewC('label',this.value)"/>
           <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
             <input class="n-input" type="number" placeholder="금액" value="${newC.points}" oninput="A.setNewC('points',this.value)" style="flex:1;width:auto"/>
             <span class="row-unit">원</span>
@@ -501,11 +507,12 @@ window.A = (() => {
           <button class="add-btn" onclick="A.addChore()">+ 추가하기</button>
         </div></div>`;
     }
+
     return `<div class="tab-row">${tabsH}</div>${body}`;
   }
 
   function render(){
-    renderTopBar();renderNavBar();
+    renderTopBar(); renderNavBar();
     const map={home:renderHome,reading:renderReadingPage,chore:renderChorePage,spend:renderSpendPage,history:renderHistory,settings:renderSettings};
     document.getElementById('body').innerHTML=(map[cur()]||renderHome)();
   }
@@ -514,16 +521,16 @@ window.A = (() => {
     db.collection('app').doc('config').onSnapshot(snap=>{
       if(snap&&snap.exists===true){
         const d=snap.data();
-        st.kids    = d.kids&&d.kids.length    ?d.kids    :DEFAULTS.kids;
-        st.reading = d.reading&&d.reading.length?d.reading:DEFAULTS.reading;
-        st.chores  = d.chores&&d.chores.length  ?d.chores :DEFAULTS.chores;
+        st.kids    =d.kids&&d.kids.length    ?d.kids    :DEFAULTS.kids;
+        st.reading =d.reading&&d.reading.length?d.reading:DEFAULTS.reading;
+        st.chores  =d.chores&&d.chores.length  ?d.chores :DEFAULTS.chores;
         render();
       }
     });
     for(let i=0;i<2;i++){
       const idx=i;
       db.collection('app').doc('records_'+idx).onSnapshot(snap=>{
-        if(snap&&snap.exists===true)st.records[idx]=snap.data().list||[];
+        if(snap&&snap.exists===true) st.records[idx]=snap.data().list||[];
         render();
       });
     }
@@ -534,9 +541,9 @@ window.A = (() => {
       const cfg=await db.collection('app').doc('config').get();
       if(cfg&&cfg.exists===true){
         const d=cfg.data();
-        st.kids    = d.kids&&d.kids.length    ?d.kids    :DEFAULTS.kids;
-        st.reading = d.reading&&d.reading.length?d.reading:DEFAULTS.reading;
-        st.chores  = d.chores&&d.chores.length  ?d.chores :DEFAULTS.chores;
+        st.kids    =d.kids&&d.kids.length    ?d.kids    :DEFAULTS.kids;
+        st.reading =d.reading&&d.reading.length?d.reading:DEFAULTS.reading;
+        st.chores  =d.chores&&d.chores.length  ?d.chores :DEFAULTS.chores;
       }else{
         await db.collection('app').doc('config').set({kids:st.kids,reading:st.reading,chores:st.chores});
       }
@@ -556,47 +563,40 @@ window.A = (() => {
     selectType: id=>{form.typeId=id;render();},
     setForm:    (k,v)=>{form[k]=v;},
     setQty:     v=>{form.qty=Math.max(1,v);render();},
-    setKidIdx:  i=>{kidIdx=i;render();},
-    setHistFilter:   f=>{histFilter=f;readingFilter=null;render();},
+    setKidIdx:  i=>{kidIdx=i;expandedIdx=null;render();},
+    setHistFilter:   f=>{histFilter=f;readingFilter=null;expandedIdx=null;render();},
     setReadingFilter:f=>{readingFilter=f;render();},
     setSettingsTab:  t=>{settingsTab=t;render();},
     toggleMemo: idx=>{expandedIdx=expandedIdx===idx?null:idx;render();},
     refreshSaveBtn:()=>{const b=document.getElementById('spend-save-btn');if(b)b.disabled=!(form.amount&&form.memo);},
     updateKidName:   (i,v)=>{st.kids[i]=v;},
-    saveKidName:     async()=>{await save();render();},
-    updateReadingLabel:(i,v)=>{st.reading[i].label=v;},
-    updateReadingPts:  (i,v)=>{st.reading[i].points=parseInt(v)||0;},
+    saveSettings:    async()=>{await save();toast('설정 저장됐어요');},
+    updateReadingPts:(i,v)=>{st.reading[i].points=parseInt(v)||0;},
     updateChoreLabel:(i,v)=>{st.chores[i].label=v;},
     updateChorePts:  (i,v)=>{st.chores[i].points=parseInt(v)||0;},
     deleteReading: async i=>{st.reading.splice(i,1);await save();render();},
     deleteChore:   async i=>{st.chores.splice(i,1);await save();render();},
-    setNewRIcon: ic=>{newR.icon=ic;render();},
-    setNewCIcon: ic=>{newC.icon=ic;render();},
     setNewR:(k,v)=>{newR[k]=v;},
     setNewC:(k,v)=>{newC[k]=v;},
     addReading: async()=>{
       if(!newR.label||!newR.points)return;
-      st.reading.push({id:uid(),label:newR.label,points:parseInt(newR.points),icon:newR.icon});
-      newR={label:'',points:'',icon:'book'};await save();render();
+      st.reading.push({id:uid(),label:newR.label,points:parseInt(newR.points),icon:'book'});
+      newR={label:'',points:''}; await save(); render();
     },
     addChore: async()=>{
       if(!newC.label||!newC.points)return;
-      st.chores.push({id:uid(),label:newC.label,points:parseInt(newC.points),icon:newC.icon});
-      newC={label:'',points:'',icon:'bed'};await save();render();
+      st.chores.push({id:uid(),label:newC.label,points:parseInt(newC.points),icon:'bed'});
+      newC={label:'',points:''}; await save(); render();
     },
     setBalance: async(i,v)=>{
-      const t=parseInt(v);if(isNaN(t))return;
-      const diff=t-bal(i);if(diff===0)return;
+      const t=parseInt(v); if(isNaN(t))return;
+      const diff=t-bal(i); if(diff===0)return;
       const rec={type:diff>0?'chore':'spend',label:'잔액 직접 조정',icon:'adjust',amount:Math.abs(diff),date:new Date().toLocaleDateString('ko-KR')};
-      st.records[i]=[rec,...(st.records[i]||[])];await save();render();
+      st.records[i]=[rec,...(st.records[i]||[])]; await save(); render();
     },
     init,
   };
 })();
-
-document.addEventListener('blur',async e=>{
-  if(e.target?.id?.startsWith('kid-name-'))await A.saveKidName();
-},true);
 
 A.init();
 </script>
