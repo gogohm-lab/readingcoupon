@@ -275,20 +275,21 @@ window.A = (() => {
   let weatherBanner = null;
 
   async function fetchWeather(){
-    try{
-      navigator.geolocation.getCurrentPosition(async pos=>{
-        const {latitude:lat, longitude:lon} = pos.coords;
-        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=precipitation_probability_max&timezone=Asia%2FSeoul&forecast_days=1`);
-        const data = await res.json();
-        const prob = data?.daily?.precipitation_probability_max?.[0];
-        if(prob >= 50){
-          weatherBanner = `🌧 오늘 비 예보가 있어요 (강수확률 ${prob}%) — 우산 챙기세요!`;
-        } else {
-          weatherBanner = null;
-        }
+    if(!navigator.geolocation){ return; }
+    navigator.geolocation.getCurrentPosition(
+      async pos=>{
+        try{
+          const {latitude:lat, longitude:lon} = pos.coords;
+          const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=precipitation_probability_max&timezone=Asia%2FSeoul&forecast_days=1`);
+          const data = await res.json();
+          const prob = data?.daily?.precipitation_probability_max?.[0];
+          weatherBanner = (prob>=50) ? `오늘 비 예보가 있어요 (강수확률 ${prob}%) — 우산 챙기세요!` : null;
+        }catch(e){ weatherBanner=null; }
         render();
-      }, ()=>{ weatherBanner=null; });
-    }catch(e){ weatherBanner=null; }
+      },
+      ()=>{ weatherBanner=null; },
+      {timeout:5000}
+    );
   }
     const d=new Date();
     return {date:d.toLocaleDateString('ko-KR'), time:String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'), ts:d.getTime()};
@@ -706,10 +707,10 @@ window.A = (() => {
       }
     } catch(e){console.error(e);toast('데이터 불러오기 실패');}
     setupSync();
-    fetchWeather();
     document.getElementById('loading').style.display='none';
     document.getElementById('app').style.display='flex';
     render();
+    fetchWeather(); // 앱 뜬 후 백그라운드에서 날씨 로드
   }
 
   return {
