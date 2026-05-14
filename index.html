@@ -608,7 +608,6 @@ function renderSpendPage(){
 
 // ── 송금
 function renderTransferPage(){
-  var ok=(form.amount && form.dir !== undefined && form.dir !== null);
   var dirs=st.kids.map(function(k,i){
     var sel=(form.dir===i);
     return '<div class="dir-btn'+(sel?' selected':'')+'" onclick="A.setDir('+i+')">'
@@ -620,7 +619,7 @@ function renderTransferPage(){
     +'<div class="transfer-dir">'+dirs+'</div></div>'
     +'<div class="section-card"><div class="s-label">금액</div>'
     +'<input type="number" placeholder="예: 1000" value="'+(form.amount||'')+'" oninput="A.setForm(\'amount\',this.value)"/></div>'
-    +'<button class="primary-btn" id="transfer-btn" onclick="A.saveRecord()" '+(ok?'':'disabled')+'>송금하기</button>';
+    +'<button class="primary-btn" onclick="A.doTransfer()">송금하기</button>';
 }
 
 // ── 내역
@@ -832,7 +831,22 @@ window.A = {
   cancelEdit: function(){ editingKey=null; editForm={}; render(); },
   setEF:      function(k,v){ editForm[k]=v; },
   toggleComplete: function(title){ form.completeBook=(form.completeBook===title)?null:title; render(); },
-  refreshSpendBtn: function(){ var b=document.getElementById('spend-btn'); if(b) b.disabled=!(form.amount&&form.memo); },
+  doTransfer: function(){
+    if(form.dir === undefined || form.dir === null){
+      toast('보내는 사람을 선택해주세요');
+      return;
+    }
+    if(!form.amount || parseInt(form.amount) <= 0){
+      toast('금액을 입력해주세요');
+      return;
+    }
+    var from=form.dir, to=1-from, amt=parseInt(form.amount);
+    var n=nowStr();
+    st.records[from]=([{type:'spend',label:st.kids[to]+'에게 송금',icon:'transfer',amount:amt,date:n.date,time:n.time,ts:n.ts,kidIdx:from}]).concat(st.records[from]||[]);
+    st.records[to]=([{type:'income',label:st.kids[from]+'에게서 받음',icon:'transfer',amount:amt,date:n.date,time:n.time,ts:n.ts,kidIdx:to}]).concat(st.records[to]||[]);
+    form={};
+    save().then(function(){ goRoot('home'); });
+  },
   editBook:   function(i){ editingBook=i; render(); },
   cancelBook: function(){ editingBook=null; render(); },
   saveBook:   function(i){ var el=document.getElementById('cb'+i); saveCurrentBook(i, el?el.value:''); },
