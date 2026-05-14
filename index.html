@@ -538,7 +538,7 @@ function renderHome(){
     +recentHTML;
 }
 
-// ── 독서 기록
+// ── 독서 기록 - 아이콘 책으로 통일
 function renderReadingPage(){
   var qty=form.qty||1;
   var selType=form.typeId?st.reading.find(function(r){ return r.id===form.typeId; }):null;
@@ -553,7 +553,6 @@ function renderReadingPage(){
       +'<div class="t-pts">+'+fmt(r.points)+'</div></div>';
   }).join('');
 
-  // 완료 처리 옵션
   var completeSection='';
   if(curBook){
     var checked=(form.completeBook===curBook);
@@ -584,11 +583,11 @@ function renderReadingPage(){
     +'<button class="primary-btn" onclick="A.saveRecord()" '+(form.typeId?'':'disabled')+'>저장하기</button>';
 }
 
-// ── 수입 (집안일)
+// ── 수입 (집안일) - 아이콘 별로 통일
 function renderIncomePage(){
   var cards=st.chores.map(function(c){
     var sel=(form.typeId===c.id);
-    return '<div class="type-card'+(sel?' selected':'')+'" onclick="A.pickType(\''+c.id+'\')">'+choreSvg(c.icon||'star')
+    return '<div class="type-card'+(sel?' selected':'')+'" onclick="A.pickType(\''+c.id+'\')">'+SVG_STAR
       +'<div class="t-name">'+c.label+'</div>'
       +'<div class="t-pts">+'+fmt(c.points)+'</div></div>';
   }).join('');
@@ -609,18 +608,19 @@ function renderSpendPage(){
 
 // ── 송금
 function renderTransferPage(){
-  var ok=(form.amount&&form.dir!==undefined);
+  var ok=(form.amount && form.dir !== undefined && form.dir !== null);
   var dirs=st.kids.map(function(k,i){
-    return '<div class="dir-btn'+(form.dir===i?' selected':'')+'" onclick="A.setDir('+i+')">'
-      +'<div style="font-size:11px;color:var(--sub);margin-bottom:3px">보내는 사람</div>'
+    var sel=(form.dir===i);
+    return '<div class="dir-btn'+(sel?' selected':'')+'" onclick="A.setDir('+i+')">'
+      +'<div style="font-size:11px;color:'+(sel?'var(--sky-d)':'var(--sub)')+';margin-bottom:3px">보내는 사람</div>'
       +'<div style="font-size:14px;font-weight:700;color:var(--text)">'+k+'</div>'
-      +'<div style="font-size:11px;color:var(--sub);margin-top:2px">→ '+st.kids[1-i]+'</div></div>';
+      +'<div style="font-size:11px;color:'+(sel?'var(--sky-d)':'var(--sub)')+';margin-top:2px">→ '+st.kids[1-i]+'</div></div>';
   }).join('');
   return '<div class="section-card"><div class="s-label">누가 보내나요?</div>'
     +'<div class="transfer-dir">'+dirs+'</div></div>'
     +'<div class="section-card"><div class="s-label">금액</div>'
     +'<input type="number" placeholder="예: 1000" value="'+(form.amount||'')+'" oninput="A.setForm(\'amount\',this.value)"/></div>'
-    +'<button class="primary-btn" onclick="A.saveRecord()" '+(ok?'':'disabled')+'>송금하기</button>';
+    +'<button class="primary-btn" id="transfer-btn" onclick="A.saveRecord()" '+(ok?'':'disabled')+'>송금하기</button>';
 }
 
 // ── 내역
@@ -819,7 +819,7 @@ window.A = {
   push: push, pop: pop, goRoot: goRoot, render: render, saveRecord: saveRecord,
   pickType:   function(id){ form.typeId=id; render(); },
   setForm:    function(k,v){ form[k]=v; },
-  setDir:     function(v){ form.dir=v; render(); },
+  setDir: function(v){ form.dir=parseInt(v); render(); },
   setQty:     function(v){ form.qty=Math.max(1,v); render(); },
   setKidIdx:  function(i){ kidIdx=i; expandedKey=null; editingKey=null; render(); },
   setHF:      function(f){ histFilter=f; readingFilter=null; expandedKey=null; editingKey=null; render(); },
