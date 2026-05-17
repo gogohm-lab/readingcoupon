@@ -598,12 +598,11 @@ function renderIncomePage(){
 
 // ── 지출
 function renderSpendPage(){
-  var ok=(form.amount&&form.memo);
   return '<div class="section-card"><div class="s-label">금액</div>'
-    +'<input type="number" placeholder="예: 3000" value="'+(form.amount||'')+'" oninput="A.setForm(\'amount\',this.value);A.refreshSpendBtn()"/></div>'
+    +'<input type="number" placeholder="예: 3000" value="'+(form.amount||'')+'" oninput="A.setForm(\'amount\',this.value)"/></div>'
     +'<div class="section-card"><div class="s-label">어디에 썼나요</div>'
-    +'<input type="text" placeholder="예: 편의점, 문구점" value="'+(form.memo||'').replace(/"/g,'&quot;')+'" oninput="A.setForm(\'memo\',this.value);A.refreshSpendBtn()"/></div>'
-    +'<button class="primary-btn" id="spend-btn" onclick="A.saveRecord()" '+(ok?'':'disabled')+'>저장하기</button>';
+    +'<input type="text" placeholder="예: 편의점, 문구점" value="'+(form.memo||'').replace(/"/g,'&quot;')+'" oninput="A.setForm(\'memo\',this.value)"/></div>'
+    +'<button class="primary-btn" onclick="A.doSpend()">저장하기</button>';
 }
 
 // ── 송금
@@ -831,6 +830,21 @@ window.A = {
   cancelEdit: function(){ editingKey=null; editForm={}; render(); },
   setEF:      function(k,v){ editForm[k]=v; },
   toggleComplete: function(title){ form.completeBook=(form.completeBook===title)?null:title; render(); },
+  doSpend: function(){
+    if(!form.amount || parseInt(form.amount) <= 0){
+      toast('금액을 입력해주세요');
+      return;
+    }
+    if(!form.memo || !form.memo.trim()){
+      toast('어디에 썼는지 입력해주세요');
+      return;
+    }
+    var n=nowStr();
+    var rec={type:'spend',label:form.memo,icon:'spend',amount:parseInt(form.amount),date:n.date,time:n.time,ts:n.ts,kidIdx:kidIdx};
+    st.records[kidIdx]=([rec]).concat(st.records[kidIdx]||[]);
+    form={};
+    save().then(function(){ goRoot('home'); });
+  },
   doTransfer: function(){
     if(form.dir === undefined || form.dir === null){
       toast('보내는 사람을 선택해주세요');
