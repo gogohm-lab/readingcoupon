@@ -208,7 +208,7 @@ var SVG_ADJUST   = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" s
 var SVG_CHAT     = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>';
 var SVG_EDIT     = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
 var SVG_BACK     = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>';
-var SVG_CHECK    = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+var SVG_COIN     = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v2M12 16v2M9 12h6"/><path d="M14.5 9.5a2.5 2.5 0 00-5 0c0 1.5 5 2 5 3.5a2.5 2.5 0 01-5 0"/></svg>';
 
 // 집안일 아이콘 SVG 맵
 var CHORE_SVGS = {
@@ -348,9 +348,14 @@ function saveRecord(){
       var t=st.reading.find(function(r){ return r.id===form.typeId; });
       var qty=form.qty||1;
       var finTitle=form.title||'';
-      // 완료 처리: currentBooks에서 제거
+      // 완독 체크시 굵은 책으로 자동 적립
       if(form.completeBook && st.currentBooks[kidIdx]===form.completeBook){
         st.currentBooks[kidIdx]='';
+        var thickType=st.reading.find(function(r){ return r.label==='굵은 책'; });
+        if(thickType){
+          var completeRec={type:'reading',label:thickType.label,icon:'book',amount:thickType.points,qty:1,memo:'완독: '+form.completeBook,title:form.completeBook,date:n.date,time:n.time,ts:n.ts,kidIdx:kidIdx};
+          st.records[kidIdx]=([completeRec]).concat(st.records[kidIdx]||[]);
+        }
       }
       rec={type:'reading',label:t.label,icon:'book',amount:t.points*qty,qty:qty,memo:form.memo||'',title:finTitle,date:n.date,time:n.time,ts:n.ts,kidIdx:kidIdx};
     } else if(s==='income'){
@@ -553,16 +558,20 @@ function renderReadingPage(){
       +'<div class="t-pts">+'+fmt(r.points)+'</div></div>';
   }).join('');
 
+  // 완독 처리 - 굵은 책으로 연결
   var completeSection='';
   if(curBook){
     var checked=(form.completeBook===curBook);
+    // 굵은 책 항목 찾기
+    var thickType=st.reading.find(function(r){ return r.label==='굵은 책'; });
     completeSection='<div class="section-card"><div class="s-label">완독 처리</div>'
       +'<div style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="A.toggleComplete(\''+curBook.replace(/'/g,"\\'")+'\')">'
       +'<div style="width:22px;height:22px;border-radius:6px;border:1.5px solid '+(checked?'var(--sky-d)':'var(--border)')+';background:'+(checked?'var(--sky-d)':'var(--bg)')+';display:flex;align-items:center;justify-content:center">'
       +(checked?'<svg style="width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>':'')
       +'</div>'
       +'<div><div style="font-size:13px;font-weight:600;color:var(--text)">«'+curBook+'» 완독!</div>'
-      +'<div style="font-size:11px;color:var(--sub);margin-top:2px">체크하면 현재 읽는 책에서 삭제돼요</div></div>'
+      +'<div style="font-size:11px;color:var(--sub);margin-top:2px">'+(thickType?'굵은 책(+'+fmt(thickType.points)+')으로 자동 적립':'')+'되고 읽는 책 목록에서 삭제돼요</div>'
+      +'</div>'
       +'</div></div>';
   }
 
@@ -583,7 +592,7 @@ function renderReadingPage(){
     +'<button class="primary-btn" onclick="A.saveRecord()" '+(form.typeId?'':'disabled')+'>저장하기</button>';
 }
 
-// ── 수입 (집안일) - 아이콘 별로 통일
+// ── 수입 (집안일) - 별 아이콘 통일 + 중복 추가 가능
 function renderIncomePage(){
   var cards=st.chores.map(function(c){
     var sel=(form.typeId===c.id);
@@ -591,9 +600,19 @@ function renderIncomePage(){
       +'<div class="t-name">'+c.label+'</div>'
       +'<div class="t-pts">+'+fmt(c.points)+'</div></div>';
   }).join('');
+  var qty=form.incomeQty||1;
+  var selChore=form.typeId?st.chores.find(function(c){ return c.id===form.typeId; }):null;
+  var qtySection=selChore?'<div class="section-card"><div class="s-label">횟수</div>'
+    +'<div class="qty-row">'
+    +'<button class="qty-btn" onclick="A.setIQ('+(qty-1)+')">−</button>'
+    +'<span class="qty-val">'+qty+'</span>'
+    +'<button class="qty-btn plus" onclick="A.setIQ('+(qty+1)+')">+</button>'
+    +'<span class="qty-total">= +'+fmt(selChore.points*qty)+'</span>'
+    +'</div></div>':'';
   return '<div class="section-card"><div class="s-label">항목 선택</div>'
     +'<div class="type-grid">'+cards+'</div></div>'
-    +'<button class="primary-btn" onclick="A.saveRecord()" '+(form.typeId?'':'disabled')+'>저장하기</button>';
+    +qtySection
+    +'<button class="primary-btn" onclick="A.doIncome()">저장하기</button>';
 }
 
 // ── 지출
@@ -714,32 +733,26 @@ function renderSettings(){
 
   if(settingsTab==='chores'){
     var cRows=st.chores.map(function(c,i){
-      var iconBtns=CHORE_ICON_KEYS.map(function(k){
-        return '<button class="icon-opt'+(c.icon===k?' sel':'')+'" onclick="A.setCI('+i+',\''+k+'\')">'+choreSvg(k)+'</button>';
-      }).join('');
-      return '<div style="padding:12px 0;border-bottom:1px solid var(--border)">'
-        +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">'
-        +'<div style="width:34px;height:34px;border-radius:10px;background:#EDEEF5;color:#9AA0C4;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+choreSvg(c.icon||'star')+'</div>'
-        +'<span class="item-label">'+c.label+'</span>'
-        +'<input class="n-input" type="number" value="'+c.points+'" oninput="A.updCP('+i+',this.value)"/>'
-        +'<span class="row-unit">원</span>'
-        +'<button class="del-btn" onclick="A.delC('+i+')">삭제</button>'
-        +'</div>'
-        +'<div class="icon-grid">'+iconBtns+'</div>'
+      return '<div style="display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--border)">'
+        +'<div style="width:32px;height:32px;border-radius:9px;background:#EDEEF5;color:#9AA0C4;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+SVG_STAR+'</div>'
+        +'<span style="flex:1;font-size:14px;font-weight:500;color:var(--text);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+c.label+'</span>'
+        +'<input class="n-input" type="number" value="'+c.points+'" oninput="A.updCP('+i+',this.value)" style="width:68px;flex-shrink:0"/>'
+        +'<span class="row-unit" style="flex-shrink:0">원</span>'
+        +'<button class="del-btn" style="flex-shrink:0" onclick="A.delC('+i+')">삭제</button>'
         +'</div>';
     }).join('');
     body='<div class="settings-group">'
       +'<div style="background:var(--card);border-radius:var(--r);padding:4px 18px 12px;box-shadow:0 1px 4px rgba(0,0,0,.05)">'+cRows+'</div>'
       +'<button class="primary-btn" style="margin:12px 0 0;width:100%" onclick="A.saveSettings()">저장하기</button>'
-      +'<div class="add-section"><div class="add-section-title">수입 항목 추가</div>'
-      +'<div class="field-label">아이콘</div>'
-      +'<div class="icon-grid">'+CHORE_ICON_KEYS.map(function(k){
-        return '<button class="icon-opt'+(newC.icon===k?' sel':'')+'" onclick="A.setNCI(\''+k+'\')">'+choreSvg(k)+'</button>';
-      }).join('')+'</div>'
-      +'<input type="text" placeholder="이름 (예: 쓰레기 버리기)" value="'+newC.label+'" oninput="A.setNC(\'label\',this.value)" style="margin-top:10px"/>'
-      +'<div style="display:flex;gap:8px;margin-top:10px;align-items:center">'
-      +'<input class="n-input" type="number" placeholder="금액" value="'+newC.points+'" oninput="A.setNC(\'points\',this.value)" style="flex:1;width:auto"/>'
-      +'<span class="row-unit">원</span></div>'
+      +'<div class="add-section">'
+      +'<div class="add-section-title">수입 항목 추가</div>'
+      +'<div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">'
+      +'<input type="text" placeholder="항목 이름 (예: 설거지)" value="'+newC.label+'" oninput="A.setNC(\'label\',this.value)"/>'
+      +'<div style="display:flex;gap:8px;align-items:center">'
+      +'<input class="n-input" type="number" placeholder="금액" value="'+newC.points+'" oninput="A.setNC(\'points\',this.value)" style="flex:1;width:auto;text-align:left"/>'
+      +'<span class="row-unit">원</span>'
+      +'</div>'
+      +'</div>'
       +'<button class="add-btn" onclick="A.addC()">+ 추가하기</button>'
       +'</div></div>';
   }
@@ -845,7 +858,17 @@ window.A = {
     form={};
     save().then(function(){ goRoot('home'); });
   },
-  doTransfer: function(){
+  doIncome: function(){
+    if(!form.typeId){ toast('항목을 선택해주세요'); return; }
+    var c=st.chores.find(function(c){ return c.id===form.typeId; });
+    var qty=form.incomeQty||1;
+    var n=nowStr();
+    var rec={type:'income',label:c.label+(qty>1?' ×'+qty:''),icon:'coin',amount:c.points*qty,date:n.date,time:n.time,ts:n.ts,kidIdx:kidIdx};
+    st.records[kidIdx]=([rec]).concat(st.records[kidIdx]||[]);
+    form={};
+    save().then(function(){ goRoot('home'); });
+  },
+  setIQ: function(v){ form.incomeQty=Math.max(1,v); render(); }, function(){
     if(form.dir === undefined || form.dir === null){
       toast('보내는 사람을 선택해주세요');
       return;
