@@ -43,7 +43,7 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--bg);disp
 .bal-card.kid1{background:linear-gradient(135deg,#CFC0E8,var(--purple))}
 .bal-card.dim{opacity:.8}
 .bal-card.active-card{box-shadow:0 6px 20px rgba(0,0,0,.13)}
-.bal-card::before{content:'';position:absolute;right:-18px;top:-18px;width:88px;height:88px;border-radius:50%;background:rgba(255,255,255,.18)}
+.bal-card::before{content:'';position:absolute;right:-18px;top:-18px;width:88px;height:88px;border-radius:50%;background:rgba(255,255,255,.18);pointer-events:none}
 .bal-who{font-size:12px;font-weight:600;opacity:.88;margin-bottom:4px}
 .bal-amount{font-size:22px;font-weight:700;letter-spacing:-.5px}
 .bal-count{font-size:11px;opacity:.72;margin-top:4px}
@@ -201,9 +201,9 @@ var DEFAULTS = {
   currentBooks:['',''],
   recommendedBooks:[[],[]],
   reading:[
-    {id:'r1',label:'얇은 책',points:1000},
-    {id:'r2',label:'굵은 책',points:2000},
-    {id:'r3',label:'신문',points:500},
+    {id:'r1',label:'얇은 책',points:1000,icon:'book'},
+    {id:'r2',label:'굵은 책',points:2000,icon:'thick'},
+    {id:'r3',label:'신문',points:500,icon:'news'},
   ],
   chores:[
     {id:'c1',label:'이불 정리',points:300},
@@ -490,7 +490,8 @@ function renderReading(){
   var pts=sel?sel.points:0;
   var cards=st.reading.map(function(r){
     var s=(form.typeId===r.id);
-    return '<div class="type-card'+(s?' selected':'')+'" onclick="form.typeId=\''+r.id+'\';render()">'+IC.book
+    var ico=IC[r.icon||'book']||IC.book;
+    return '<div class="type-card'+(s?' selected':'')+'" onclick="form.typeId=\''+r.id+'\';render()">'+ico
       +'<div class="t-name">'+r.label+'</div><div class="t-pts">+'+fmt(r.points)+'</div></div>';
   }).join('');
   return '<div class="section-card"><div class="s-label">종류 선택</div><div class="type-grid">'+cards+'</div></div>'
