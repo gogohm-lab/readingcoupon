@@ -4,7 +4,6 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
 <meta name="apple-mobile-web-app-title" content="독서쿠폰"/>
 <link rel="apple-touch-icon" href="icon.png"/>
 <title>독서 쿠폰</title>
@@ -26,7 +25,7 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--bg);disp
 #top-bar{display:flex;align-items:center;gap:10px;padding:16px 20px 12px;flex-shrink:0}
 .app-title{flex:1;font-size:17px;font-weight:700;color:var(--text)}
 .kid-tabs{display:flex;gap:6px}
-.kid-btn{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--card);font-size:13px;font-weight:500;cursor:pointer;color:var(--sub)}
+.kid-btn{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--card);font-size:13px;font-weight:500;cursor:pointer;color:var(--sub);-webkit-tap-highlight-color:rgba(0,0,0,.1)}
 .kid-btn.k0.active{border-color:var(--sky-d);background:var(--sky-d);color:#fff}
 .kid-btn.k1.active{border-color:var(--purple-d);background:var(--purple-d);color:#fff}
 .back-btn{width:36px;height:36px;border:1.5px solid var(--border);background:var(--card);border-radius:12px;cursor:pointer;color:var(--text);display:flex;align-items:center;justify-content:center}
@@ -37,13 +36,12 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--bg);disp
 .nav-btn{flex:1;padding:10px 0 8px;font-size:11px;font-weight:500;color:var(--sub);border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px}
 .nav-btn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .nav-btn.active{color:var(--sky-d)}
-.bal-wrap{display:flex;gap:10px;margin:4px 20px 0;position:relative;z-index:1}
-.bal-card{flex:1;border-radius:22px;padding:20px 18px;color:#fff;position:relative;overflow:hidden;cursor:pointer;transition:box-shadow .2s,opacity .2s;-webkit-tap-highlight-color:rgba(0,0,0,.1)}
+.bal-wrap{display:flex;gap:10px;margin:4px 20px 0}
+.bal-card{flex:1;border-radius:22px;padding:20px 18px;color:#fff;cursor:pointer;transition:box-shadow .2s,opacity .2s;user-select:none}
 .bal-card.kid0{background:linear-gradient(135deg,#B8DCF0,var(--sky))}
 .bal-card.kid1{background:linear-gradient(135deg,#CFC0E8,var(--purple))}
 .bal-card.dim{opacity:.8}
 .bal-card.active-card{box-shadow:0 6px 20px rgba(0,0,0,.13)}
-.bal-card::before{content:'';position:absolute;right:-18px;top:-18px;width:88px;height:88px;border-radius:50%;background:rgba(255,255,255,.18);pointer-events:none}
 .bal-who{font-size:12px;font-weight:600;opacity:.88;margin-bottom:4px}
 .bal-amount{font-size:22px;font-weight:700;letter-spacing:-.5px}
 .bal-count{font-size:11px;opacity:.72;margin-top:4px}
@@ -181,7 +179,6 @@ firebase.initializeApp({
 });
 var db = firebase.firestore();
 
-// ── SVG
 var IC = {
   book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>',
   thick:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>',
@@ -195,11 +192,9 @@ var IC = {
   back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>',
 };
 
-// ── 기본값
 var DEFAULTS = {
   kids:['첫째','둘째'],
   currentBooks:['',''],
-  recommendedBooks:[[],[]],
   reading:[
     {id:'r1',label:'얇은 책',points:1000,icon:'book'},
     {id:'r2',label:'굵은 책',points:2000,icon:'thick'},
@@ -219,16 +214,22 @@ var DEFAULTS = {
   records:[[],[]],
 };
 
-// ── 상태
+// ── 상태 (전역)
 var st = JSON.parse(JSON.stringify(DEFAULTS));
-var kidIdx=0, stack=['home'], form={};
-var settingsTab='kids', histFilter='all', readingFilter=null;
-var expandedKey=null, editingKey=null, editForm={};
-var newR={label:'',points:''}, newC={label:'',points:''};
-var saving=false, editingBook=null;
-var addingRecommend=false, newRecommendBook='';
+var kidIdx = 0;
+var stack = ['home'];
+var form = {};
+var settingsTab = 'kids';
+var histFilter = 'all';
+var readingFilter = null;
+var expandedKey = null;
+var editingKey = null;
+var editForm = {};
+var newR = {label:'',points:''};
+var newC = {label:'',points:''};
+var saving = false;
+var editingBook = null;
 
-// ── 유틸
 function fmt(n){ return (n||0).toLocaleString('ko-KR')+'원'; }
 function uid(){ return Math.random().toString(36).slice(2,7); }
 function cur(){ return stack[stack.length-1]; }
@@ -244,18 +245,19 @@ function toast(msg){
   setTimeout(function(){ el.classList.remove('show'); },2500);
 }
 
-// ── Firebase 저장
+function setKidIdx(i){
+  kidIdx=i; expandedKey=null; editingKey=null; render();
+}
+
 function save(){
   if(saving) return Promise.resolve();
   saving=true;
-  var data={
+  return db.collection('app').doc('config').set({
     kids:JSON.parse(JSON.stringify(st.kids)),
     currentBooks:JSON.parse(JSON.stringify(st.currentBooks||['',''])),
-    recommendedBooks:JSON.parse(JSON.stringify(st.recommendedBooks||[[],[]])),
     reading:JSON.parse(JSON.stringify(st.reading)),
     chores:JSON.parse(JSON.stringify(st.chores)),
-  };
-  return db.collection('app').doc('config').set(data,{merge:true}).then(function(){
+  },{merge:true}).then(function(){
     var ps=[];
     for(var i=0;i<2;i++){
       var clean=(st.records[i]||[]).map(function(r){
@@ -268,12 +270,10 @@ function save(){
   .catch(function(e){ console.error(e); toast('저장 실패: '+e.message); saving=false; });
 }
 
-// ── 네비
 function push(s){ stack.push(s); form={}; render(); }
 function pop(){ if(stack.length>1) stack.pop(); render(); }
-function goRoot(s){ stack=[s]; editingKey=null; expandedKey=null; editingBook=null; addingRecommend=false; render(); }
+function goRoot(s){ stack=[s]; editingKey=null; expandedKey=null; editingBook=null; render(); }
 
-// ── 버블 클래스
 function bubClass(r){
   if(r.icon==='transfer') return 'transfer';
   if(r.label==='잔액 직접 조정') return 'adjust';
@@ -282,7 +282,6 @@ function bubClass(r){
   return 'spend';
 }
 
-// ── 기록 HTML
 function recHTML(r, showKid){
   var isSpend=(r.type==='spend');
   var cls=isSpend?'minus':'plus', sign=isSpend?'-':'+';
@@ -291,7 +290,7 @@ function recHTML(r, showKid){
   var isExp=(expandedKey===key), isEdit=(editingKey===key);
   var hasMemo=(r.memo&&r.memo.trim());
   var isAdj=(r.label==='잔액 직접 조정');
-  var bubIcon = r.type==='reading'?IC.book : r.type==='income'?IC.star : r.icon==='transfer'?IC.transfer : r.label==='잔액 직접 조정'?IC.adjust : IC.spend;
+  var bubIcon = r.type==='reading'?(IC[r.icon||'book']||IC.book) : r.type==='income'?IC.star : r.icon==='transfer'?IC.transfer : r.label==='잔액 직접 조정'?IC.adjust : IC.spend;
 
   var extra='';
   if(isEdit){
@@ -328,7 +327,6 @@ function recHTML(r, showKid){
     +'</div></div>'+extra+'</div>';
 }
 
-// ── 수정/삭제
 function startEdit(ki,idx){
   var r=st.records[ki][idx];
   editForm={title:r.title||'',memo:r.memo||'',amount:r.amount,label:r.label};
@@ -352,36 +350,19 @@ function deleteRec(ki,idx){
 function cancelEdit(){ editingKey=null; editForm={}; render(); }
 function toggleMemo(key){ expandedKey=(expandedKey===key)?null:key; editingKey=null; render(); }
 
-// ── 완독 처리
 function doComplete(i){
   var book=(st.currentBooks||['',''])[i];
   if(!book) return;
   var thick=st.reading.find(function(r){ return r.label==='굵은 책'; });
   var n=nowStr();
   if(thick){
-    var rec={type:'reading',label:thick.label,icon:'book',amount:thick.points,qty:1,memo:'완독: '+book,title:book,date:n.date,time:n.time,ts:n.ts,kidIdx:i};
+    var rec={type:'reading',label:thick.label,icon:'thick',amount:thick.points,qty:1,memo:'완독: '+book,title:book,date:n.date,time:n.time,ts:n.ts,kidIdx:i};
     st.records[i]=([rec]).concat(st.records[i]||[]);
   }
   st.currentBooks[i]='';
   save().then(function(){ render(); toast('완독 축하해요! 🎉'); });
 }
 
-// ── 추천 도서
-function saveRecommend(){
-  if(!newRecommendBook.trim()){ toast('책 제목을 입력해주세요'); return; }
-  var ki=(form.recKidIdx!==undefined)?form.recKidIdx:0;
-  if(!st.recommendedBooks) st.recommendedBooks=[[],[]];
-  st.recommendedBooks[ki]=st.recommendedBooks[ki]||[];
-  st.recommendedBooks[ki].push(newRecommendBook.trim());
-  newRecommendBook=''; addingRecommend=false; form.recKidIdx=undefined;
-  save().then(function(){ render(); });
-}
-function removeRecommend(ki,bi){
-  st.recommendedBooks[ki].splice(bi,1);
-  save().then(function(){ render(); });
-}
-
-// ── 잔액 직접 설정
 function setBalance(i,v){
   var t=parseInt(v); if(isNaN(t)) return;
   var diff=t-bal(i); if(diff===0) return;
@@ -391,31 +372,46 @@ function setBalance(i,v){
   save().then(function(){ render(); });
 }
 
-// ── Top Bar / Nav Bar
+function editBook(i){ editingBook=i; render(); }
+function cancelBook(){ editingBook=null; render(); }
+function saveBook(i){
+  var el=document.getElementById('cb'+i);
+  if(el){ st.currentBooks[i]=el.value; save().then(function(){ editingBook=null; render(); }); }
+}
+
+// ── 렌더
 function renderTopBar(){
   var s=cur(), isSub=['reading','income','spend','transfer'].indexOf(s)>=0;
   var titles={reading:'독서 기록',income:'수입',spend:'지출',transfer:'송금'};
-  var html=isSub
-    ?'<button class="back-btn" onclick="pop()">'+IC.back+'</button>'
+  if(isSub){
+    document.getElementById('top-bar').innerHTML=
+      '<button class="back-btn" onclick="pop()">'+IC.back+'</button>'
       +'<span style="flex:1;font-size:16px;font-weight:700;color:var(--text)">'+titles[s]+'</span>'
-      +'<button class="home-link" onclick="goRoot(\'home\')">홈으로</button>'
-    :'<span class="app-title">독서 쿠폰</span><div class="kid-tabs">'
-      +st.kids.map(function(k,i){ return '<button class="kid-btn k'+i+' '+(kidIdx===i?'active':'')+'" onclick="setKidIdx('+i+')">'+k+'</button>'; }).join('')
+      +'<button class="home-link" onclick="goRoot(\'home\')">홈으로</button>';
+  } else {
+    document.getElementById('top-bar').innerHTML=
+      '<span class="app-title">독서 쿠폰</span>'
+      +'<div class="kid-tabs">'
+      +'<button class="kid-btn k0 '+(kidIdx===0?'active':'')+'" id="kt0">'+st.kids[0]+'</button>'
+      +'<button class="kid-btn k1 '+(kidIdx===1?'active':'')+'" id="kt1">'+st.kids[1]+'</button>'
       +'</div>';
-  document.getElementById('top-bar').innerHTML=html;
+    // 탭 클릭 이벤트 직접 연결
+    var kt0=document.getElementById('kt0');
+    var kt1=document.getElementById('kt1');
+    if(kt0) kt0.addEventListener('click', function(){ setKidIdx(0); });
+    if(kt1) kt1.addEventListener('click', function(){ setKidIdx(1); });
+  }
 }
+
 function renderNavBar(){
   var isSub=['reading','income','spend','transfer'].indexOf(cur())>=0;
   document.querySelectorAll('.nav-btn').forEach(function(b){ b.classList.toggle('active',!isSub&&b.dataset.s===root()); });
 }
 
-// ── 홈
 function renderHome(){
   var books=st.currentBooks||['',''];
-  var recommended=st.recommendedBooks||[[],[]];
   var recs=(st.records[kidIdx]||[]).map(function(r,idx){ return Object.assign({},r,{_ki:kidIdx,_idx:idx}); });
 
-  // 읽는 중 카드
   var bookCards=st.kids.map(function(k,i){
     if(editingBook===i){
       return '<div class="curr-book-card">'
@@ -435,45 +431,23 @@ function renderHome(){
       +completeBtn+'</div>';
   }).join('');
 
-  // 도전 도서 카드
-  var recCards=st.kids.map(function(k,i){
-    var rbs=recommended[i]||[];
-    if(editingBook===('rec_'+i)){
-      return '<div class="curr-book-card">'
-        +'<div class="curr-book-label">'+k+' · 도전!</div>'
-        +'<input type="text" id="rec-edit-'+i+'" placeholder="책 제목 입력" style="font-size:13px;padding:6px 8px;margin-top:2px"/>'
-        +'<div style="display:flex;gap:6px;margin-top:6px">'
-        +'<button onclick="saveRecEdit('+i+')" style="flex:1;padding:6px;border-radius:8px;background:var(--purple-d);color:#fff;font-size:12px;font-weight:600;border:none;cursor:pointer;font-family:inherit">추가</button>'
-        +'<button onclick="cancelBook()" style="padding:6px 10px;border-radius:8px;background:var(--border);color:var(--text);font-size:12px;font-weight:600;border:none;cursor:pointer;font-family:inherit">취소</button>'
-        +'</div></div>';
-    }
-    var bookList=rbs.length>0
-      ?rbs.map(function(b,bi){
-          return '<div style="display:flex;align-items:center;gap:4px;margin-top:4px">'
-            +'<span style="font-size:12px;color:var(--text);flex:1;line-height:1.4">'+b+'</span>'
-            +'<button onclick="removeRecommend('+i+','+bi+')" style="padding:1px 6px;border-radius:5px;border:1px solid #FFCDD2;background:#FFF5F5;color:var(--red);font-size:10px;cursor:pointer;flex-shrink:0">삭제</button>'
-            +'</div>';
-        }).join('')
-      :'<div class="curr-book-empty">없어요</div>';
-    return '<div class="curr-book-card">'
-      +'<div class="curr-book-label">'+k+' · 도전!</div>'
-      +bookList
-      +'<button class="curr-book-edit" onclick="editBook(\'rec_'+i+'\')">+ 추가</button>'
-      +'</div>';
-  }).join('');
-
   var recentHTML=recs.length===0
     ?'<div class="empty-msg">아직 기록이 없어요</div>'
     :recs.slice(0,6).map(function(r){ return recHTML(r,false); }).join('');
 
-  return '<div class="bal-wrap">'
-    +st.kids.map(function(k,i){
-      return '<div class="bal-card kid'+i+' '+(kidIdx===i?'active-card':'dim')+'" id="bal-card-'+i+'">'
-        +'<div class="bal-who">'+k+'</div><div class="bal-amount">'+fmt(bal(i))+'</div>'
-        +'<div class="bal-count">'+(st.records[i]||[]).length+'건의 기록</div></div>';
-    }).join('')+'</div>'
-    +'<div class="curr-book-wrap">'+bookCards    +'</div>'
-    +'<div class="curr-book-wrap">'+recCards+'</div>'
+  // 잔액 카드 HTML (onclick 인라인으로 단순하게)
+  var balCards=
+    '<div class="bal-card kid0 '+(kidIdx===0?'active-card':'dim')+'" onclick="setKidIdx(0)">'
+    +'<div class="bal-who">'+st.kids[0]+'</div>'
+    +'<div class="bal-amount">'+fmt(bal(0))+'</div>'
+    +'<div class="bal-count">'+(st.records[0]||[]).length+'건의 기록</div></div>'
+    +'<div class="bal-card kid1 '+(kidIdx===1?'active-card':'dim')+'" onclick="setKidIdx(1)">'
+    +'<div class="bal-who">'+st.kids[1]+'</div>'
+    +'<div class="bal-amount">'+fmt(bal(1))+'</div>'
+    +'<div class="bal-count">'+(st.records[1]||[]).length+'건의 기록</div></div>';
+
+  return '<div class="bal-wrap">'+balCards+'</div>'
+    +'<div class="curr-book-wrap">'+bookCards+'</div>'
     +'<div class="action-row">'
     +'<button class="action-btn reading" onclick="push(\'reading\')">'+IC.book+'독서</button>'
     +'<button class="action-btn income" onclick="push(\'income\')">'+IC.star+'수입</button>'
@@ -483,7 +457,6 @@ function renderHome(){
     +'<div class="sec-title">'+st.kids[kidIdx]+' 최근 내역</div>'+recentHTML;
 }
 
-// ── 독서
 function renderReading(){
   var qty=form.qty||1;
   var sel=form.typeId?st.reading.find(function(r){ return r.id===form.typeId; }):null;
@@ -507,16 +480,16 @@ function renderReading(){
     +'<textarea placeholder="기억에 남는 내용을 적어봐요" oninput="form.memo=this.value">'+(form.memo||'')+'</textarea></div>'
     +'<button class="primary-btn" onclick="doReading()">저장하기</button>';
 }
+
 function doReading(){
   if(!form.typeId){ toast('종류를 선택해주세요'); return; }
   var t=st.reading.find(function(r){ return r.id===form.typeId; });
   var qty=form.qty||1, n=nowStr();
-  var rec={type:'reading',label:t.label,icon:'book',amount:t.points*qty,qty:qty,memo:form.memo||'',title:form.title||'',date:n.date,time:n.time,ts:n.ts,kidIdx:kidIdx};
+  var rec={type:'reading',label:t.label,icon:t.icon||'book',amount:t.points*qty,qty:qty,memo:form.memo||'',title:form.title||'',date:n.date,time:n.time,ts:n.ts,kidIdx:kidIdx};
   st.records[kidIdx]=([rec]).concat(st.records[kidIdx]||[]);
   form={}; save().then(function(){ goRoot('home'); });
 }
 
-// ── 수입 (다중선택)
 function renderIncome(){
   var selected=form.selectedChores||[];
   var cards=st.chores.map(function(c){
@@ -532,12 +505,14 @@ function renderIncome(){
   return '<div class="section-card"><div class="s-label">항목 선택 (중복 가능)</div><div class="type-grid">'+cards+'</div></div>'
     +bar+'<button class="primary-btn" onclick="doIncome()">저장하기</button>';
 }
+
 function toggleChore(id){
   if(!form.selectedChores) form.selectedChores=[];
   var i=form.selectedChores.indexOf(id);
   if(i>=0) form.selectedChores.splice(i,1); else form.selectedChores.push(id);
   render();
 }
+
 function doIncome(){
   var sel=form.selectedChores||[];
   if(sel.length===0){ toast('항목을 선택해주세요'); return; }
@@ -550,7 +525,6 @@ function doIncome(){
   form={}; save().then(function(){ goRoot('home'); });
 }
 
-// ── 지출
 function renderSpend(){
   return '<div class="section-card"><div class="s-label">금액</div>'
     +'<input type="number" placeholder="예: 3000" value="'+(form.amount||'')+'" oninput="form.amount=this.value"/></div>'
@@ -558,6 +532,7 @@ function renderSpend(){
     +'<input type="text" placeholder="예: 편의점" value="'+(form.memo||'').replace(/"/g,'&quot;')+'" oninput="form.memo=this.value"/></div>'
     +'<button class="primary-btn" onclick="doSpend()">저장하기</button>';
 }
+
 function doSpend(){
   if(!form.amount||parseInt(form.amount)<=0){ toast('금액을 입력해주세요'); return; }
   if(!form.memo||!form.memo.trim()){ toast('어디에 썼는지 입력해주세요'); return; }
@@ -567,7 +542,6 @@ function doSpend(){
   form={}; save().then(function(){ goRoot('home'); });
 }
 
-// ── 송금
 function renderTransfer(){
   var dirs=st.kids.map(function(k,i){
     var s=(form.dir===i);
@@ -582,6 +556,7 @@ function renderTransfer(){
     +'<input type="number" placeholder="예: 1000" value="'+(form.amount||'')+'" oninput="form.amount=this.value"/></div>'
     +'<button class="primary-btn" onclick="doTransfer()">송금하기</button>';
 }
+
 function doTransfer(){
   if(form.dir===undefined||form.dir===null){ toast('보내는 사람을 선택해주세요'); return; }
   if(!form.amount||parseInt(form.amount)<=0){ toast('금액을 입력해주세요'); return; }
@@ -591,7 +566,6 @@ function doTransfer(){
   form={}; save().then(function(){ goRoot('home'); });
 }
 
-// ── 내역
 function renderHistory(){
   var tabs=[['all','전체'],['reading','독서'],['income','수입'],['spend','지출']];
   var tabsH=tabs.map(function(t){ return '<button class="tab-btn'+(histFilter===t[0]?' active':'')+'" onclick="histFilter=\''+t[0]+'\';readingFilter=null;render()">'+t[1]+'</button>'; }).join('');
@@ -615,7 +589,6 @@ function renderHistory(){
     +'<div style="margin-top:8px">'+(filtered.length===0?'<div class="empty-msg">'+st.kids[kidIdx]+'의 기록이 없어요</div>':filtered.map(function(r){ return recHTML(r,false); }).join(''))+'</div>';
 }
 
-// ── 설정
 function renderSettings(){
   var tabs=[['kids','이름'],['reading','독서'],['chores','수입']];
   var tabsH=tabs.map(function(t){ return '<button class="tab-btn'+(settingsTab===t[0]?' active':'')+'" onclick="settingsTab=\''+t[0]+'\';render()">'+t[1]+'</button>'; }).join('');
@@ -636,7 +609,7 @@ function renderSettings(){
   if(settingsTab==='reading'){
     var rows=st.reading.map(function(r,i){
       return '<div class="item-row">'
-        +'<div style="width:32px;height:32px;border-radius:9px;background:#DFF5EF;color:#6BBFAD;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+IC.book+'</div>'
+        +'<div style="width:32px;height:32px;border-radius:9px;background:#DFF5EF;color:#6BBFAD;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+(IC[r.icon||'book']||IC.book)+'</div>'
         +'<span class="item-label">'+r.label+'</span>'
         +'<input class="n-input" type="number" value="'+r.points+'" oninput="st.reading['+i+'].points=parseInt(this.value)||0"/>'
         +'<span class="row-unit">원</span>'
@@ -649,7 +622,7 @@ function renderSettings(){
       +'<div style="display:flex;gap:8px;margin-top:10px;align-items:center">'
       +'<input class="n-input" type="number" placeholder="금액" value="'+newR.points+'" oninput="newR.points=this.value" style="flex:1;width:auto"/>'
       +'<span class="row-unit">원</span></div>'
-      +'<button class="add-btn" onclick="if(newR.label&&newR.points){st.reading.push({id:uid(),label:newR.label,points:parseInt(newR.points)});newR={label:\'\',points:\'\',};save().then(function(){ render(); });}">+ 추가하기</button>'
+      +'<button class="add-btn" onclick="if(newR.label&&newR.points){st.reading.push({id:uid(),label:newR.label,points:parseInt(newR.points),icon:\'book\'});newR={label:\'\',points:\'\'};save().then(function(){ render(); });}">+ 추가하기</button>'
       +'</div></div>';
   }
   if(settingsTab==='chores'){
@@ -669,42 +642,25 @@ function renderSettings(){
       +'<div style="display:flex;gap:8px;align-items:center">'
       +'<input class="n-input" type="number" placeholder="금액" value="'+newC.points+'" oninput="newC.points=this.value" style="flex:1;width:auto;text-align:left"/>'
       +'<span class="row-unit">원</span></div></div>'
-      +'<button class="add-btn" onclick="if(newC.label&&newC.points){st.chores.push({id:uid(),label:newC.label,points:parseInt(newC.points)});newC={label:\'\',points:\'\',};save().then(function(){ render(); });}">+ 추가하기</button>'
+      +'<button class="add-btn" onclick="if(newC.label&&newC.points){st.chores.push({id:uid(),label:newC.label,points:parseInt(newC.points)});newC={label:\'\',points:\'\'};save().then(function(){ render(); });}">+ 추가하기</button>'
       +'</div></div>';
   }
   return '<div class="tab-row">'+tabsH+'</div>'+body;
 }
 
-// ── 메인 렌더
 function render(){
   renderTopBar(); renderNavBar();
   var screens={home:renderHome,reading:renderReading,income:renderIncome,spend:renderSpend,transfer:renderTransfer,history:renderHistory,settings:renderSettings};
   var fn=screens[cur()];
   document.getElementById('body').innerHTML=fn?fn():'';
-  if(cur()==='home') bindBalCards();
 }
 
-// ── 헬퍼 (전역)
-function saveRecEdit(i){
-  var el=document.getElementById('rec-edit-'+i);
-  if(!el||!el.value.trim()) return;
-  if(!st.recommendedBooks) st.recommendedBooks=[[],[]];
-  st.recommendedBooks[i]=st.recommendedBooks[i]||[];
-  st.recommendedBooks[i].push(el.value.trim());
-  save().then(function(){ editingBook=null; render(); });
-}
-function editBook(i){ editingBook=i; render(); }
-function cancelBook(){ editingBook=null; render(); }
-function saveBook(i){ var el=document.getElementById('cb'+i); if(el){ st.currentBooks[i]=el.value; save().then(function(){ editingBook=null; render(); }); } }
-
-// ── 동기화
 function setupSync(){
   db.collection('app').doc('config').onSnapshot(function(snap){
     if(snap&&snap.exists===true){
       var d=snap.data();
       st.kids=d.kids&&d.kids.length?d.kids:DEFAULTS.kids;
       st.currentBooks=d.currentBooks||['',''];
-      st.recommendedBooks=d.recommendedBooks||[[],[]];
       st.reading=d.reading&&d.reading.length?d.reading:DEFAULTS.reading;
       st.chores=d.chores&&d.chores.length?d.chores:DEFAULTS.chores;
       render();
@@ -720,17 +676,15 @@ function setupSync(){
   }
 }
 
-// ── 초기화
 db.collection('app').doc('config').get().then(function(cfg){
   if(cfg&&cfg.exists===true){
     var d=cfg.data();
     st.kids=d.kids&&d.kids.length?d.kids:DEFAULTS.kids;
     st.currentBooks=d.currentBooks||['',''];
-    st.recommendedBooks=d.recommendedBooks||[[],[]];
     st.reading=d.reading&&d.reading.length?d.reading:DEFAULTS.reading;
     st.chores=d.chores&&d.chores.length?d.chores:DEFAULTS.chores;
   } else {
-    db.collection('app').doc('config').set({kids:st.kids,currentBooks:st.currentBooks,recommendedBooks:st.recommendedBooks,reading:st.reading,chores:st.chores});
+    db.collection('app').doc('config').set({kids:st.kids,currentBooks:st.currentBooks,reading:st.reading,chores:st.chores});
   }
   var ps=[];
   for(var i=0;i<2;i++){
