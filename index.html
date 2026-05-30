@@ -534,10 +534,12 @@ function renderSpend(){
 }
 
 function doSpend(){
-  if(!form.amount||parseInt(form.amount)<=0){ toast('금액을 입력해주세요'); return; }
-  if(!form.memo||!form.memo.trim()){ toast('어디에 썼는지 입력해주세요'); return; }
+  var amt = parseInt(form.amount);
+  var memo = (form.memo||'').trim();
+  if(!form.amount || isNaN(amt) || amt<=0){ toast('금액을 입력해주세요'); return; }
+  if(!memo){ toast('어디에 썼는지 입력해주세요'); return; }
   var n=nowStr();
-  var rec={type:'spend',label:form.memo,icon:'spend',amount:parseInt(form.amount),date:n.date,time:n.time,ts:n.ts,kidIdx:kidIdx};
+  var rec={type:'spend',label:memo,icon:'spend',amount:amt,date:n.date,time:n.time,ts:n.ts,kidIdx:kidIdx};
   st.records[kidIdx]=([rec]).concat(st.records[kidIdx]||[]);
   form={}; save().then(function(){ goRoot('home'); });
 }
