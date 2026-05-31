@@ -632,12 +632,12 @@ function renderSettings(){
   }
   if(settingsTab==='chores'){
     var cRows=st.chores.map(function(c,i){
-      return '<div class="item-row">'
-        +'<div style="width:32px;height:32px;border-radius:9px;background:#EDEEF5;color:#9AA0C4;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+IC.star+'</div>'
-        +'<span class="item-label">'+c.label+'</span>'
-        +'<input class="n-input" type="number" value="'+c.points+'" oninput="st.chores['+i+'].points=parseInt(this.value)||0"/>'
-        +'<span class="row-unit">원</span>'
-        +'<button class="del-btn" onclick="st.chores.splice('+i+',1);save().then(function(){ render(); })">삭제</button></div>';
+      return '<div style="display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--border)">'
+        +'<span style="flex:1;font-size:14px;font-weight:500;color:var(--text);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+c.label+'</span>'
+        +'<input type="number" value="'+c.points+'" oninput="st.chores['+i+'].points=parseInt(this.value)||0" style="width:60px;padding:5px 6px;border-radius:8px;border:1.5px solid var(--border);font-size:13px;text-align:right;font-family:inherit;background:var(--bg);color:var(--text);outline:none;flex-shrink:0"/>'
+        +'<span style="font-size:12px;color:var(--sub);flex-shrink:0">원</span>'
+        +'<button class="del-btn" onclick="st.chores.splice('+i+',1);save().then(function(){ render(); })">삭제</button>'
+        +'</div>';
     }).join('');
     body='<div class="settings-group"><div style="background:var(--card);border-radius:var(--r);padding:4px 18px 12px;box-shadow:0 1px 4px rgba(0,0,0,.05)">'+cRows+'</div>'
       +'<button class="primary-btn" style="margin:12px 0 0;width:100%" onclick="save().then(function(){ toast(\'저장됐어요\'); })">저장하기</button>'
